@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolbox Talk Flash Cards — Safe Vessel Transfers | Your Watch. Our Standard. | Seagull Maritime</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Open Sans', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            height: 297mm;
+            background: white;
+            padding: 15mm;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 10mm;
+        }
+
+        .flash-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .card-header {
+            padding: 8mm 6mm;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 18mm;
+        }
+
+        .card-header.navy {
+            background: #003C72;
+        }
+
+        .card-header.cyan {
+            background: #00A3D9;
+        }
+
+        .card-body {
+            flex: 1;
+            padding: 6mm;
+            font-size: 9px;
+            line-height: 1.4;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .card-footer {
+            padding: 4mm 6mm;
+            border-top: 1px solid #e0e0e0;
+            font-size: 7px;
+            color: #999;
+            text-align: center;
+            background: #fafafa;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .card-footer .campaign-tag {
+            display: block;
+            font-weight: 700;
+            color: #003C72;
+            font-size: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
+        }
+
+        .card-footer .ref-text {
+            font-size: 6px;
+            color: #999;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 4px;
+            padding-left: 14px;
+            position: relative;
+            text-align: left;
+        }
+
+        li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+            color: #00A3D9;
+            font-size: 10px;
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            color: #003C72;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .card-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 9px;
+            color: #42515A;
+            margin: 4px 0 3px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        .warning-icon {
+            font-size: 28px;
+            text-align: center;
+            margin: 4mm 0;
+            color: #C0392B;
+        }
+
+        .warning-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            color: #C0392B;
+            text-align: center;
+            margin: 3mm 0;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .warning-subtext {
+            font-size: 9px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 3px;
+            line-height: 1.3;
+        }
+
+        .emphasis-red {
+            color: #C0392B;
+            font-weight: 700;
+        }
+
+        /* Card 5 specific adjustments */
+        .card-5 .card-body li {
+            font-size: 8.5px;
+            margin-bottom: 3px;
+        }
+
+        /* Card 6 specific adjustments */
+        .card-6 .card-body {
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Print styles */
+        @media print {
+            html, body {
+                margin: 0;
+                padding: 0;
+                background: white;
+            }
+
+            body {
+                display: block;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 100%;
+                width: 210mm;
+                height: 297mm;
+                padding: 15mm;
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+
+            .flash-card {
+                page-break-inside: avoid;
+                box-shadow: none;
+                border: 2px dashed #999;
+            }
+
+            .flash-card:nth-child(1),
+            .flash-card:nth-child(2) {
+                margin-bottom: 8mm;
+            }
+
+            .flash-card:nth-child(3),
+            .flash-card:nth-child(4) {
+                margin-bottom: 8mm;
+            }
+        }
+
+        /* Screen-only: visual separation */
+        @media screen {
+            .container {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            .info-banner {
+                text-align: center;
+                margin-bottom: 20px;
+                font-size: 13px;
+                color: #666;
+            }
+
+            .info-banner strong {
+                color: #003C72;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="width: 100%; max-width: 210mm;">
+        <div class="info-banner">
+            <strong>Print on A4 paper in Landscape mode. Laminate after cutting.</strong> Do not print backgrounds.
+        </div>
+
+        <div class="container">
+            <!-- CARD 1: PPE CHECKLIST -->
+            <div class="flash-card card-1">
+                <div class="card-header navy">PPE Checklist</div>
+                <div class="card-body">
+                    <ul>
+                        <li>SOLAS-approved lifejacket / PFD</li>
+                        <li>Helmet with chin strap</li>
+                        <li>Non-slip safety footwear</li>
+                        <li>Gloves</li>
+                        <li>AIS MOB / PLB (if issued)</li>
+                        <li>Weather-appropriate clothing</li>
+                    </ul>
+                    <div style="margin-top: 4mm; padding-top: 4mm; border-top: 1px solid #e0e0e0;">
+                        <div class="warning-text">NO PPE = NO TRANSFER</div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span class="campaign-tag">Your Watch. Our Standard.</span>
+                    <span class="ref-text">SM-CAM-FC-001 | Seagull Maritime</span>
+                </div>
+            </div>
+
+            <!-- CARD 2: BEFORE TRANSFER -->
+            <div class="flash-card card-2">
+                <div class="card-header cyan">Before Transfer</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Consult method statement</li>
+                        <li>Weather/sea conditions acceptable</li>
+                        <li>Master approved the transfer</li>
+                        <li>Pilot ladder rigged & inspected</li>
+                        <li>Comms established with pilot boat</li>
+                        <li>Rescue equipment ready</li>
+                        <li>Personnel briefed & fit for task</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <span class="campaign-tag">Your Watch. Our Standard.</span>
+                    <span class="ref-text">SM-CAM-FC-001 | Seagull Maritime</span>
+                </div>
+            </div>
+
+            <!-- CARD 3: DURING TRANSFER -->
+            <div class="flash-card card-3">
+                <div class="card-header navy">During Transfer</div>
+                <div class="card-body">
+                    <ul>
+                        <li>One person at a time</li>
+                        <li>Three points of contact always</li>
+                        <li>Face the ladder at all times</li>
+                        <li>Move steadily — don't rush</li>
+                        <li>Follow crew/coxswain instructions</li>
+                        <li>Abort if conditions change</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <span class="campaign-tag">Your Watch. Our Standard.</span>
+                    <span class="ref-text">SM-CAM-FC-001 | Seagull Maritime</span>
+                </div>
+            </div>
+
+            <!-- CARD 4: AFTER TRANSFER -->
+            <div class="flash-card card-4">
+                <div class="card-header cyan">After Transfer</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Confirm all personnel safely onboard</li>
+                        <li>Secure ladder and equipment</li>
+                        <li>Report any defects or near misses</li>
+                        <li>Inform Master / Team Leader</li>
+                        <li>Log transfer completion</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <span class="campaign-tag">Your Watch. Our Standard.</span>
+                    <span class="ref-text">SM-CAM-FC-001 | Seagull Maritime</span>
+                </div>
+            </div>
+
+            <!-- CARD 5: KEY HAZARDS -->
+            <div class="flash-card card-5">
+                <div class="card-header navy">Key Hazards</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Falling between vessels</li>
+                        <li>Crushing between hulls</li>
+                        <li>Vessel movement (swell/wake/wash)</li>
+                        <li>Wet/oily surfaces</li>
+                        <li>Ladder failure</li>
+                        <li>Poor weather/visibility</li>
+                        <li>Fatigue / loss of balance</li>
+                        <li>Poor communication</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <span class="campaign-tag">Your Watch. Our Standard.</span>
+                    <span class="ref-text">SM-CAM-FC-001 | Seagull Maritime</span>
+                </div>
+            </div>
+
+            <!-- CARD 6: STOP THE TRANSFER -->
+            <div class="flash-card card-6">
+                <div class="card-header" style="background: #C0392B;">Stop the Transfer</div>
+                <div class="card-body">
+                    <div class="warning-icon">⚠</div>
+                    <div class="warning-text">IF IN DOUBT — STOP</div>
+                    <div class="warning-subtext">
+                        <strong>ANYONE can halt a transfer if unsafe</strong>
+                    </div>
+                    <ul style="margin-top: 4mm;">
+                        <li style="text-align: center; padding: 0; margin: 2px 0;">Safety over timings</li>
+                        <li style="text-align: center; padding: 0; margin: 2px 0;">No shortcuts</li>
+                        <li style="text-align: center; padding: 0; margin: 2px 0;">Report to Master / Team Leader immediately</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <span class="campaign-tag">Your Watch. Our Standard.</span>
+                    <span class="ref-text">SM-CAM-FC-001 | Seagull Maritime</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

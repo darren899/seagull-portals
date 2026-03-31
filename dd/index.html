@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seagull Maritime — Due Diligence Document Portal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #003C72;
+    --navy-dark: #002a52;
+    --navy-light: #0a5a9e;
+    --tint: #E6EDF5;
+    --gold: #C4975C;
+    --gold-light: #e8c98a;
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #1a1a2e;
+    --text-light: #5a6275;
+    --red: #c0392b;
+    --green: #27ae60;
+    --border: #dde3eb;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* ===== ACCESS GATE ===== */
+  #gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, var(--navy-light) 100%);
+  }
+
+  .gate-card {
+    background: white;
+    border-radius: 16px;
+    padding: 48px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .gate-logo {
+    width: 220px;
+    margin-bottom: 32px;
+  }
+
+  .gate-card h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .gate-card p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .gate-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 3px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .gate-input:focus { border-color: var(--navy); }
+  .gate-input.error { border-color: var(--red); animation: shake 0.4s; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  .gate-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .gate-btn:hover { background: var(--navy-dark); }
+
+  .gate-error {
+    color: var(--red);
+    font-size: 12px;
+    margin-top: 12px;
+    min-height: 18px;
+  }
+
+  .gate-footer {
+    margin-top: 32px;
+    font-size: 11px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  /* ===== PORTAL ===== */
+  #portal { display: none; }
+
+  .watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: 80px;
+    font-weight: 700;
+    color: rgba(0, 60, 114, 0.04);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1000;
+    letter-spacing: 8px;
+  }
+
+  /* Header */
+  .portal-header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+    color: white;
+    padding: 0;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .header-logo { height: 44px; }
+
+  .header-meta {
+    text-align: right;
+    font-size: 12px;
+    opacity: 0.8;
+    line-height: 1.6;
+  }
+
+  .header-meta strong { opacity: 1; }
+
+  .header-hero {
+    padding: 48px 40px;
+    max-width: 900px;
+  }
+
+  .header-hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .header-hero h2 {
+    font-size: 16px;
+    font-weight: 400;
+    opacity: 0.7;
+    margin-bottom: 20px;
+  }
+
+  .header-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-gold { background: var(--gold); color: white; }
+  .badge-outline { border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+
+  /* Security banner */
+  .security-banner {
+    background: var(--navy-dark);
+    color: var(--gold-light);
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  /* Content */
+  .portal-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .section-intro {
+    margin-bottom: 40px;
+    padding: 24px 28px;
+    background: white;
+    border-radius: 12px;
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+
+  .section-intro h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .section-intro p {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  /* Section cards */
+  .sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .section-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+
+  .section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .card-header {
+    background: var(--navy);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .card-number {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .card-body {
+    padding: 16px 20px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .doc-list { list-style: none; }
+
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--tint);
+    font-size: 12px;
+  }
+
+  .doc-item:last-child { border-bottom: none; }
+
+  .doc-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--tint);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+
+  .doc-name {
+    flex: 1;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .doc-link {
+    color: var(--navy);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--navy);
+    border-radius: 4px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .doc-link:hover {
+    background: var(--navy);
+    color: white;
+  }
+
+  .subfolder-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 0 6px;
+    border-bottom: 2px solid var(--tint);
+    margin-top: 6px;
+  }
+
+  /* OCIMF mapping */
+  .ocimf-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    background: var(--tint);
+    border-radius: 3px;
+    color: var(--navy);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Footer */
+  .portal-footer {
+    background: var(--navy-dark);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 11px;
+    line-height: 1.8;
+  }
+
+  .portal-footer strong { color: var(--gold-light); }
+
+  /* Expired state */
+  #expired {
+    display: none;
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  #expired h2 { color: var(--red); margin-bottom: 16px; }
+  #expired p { color: var(--text-light); }
+
+  /* Print blocking */
+  @media print {
+    body::before {
+      content: "PRINTING NOT PERMITTED — CONFIDENTIAL DOCUMENT";
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-35deg);
+      font-size: 48px;
+      color: rgba(192, 57, 43, 0.3);
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    .portal-content { display: none !important; }
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header-top { padding: 16px 20px; }
+    .header-hero { padding: 28px 20px; }
+    .header-hero h1 { font-size: 22px; }
+    .portal-content { padding: 20px 12px; }
+    .sections-grid { grid-template-columns: 1fr; }
+    .gate-card { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+<!-- ===== ACCESS GATE ===== -->
+<div id="gate">
+  <div class="gate-card">
+    <!-- Replace src with your actual logo URL -->
+    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIwIiBoZWlnaHQ9IjYwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIyMjAiIGhlaWdodD0iNjAiIGZpbGw9IiMwMDNDNzIiIHJ4PSI4Ii8+PHRleHQgeD0iMTEwIiB5PSIzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkludGVyLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IndoaXRlIiBkeT0iLjNlbSI+U0VBR1VMTCBNQVJJVElNRTwvdGV4dD48L3N2Zz4=" alt="Seagull Maritime" class="gate-logo">
+    <h1>Due Diligence Document Portal</h1>
+    <p>This portal contains confidential compliance documentation prepared for authorised review only. Enter your access code and company name to proceed.</p>
+    <input type="text" id="accessCode" class="gate-input" placeholder="ACCESS CODE" maxlength="12" autocomplete="off" spellcheck="false">
+    <input type="text" id="companyName" class="gate-input" placeholder="YOUR COMPANY NAME" maxlength="60" autocomplete="off" spellcheck="false" style="margin-top: 12px; letter-spacing: normal; text-transform: none;">
+    <button class="gate-btn" onclick="authenticate()">Access Documents</button>
+    <div class="gate-error" id="gateError"></div>
+    <div class="gate-footer">
+      All documents are confidential and proprietary to Seagull Maritime Ltd.<br>
+      Unauthorised access or distribution is prohibited.
+    </div>
+  </div>
+</div>
+
+<!-- ===== EXPIRED STATE ===== -->
+<div id="expired">
+  <h2>Access Expired</h2>
+  <p>Your access to this document portal has expired.<br>
+  Please contact Seagull Maritime to request renewal.</p>
+  <p style="margin-top: 24px; font-size: 13px;"><strong>Email:</strong> compliance@seagullmaritimeltd.com</p>
+</div>
+
+<!-- ===== PORTAL ===== -->
+<div id="portal">
+  <div class="watermark" id="watermark"></div>
+
+  <header class="portal-header">
+    <div class="header-top">
+      <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIwIiBoZWlnaHQ9IjYwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIyMjAiIGhlaWdodD0iNjAiIGZpbGw9InRyYW5zcGFyZW50IiByeD0iOCIvPjx0ZXh0IHg9IjExMCIgeT0iMzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJJbnRlcixzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSJ3aGl0ZSIgZHk9Ii4zZW0iPlNFQUdVTEwgTUFSSVRJTUU8L3RleHQ+PC9zdmc+" alt="Seagull Maritime" class="header-logo">
+      <div class="header-meta">
+        <strong>Prepared for: <span id="clientName"></span></strong><br>
+        Reference: <span id="portalRef"></span><br>
+        Valid until: <span id="portalExpiry"></span>
+      </div>
+    </div>
+    <div class="header-hero">
+      <h1>Due Diligence Document Pack</h1>
+      <h2>Indian Ocean Region — 2025</h2>
+      <div class="header-badges">
+        <span class="badge badge-gold">ISO 18788</span>
+        <span class="badge badge-gold">ISO 28000</span>
+        <span class="badge badge-gold">ISO 28007</span>
+        <span class="badge badge-gold">ISO 9001</span>
+        <span class="badge badge-outline">ICoCA Certified Member</span>
+        <span class="badge badge-outline">SAMI Associate Member</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="security-banner">
+    CONFIDENTIAL — PREPARED EXCLUSIVELY FOR <span id="bannerClient"></span> — UNAUTHORISED DISTRIBUTION PROHIBITED
+  </div>
+
+  <main class="portal-content">
+    <div class="section-intro">
+      <h3>Navigation Guide</h3>
+      <p>This document pack provides comprehensive evidence of Seagull Maritime's compliance with OCIMF PMSC Guidance, Shell PMSC Audit Requirements, and international maritime security standards. Documents are organised into 10 sections below. Click any section to expand and access individual documents. All documents are view-only.</p>
+    </div>
+
+    <div class="sections-grid" id="sectionsGrid">
+      <!-- Populated by JS -->
+    </div>
+  </main>
+
+  <footer class="portal-footer">
+    <strong>Seagull Maritime Ltd</strong> — 64 "Excalibur" B Bontadini Street, Birikirkara BKR1737, Malta<br>
+    ISO 18788 | ISO 28000 | ISO 28007 | ISO 9001 | ICoCA Certified Member<br><br>
+    All documents within this portal are confidential and proprietary. Reproduction, distribution, or sharing<br>
+    of this portal link or its contents without written authorisation from Seagull Maritime is strictly prohibited.<br><br>
+    <strong>Document Reference:</strong> <span id="footerRef"></span> | <strong>Portal Version:</strong> 1.0 | <strong>Last Updated:</strong> March 2026
+  </footer>
+</div>
+
+<script>
+// ================================================================
+// AUTO-ROTATING WEEKLY ACCESS CODE
+// Code format: SG + week-starting Monday date (DDMMYY)
+// Example: Week of 31 March 2026 = SG310326
+//
+// Internal staff can work out the code from the date.
+// Clients must request the current code from Commercial.
+// Code expires automatically at end of each Sunday (7-day window).
+//
+// To override with a manual code (e.g. for a demo), add it below.
+// Manual codes take priority over the auto-generated weekly code.
+// ================================================================
+const MANUAL_CODES = {
+  'DEMO2026': { expiry: '2026-12-31' },
+  // Add manual override codes here if needed
+};
+
+function getWeeklyCode() {
+  const now = new Date();
+  // Find Monday of current week
+  const day = now.getDay();
+  const diff = day === 0 ? -6 : 1 - day; // Monday = 1
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diff);
+
+  const dd = String(monday.getDate()).padStart(2, '0');
+  const mm = String(monday.getMonth() + 1).padStart(2, '0');
+  const yy = String(monday.getFullYear()).slice(-2);
+
+  return {
+    code: 'SG' + dd + mm + yy,
+    expiry: getEndOfWeek(monday),
+    monday: monday
+  };
+}
+
+function getEndOfWeek(monday) {
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23, 59, 59, 999);
+  return sunday;
+}
+
+function isValidCode(input) {
+  const upper = input.toUpperCase();
+
+  // Check manual codes first
+  if (MANUAL_CODES[upper]) {
+    const exp = new Date(MANUAL_CODES[upper].expiry + 'T23:59:59');
+    if (new Date() <= exp) return { valid: true, expiry: exp };
+    return { valid: false, expired: true };
+  }
+
+  // Check auto-generated weekly code
+  const weekly = getWeeklyCode();
+  if (upper === weekly.code) {
+    return { valid: true, expiry: weekly.expiry };
+  }
+
+  return { valid: false, expired: false };
+}
+
+// ================================================================
+// DOCUMENT SECTIONS
+// Links point to self-hosted PDF files served alongside this portal.
+// Drop PDFs into the matching docs/ subfolder.
+// ================================================================
+const DOC_PATHS = {
+ 
+  s1: 'docs/s1/',
+ 
+  s1_profile: 'docs/s1/profile/',
+ 
+  s1_reg: 'docs/s1/registration/',
+ 
+  s1_fin: 'docs/s1/financial/',
+ 
+  s2: 'docs/s2/',
+ 
+  s2_accred: 'docs/s2/accreditations/',
+ 
+  s2_flags: 'docs/s2/flags/',
+ 
+  s2_liberia: 'docs/s2/liberia/',
+ 
+  s2_panama: 'docs/s2/panama/',
+ 
+  s2_palau: 'docs/s2/palau/',
+ 
+  s3: 'docs/s3/',
+ 
+  s4: 'docs/s4/',
+ 
+  s5: 'docs/s5/',
+ 
+  s6: 'docs/s6/',
+ 
+  s6_example: 'docs/s6/example/',
+ 
+  s6_mso_docs: 'docs/s6/mso-docs/',
+ 
+  s7: 'docs/s7/',
+ 
+  s7_gbsit163: 'docs/s7/gbsit163/',
+ 
+  s7_gbsit168: 'docs/s7/gbsit168/',
+ 
+  s7_gbsit171: 'docs/s7/gbsit171/',
+ 
+  s7_gbsit031: 'docs/s7/gbsit031/',
+ 
+  s7_gbsit144: 'docs/s7/gbsit144/',
+ 
+  s7_gbsit039: 'docs/s7/gbsit039/',
+ 
+  s7_eu1350: 'docs/s7/eu1350/',
+ 
+  s7_eu1351: 'docs/s7/eu1351/',
+ 
+  s7_eu1352: 'docs/s7/eu1352/',
+ 
+  s8: 'docs/s8/',
+ 
+  s8_policies: 'docs/s8/policies/',
+ 
+  s9: 'docs/s9/',
+ 
+  s9_ptr: 'docs/s9/ptr/',
+ 
+  s10: 'docs/s10/',
+};
+
+const SECTIONS = [
+  {
+    num: 1,
+    title: 'Company Registration & Information',
+    desc: 'Corporate structure, registration, ownership verification, financial standing, and office locations.',
+    ocimf: '1.1–1.10',
+    docs: [
+      { sub: 'Company Profile' },
+      { name: 'Company Organisation Chart', href: DOC_PATHS.s1_profile, icon: 'IMG' },
+      { name: 'Company Profile', href: DOC_PATHS.s1_profile, icon: 'PDF' },
+      { sub: 'Registration & Ownership' },
+      { name: 'Certificate of Registration (2011)', href: DOC_PATHS.s1_reg, icon: 'PDF' },
+      { name: 'Certificate of Change of Name (2013)', href: DOC_PATHS.s1_reg, icon: 'PDF' },
+      { name: 'Notification of Change of Address (2017)', href: DOC_PATHS.s1_reg, icon: 'PDF' },
+      { name: 'Altered Certificate of Registration (2021)', href: DOC_PATHS.s1_reg, icon: 'PDF' },
+      { name: 'Ownership Declaration (2024)', href: DOC_PATHS.s1_reg, icon: 'PDF' },
+      { sub: 'Financial Standing' },
+      { name: 'Audit Confirmation — March 2025', href: DOC_PATHS.s1_fin, icon: 'PDF' },
+      { name: 'Platform Locations — February 2026', href: DOC_PATHS.s1, icon: 'PDF' },
+    ]
+  },
+  {
+    num: 2,
+    title: 'Compliance & Accreditation',
+    desc: 'ISO certifications, ICoCA membership, flag state authorisations, and compliance register.',
+    ocimf: '1.6, 2.1–2.5',
+    docs: [
+      { sub: 'Accreditations' },
+      { name: 'ISO 18788:2015 Certificate', href: DOC_PATHS.s2_accred, icon: 'PDF' },
+      { name: 'ISO 28000:2022 Certificate', href: DOC_PATHS.s2_accred, icon: 'PDF' },
+      { name: 'ISO 28007 Certificate', href: DOC_PATHS.s2_accred, icon: 'PDF' },
+      { name: 'ISO 9001:2015 Certificate', href: DOC_PATHS.s2_accred, icon: 'PDF' },
+      { name: 'ICoCA Certified Member Certificate', href: DOC_PATHS.s2_accred, icon: 'PDF' },
+      { sub: 'Flag State Authorisations' },
+      { name: 'UK PMSC Authorisation (0007.GB)', href: DOC_PATHS.s2_flags, icon: 'PDF' },
+      { name: 'Liberia — Letter of Authorisation', href: DOC_PATHS.s2_liberia, icon: 'PDF' },
+      { name: 'Panama — Flag State Authorisations', href: DOC_PATHS.s2_panama, icon: 'PDF' },
+      { name: 'Palau — Flag State Authorisations', href: DOC_PATHS.s2_palau, icon: 'PDF' },
+      { name: 'Compliance Requirements Register (M-2003)', href: DOC_PATHS.s2, icon: 'PDF' },
+    ]
+  },
+  {
+    num: 3,
+    title: 'Standard Operating Procedures',
+    desc: 'Embarked team operations, LNG/LPG additional procedures, and standing orders.',
+    ocimf: '3.1–3.8',
+    docs: [
+      { name: 'Embarked Teams Manual (M-3001)', href: DOC_PATHS.s3, icon: 'PDF' },
+      { name: 'Embarked Team Procedures (SOP-3001)', href: DOC_PATHS.s3, icon: 'PDF' },
+      { name: 'LNG, LPG, Tankers Additional Procedure (SOP-3002)', href: DOC_PATHS.s3, icon: 'PDF' },
+      { name: 'Standing Orders — Stowaway Operations (SOP-7778)', href: DOC_PATHS.s3, icon: 'PDF' },
+    ]
+  },
+  {
+    num: 4,
+    title: 'Rules on the Use of Force',
+    desc: 'Company rules governing use of force, escalation procedures, and proportionality framework.',
+    ocimf: '4.1–4.4',
+    docs: [
+      { name: 'Rules on the Use of Force', href: DOC_PATHS.s4, icon: 'PDF' },
+    ]
+  },
+  {
+    num: 5,
+    title: 'Management Procedures',
+    desc: 'Document control, risk assessment, crisis response, incident investigation, and emergency procedures.',
+    ocimf: '1.4, 1.10, 5.1–5.6',
+    docs: [
+      { name: 'Document Control Procedure (SOP-1001)', href: DOC_PATHS.s5, icon: 'PDF' },
+      { name: 'Control of Records Procedure (SOP-1002)', href: DOC_PATHS.s5, icon: 'PDF' },
+      { name: 'Internal & External Communication (SOP-1003)', href: DOC_PATHS.s5, icon: 'PDF' },
+      { name: 'Command and Control Procedures (SOP-1009)', href: DOC_PATHS.s5, icon: 'PDF' },
+      { name: 'Control of Non-conformances (SOP-1020)', href: DOC_PATHS.s5, icon: 'PDF' },
+      { name: 'Corrective Action Procedure (SOP-1023)', href: DOC_PATHS.s5, icon: 'PDF' },
+      { name: 'Risk Assessment Procedure (SOP-2001)', href: DOC_PATHS.s5, icon: 'PDF' },
+      { name: 'Crisis Response Procedures (SOP-2002)', href: DOC_PATHS.s5, icon: 'PDF' },
+      { name: 'Emergency Procedures Ops Centre (SOP-2005)', href: DOC_PATHS.s5, icon: 'PDF' },
+      { name: 'Incident Investigation & Reporting (SOP-3005)', href: DOC_PATHS.s5, icon: 'PDF' },
+    ]
+  },
+  {
+    num: 6,
+    title: 'Personnel Management',
+    desc: 'Recruitment, screening, training programmes, competency records, and example personnel files.',
+    ocimf: '6.1–6.8',
+    docs: [
+      { name: 'Training, Competency and Awareness (SOP-1005)', href: DOC_PATHS.s6, icon: 'PDF' },
+      { name: 'Recruitment and Screening Procedure (SOP-1026)', href: DOC_PATHS.s6, icon: 'PDF' },
+      { name: 'MSO Training Syllabus — Online Course', href: DOC_PATHS.s6, icon: 'PDF' },
+      { name: 'MSO Syllabus', href: DOC_PATHS.s6, icon: 'PDF' },
+      { sub: 'Example Personnel Files' },
+      { name: 'MSO Documents — Sample Personnel Pack', href: DOC_PATHS.s6_mso_docs, icon: 'PDF' },
+    ]
+  },
+  {
+    num: 7,
+    title: 'Weapons Management',
+    desc: 'End user certificates, UK export licences, weapons transfer agreements, and management procedures.',
+    ocimf: '7.1–7.6',
+    docs: [
+      { name: 'Weapons & Security Equipment (SOP-3003)', href: DOC_PATHS.s7, icon: 'PDF' },
+      { name: 'Weapons Inventory', href: DOC_PATHS.s7, icon: 'XLS' },
+      { sub: 'UK Export Licences (GBSIT)' },
+      { name: 'GBSIT2016/00163', href: DOC_PATHS.s7_gbsit163, icon: 'PDF' },
+      { name: 'GBSIT2016/00168', href: DOC_PATHS.s7_gbsit168, icon: 'PDF' },
+      { name: 'GBSIT2016/00171', href: DOC_PATHS.s7_gbsit171, icon: 'PDF' },
+      { name: 'GBSIT2017/00031', href: DOC_PATHS.s7_gbsit031, icon: 'PDF' },
+      { name: 'GBSIT2017/00144', href: DOC_PATHS.s7_gbsit144, icon: 'PDF' },
+      { name: 'GBSIT2019/00039', href: DOC_PATHS.s7_gbsit039, icon: 'PDF' },
+      { sub: 'End User Certificates' },
+      { name: 'End User Certificate 25DJ1350', href: DOC_PATHS.s7_eu1350, icon: 'PDF' },
+      { name: 'End User Certificate 25DJ1351', href: DOC_PATHS.s7_eu1351, icon: 'PDF' },
+      { name: 'End User Certificate 25DJ1352', href: DOC_PATHS.s7_eu1352, icon: 'PDF' },
+    ]
+  },
+  {
+    num: 8,
+    title: 'Company Policies & Procedures',
+    desc: 'Full suite of corporate policies covering security, quality, H&S, ethics, HR, and data protection.',
+    ocimf: '1.3, 8.1–8.4',
+    docs: [
+      { name: 'Security Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Quality Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Health & Safety Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Human Rights Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Anti-Bribery, Corruption & Business Ethics', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Code of Conduct', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Environmental Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Equal Opportunities Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Grievance & Whistleblowing Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Personal Data Protection Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Recruitment Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Risk Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Training Policy', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+      { name: 'Statement of Conformance', href: DOC_PATHS.s8_policies, icon: 'PDF' },
+    ]
+  },
+  {
+    num: 9,
+    title: 'Testimonials & References',
+    desc: 'Client testimonials, performance reports, and recommendation letters.',
+    ocimf: '9.1',
+    docs: [
+      { name: 'Client Recommendation Letter', href: DOC_PATHS.s9, icon: 'PDF' },
+      { name: 'Performance & Trip Report (PTR)', href: DOC_PATHS.s9_ptr, icon: 'PDF' },
+      { name: 'MV Cosmograph Performance Report — March 2024', href: DOC_PATHS.s9, icon: 'PDF' },
+    ]
+  },
+  {
+    num: 10,
+    title: 'Insurance',
+    desc: 'Professional indemnity, liability insurance certificates, and personal accident cover.',
+    ocimf: '10.1–10.3',
+    docs: [
+      { name: 'Seagull Maritime Malta — LI Policy 2025-26', href: DOC_PATHS.s10, icon: 'PDF' },
+      { name: 'Personal Accident Insurance Certificate', href: DOC_PATHS.s10, icon: 'PDF' },
+    ]
+  },
+];
+
+// ================================================================
+// AUTHENTICATION
+// ================================================================
+function authenticate() {
+  const code = document.getElementById('accessCode').value.trim();
+  const company = document.getElementById('companyName').value.trim();
+  const codeInput = document.getElementById('accessCode');
+  const companyInput = document.getElementById('companyName');
+  const error = document.getElementById('gateError');
+
+  if (!code) {
+    codeInput.classList.add('error');
+    error.textContent = 'Please enter your access code.';
+    setTimeout(() => codeInput.classList.remove('error'), 400);
+    return;
+  }
+
+  if (!company) {
+    companyInput.classList.add('error');
+    error.textContent = 'Please enter your company name.';
+    setTimeout(() => companyInput.classList.remove('error'), 400);
+    return;
+  }
+
+  const result = isValidCode(code);
+
+  if (!result.valid && result.expired) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('expired').style.display = 'block';
+    logAccess(code, company, 'FAILED — expired');
+    return;
+  }
+
+  if (!result.valid) {
+    codeInput.classList.add('error');
+    error.textContent = 'Invalid access code. Please check and try again.';
+    setTimeout(() => codeInput.classList.remove('error'), 400);
+    logAccess(code, company, 'FAILED — invalid code');
+    return;
+  }
+
+  // Success — show portal
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('portal').style.display = 'block';
+
+  // Generate reference from company name
+  const companyShort = company.replace(/[^a-zA-Z0-9]/g, '').substring(0, 6).toUpperCase();
+  const ref = 'SM-DD-' + companyShort + '-' + new Date().getFullYear();
+
+  // Populate client details from the company name they entered
+  document.getElementById('clientName').textContent = company;
+  document.getElementById('portalRef').textContent = ref;
+  document.getElementById('portalExpiry').textContent = formatDate(result.expiry);
+  document.getElementById('bannerClient').textContent = company.toUpperCase();
+  document.getElementById('watermark').textContent = company;
+  document.getElementById('footerRef').textContent = ref;
+
+  // Build sections
+  buildSections();
+  logAccess(code, company, 'SUCCESS');
+}
+
+// Enter key support on both inputs
+document.getElementById('accessCode').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('companyName').focus();
+});
+document.getElementById('companyName').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') authenticate();
+});
+
+// ================================================================
+// BUILD PORTAL SECTIONS
+// ================================================================
+function buildSections() {
+  const grid = document.getElementById('sectionsGrid');
+
+  SECTIONS.forEach(section => {
+    const card = document.createElement('div');
+    card.className = 'section-card';
+
+    let docsHtml = '';
+    section.docs.forEach(doc => {
+      if (doc.sub) {
+        docsHtml += `<div class="subfolder-label">${doc.sub}</div>`;
+      } else {
+        docsHtml += `
+          <li class="doc-item">
+            <div class="doc-icon">${doc.icon || 'PDF'}</div>
+            <span class="doc-name">${doc.name}</span>
+            <a href="${doc.href}" target="_blank" rel="noopener" class="doc-link" onclick="logDocView('${doc.name}')">View</a>
+          </li>`;
+      }
+    });
+
+    card.innerHTML = `
+      <div class="card-header" onclick="this.parentElement.querySelector('.card-body').classList.toggle('collapsed')">
+        <div class="card-number">${section.num}</div>
+        <div>
+          <div class="card-title">${section.title}</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">${section.desc}<br><span class="ocimf-tag">OCIMF Ref: ${section.ocimf}</span></div>
+        <ul class="doc-list">${docsHtml}</ul>
+      </div>`;
+
+    grid.appendChild(card);
+  });
+}
+
+// ================================================================
+// LOGGING
+// Sends access events to a webhook. Replace URL with your
+// Google Apps Script web app URL or similar endpoint.
+// ================================================================
+function logAccess(code, company, result) {
+  const payload = {
+    timestamp: new Date().toISOString(),
+    code: code,
+    company: company,
+    result: result,
+    userAgent: navigator.userAgent,
+    portal: 'IOR-2025'
+  };
+
+  // Uncomment and replace URL when webhook is ready:
+  // fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+  //   method: 'POST',
+  //   mode: 'no-cors',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(payload)
+  // }).catch(() => {});
+
+  console.log('Access log:', payload);
+}
+
+function logDocView(docName) {
+  const payload = {
+    timestamp: new Date().toISOString(),
+    client: document.getElementById('clientName').textContent,
+    document: docName,
+    portal: 'IOR-2025'
+  };
+
+  // Uncomment when webhook ready:
+  // fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+  //   method: 'POST',
+  //   mode: 'no-cors',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(payload)
+  // }).catch(() => {});
+
+  console.log('Doc view:', payload);
+}
+
+// ================================================================
+// UTILITIES
+// ================================================================
+function formatDate(d) {
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+// Disable keyboard shortcuts for copying/printing
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P' || e.key === 's' || e.key === 'S')) {
+    e.preventDefault();
+    return false;
+  }
+});
+</script>
+</body>
+</html>

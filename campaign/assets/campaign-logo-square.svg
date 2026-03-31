@@ -1,0 +1,57 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;800&display=swap');
+    </style>
+  </defs>
+
+  <!-- Wing Icon (Top, centred) -->
+  <g id="wing-icon" transform="translate(100, 35)">
+    <!-- Left wing curve -->
+    <path d="M -15 15 Q -20 0 -10 -10 Q 0 -5 3 10 Q 0 13 -5 15 Z"
+          fill="none"
+          stroke="#003C72"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+
+    <!-- Right wing curve -->
+    <path d="M 15 15 Q 20 0 10 -10 Q 0 -5 -3 10 Q 0 13 5 15 Z"
+          fill="none"
+          stroke="#00A3D9"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  </g>
+
+  <!-- Text Group (Centred below wing) -->
+  <g id="text-group">
+    <!-- Top line: "YOUR WATCH." -->
+    <text x="100" y="95"
+          font-family="Montserrat, sans-serif"
+          font-size="18"
+          font-weight="800"
+          fill="#003C72"
+          text-anchor="middle"
+          letter-spacing="0">YOUR </text>
+
+    <text x="146" y="95"
+          font-family="Montserrat, sans-serif"
+          font-size="18"
+          font-weight="800"
+          fill="#00A3D9"
+          text-anchor="start"
+          letter-spacing="0">WATCH.</text>
+
+    <!-- Bottom line: "OUR STANDARD." -->
+    <text x="100" y="125"
+          font-family="Montserrat, sans-serif"
+          font-size="10"
+          font-weight="300"
+          fill="#003C72"
+          opacity="0.85"
+          text-anchor="middle"
+          letter-spacing="1.5"
+          text-transform="uppercase">OUR STANDARD.</text>
+  </g>
+</svg>

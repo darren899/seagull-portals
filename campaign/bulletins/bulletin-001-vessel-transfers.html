@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seagull Maritime - Safe Vessel Transfers - Bulletin 001</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #f0f0f0;
+            font-family: 'Open Sans', sans-serif;
+            color: #42515A;
+        }
+
+        .container {
+            width: 595px;
+            height: 842px;
+            background: white;
+            margin: 20px auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #003C72 0%, #004d8f 100%);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+            border-bottom: 4px solid #00A3D9;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .campaign-tagline {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-align: left;
+            flex: 1;
+        }
+
+        .bulletin-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            background: #00A3D9;
+            padding: 4px 12px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .seagull-branding {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.95;
+        }
+
+        /* Main Topic Title */
+        .topic-section {
+            background: linear-gradient(90deg, #003C72 0%, #004d8f 100%);
+            color: white;
+            padding: 16px 20px;
+            border-bottom: 3px solid #4DC4E8;
+        }
+
+        .topic-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Pillar Sections */
+        .pillar {
+            border-left: 5px solid;
+            padding: 14px;
+            border-radius: 3px;
+            background: #F4F7FA;
+        }
+
+        .pillar.assess {
+            border-left-color: #003C72;
+            background: linear-gradient(to right, rgba(0, 60, 114, 0.05) 0%, transparent 100%);
+        }
+
+        .pillar.report {
+            border-left-color: #00A3D9;
+            background: linear-gradient(to right, rgba(0, 163, 217, 0.05) 0%, transparent 100%);
+        }
+
+        .pillar.deliver {
+            border-left-color: #42515A;
+            background: linear-gradient(to right, rgba(66, 81, 90, 0.05) 0%, transparent 100%);
+        }
+
+        .pillar-header {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pillar.assess .pillar-header {
+            color: #003C72;
+        }
+
+        .pillar.report .pillar-header {
+            color: #00A3D9;
+        }
+
+        .pillar.deliver .pillar-header {
+            color: #42515A;
+        }
+
+        .pillar-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .pillar-content {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #42515A;
+        }
+
+        .pillar-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .pillar-content li {
+            padding: 4px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .pillar-content li:before {
+            content: "▪";
+            position: absolute;
+            left: 4px;
+            font-size: 10px;
+        }
+
+        .pillar.assess .pillar-content li:before {
+            color: #003C72;
+        }
+
+        .pillar.report .pillar-content li:before {
+            color: #00A3D9;
+        }
+
+        .pillar.deliver .pillar-content li:before {
+            color: #42515A;
+        }
+
+        /* Critical Callout Box */
+        .critical-callout {
+            background: #FF0000;
+            color: white;
+            padding: 12px;
+            border-radius: 3px;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 4px 0;
+            border: 2px solid #CC0000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Footer */
+        .footer {
+            background: #003C72;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 10px;
+            border-top: 2px solid #00A3D9;
+            margin-top: auto;
+        }
+
+        .footer-tagline {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .footer-details {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            font-size: 9px;
+        }
+
+        .footer-detail {
+            opacity: 0.9;
+        }
+
+        /* Scrollbar styling */
+        .content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: #F4F7FA;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: #00A3D9;
+            border-radius: 3px;
+        }
+
+        /* Print Styles */
+        @media print {
+            html, body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+
+            .content {
+                overflow: visible;
+            }
+        }
+
+        /* Responsive for smaller screens */
+        @media (max-width: 650px) {
+            .container {
+                width: 100%;
+                height: auto;
+                margin: 10px;
+                box-shadow: none;
+            }
+
+            .header-title {
+                font-size: 20px;
+            }
+
+            .topic-title {
+                font-size: 22px;
+            }
+
+            .content {
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .pillar {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div class="campaign-tagline">YOUR WATCH.<br>OUR STANDARD.</div>
+                <div class="bulletin-number">Bulletin 001</div>
+            </div>
+            <div class="header-title">Safety Awareness Programme</div>
+            <div class="seagull-branding">SEAGULL MARITIME</div>
+        </div>
+
+        <!-- Topic Title -->
+        <div class="topic-section">
+            <div class="topic-title">Safe Vessel Transfers</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- ASSESS Pillar -->
+            <div class="pillar assess">
+                <div class="pillar-header">
+                    <span class="pillar-icon">📋</span>
+                    ASSESS: Preparation & Awareness
+                </div>
+                <div class="pillar-content">
+                    <strong style="display: block; margin-bottom: 6px;">Before Every Transfer:</strong>
+                    <ul>
+                        <li>Consult the transfer method statement</li>
+                        <li>Confirm weather and sea conditions are acceptable</li>
+                        <li>Obtain Master approval before proceeding</li>
+                        <li>Verify pilot ladder is correctly rigged and inspected</li>
+                        <li>Establish communication with pilot boat crew</li>
+                        <li>Ensure rescue equipment is ready and accessible</li>
+                        <li>Brief all personnel and confirm fitness for transfer</li>
+                    </ul>
+                    <strong style="display: block; margin-top: 8px; margin-bottom: 6px;">Required PPE:</strong>
+                    <ul>
+                        <li>SOLAS-approved lifejacket or PFD</li>
+                        <li>Safety helmet with chin strap secured</li>
+                        <li>Non-slip safety footwear</li>
+                        <li>Work gloves</li>
+                        <li>AIS MOB / PLB (if issued)</li>
+                        <li>Weather-appropriate protective clothing</li>
+                    </ul>
+                    <div style="margin-top: 6px; font-weight: 700; color: #003C72;">NO PPE = NO TRANSFER</div>
+                </div>
+            </div>
+
+            <!-- DELIVER Pillar -->
+            <div class="pillar deliver">
+                <div class="pillar-header">
+                    <span class="pillar-icon">⚠️</span>
+                    DELIVER: Knowledge & Standards
+                </div>
+                <div class="pillar-content">
+                    <strong style="display: block; margin-bottom: 6px;">Key Hazards to Manage:</strong>
+                    <ul>
+                        <li>Falling between pilot boat and vessel hull</li>
+                        <li>Vessel movement due to swell, wake, or wash</li>
+                        <li>Slips on wet or oily surfaces</li>
+                        <li>Ladder failure or incorrect rigging</li>
+                        <li>Crushing between vessel hulls during transfer</li>
+                        <li>Poor weather conditions or reduced visibility</li>
+                        <li>Fatigue or loss of balance</li>
+                        <li>Inadequate communication between parties</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Critical Callout -->
+            <div class="critical-callout">IF IN DOUBT — STOP THE TRANSFER</div>
+
+            <!-- REPORT Pillar -->
+            <div class="pillar report">
+                <div class="pillar-header">
+                    <span class="pillar-icon">✓</span>
+                    REPORT: Action & Communication
+                </div>
+                <div class="pillar-content">
+                    <strong style="display: block; margin-bottom: 6px;">During Transfer:</strong>
+                    <ul>
+                        <li>Only one person transfers at a time</li>
+                        <li>Maintain three points of contact on ladder at all times</li>
+                        <li>Face the ladder — never turn your back or sidestep</li>
+                        <li>Move steadily and deliberately — do not rush</li>
+                        <li>Follow all instructions from crew and pilot boat coxswain</li>
+                        <li>Abort the transfer immediately if conditions change</li>
+                    </ul>
+                    <strong style="display: block; margin-top: 8px; margin-bottom: 6px;">After Transfer:</strong>
+                    <ul>
+                        <li>Confirm all personnel are safely onboard</li>
+                        <li>Secure the pilot ladder and all equipment</li>
+                        <li>Report any defects, damage, or near misses</li>
+                        <li>Inform Master or Team Leader of the completion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-tagline">YOUR WATCH. OUR STANDARD.</div>
+            <div class="footer-details">
+                <span class="footer-detail">Seagull Maritime</span>
+                <span class="footer-detail">April 2026</span>
+                <span class="footer-detail">SM-CAM-BUL-001</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

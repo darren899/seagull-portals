@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seagull Maritime — Portals</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --navy: #003C72;
+    --navy-dark: #002a52;
+    --cyan: #00A3D9;
+    --cyan-light: #4DC4E8;
+    --gold: #C4975C;
+  }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container {
+    text-align: center;
+    padding: 40px;
+  }
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .logo-text span { color: var(--cyan); font-weight: 400; }
+  .subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+  }
+  .portals {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .portal-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 40px 36px;
+    width: 280px;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .portal-card:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .portal-icon {
+    font-size: 36px;
+    margin-bottom: 18px;
+    display: block;
+  }
+  .portal-card h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+  }
+  .portal-card p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+  .portal-card .badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin-top: 14px;
+  }
+  .badge-gold { background: var(--gold); color: white; }
+  .badge-cyan { background: var(--cyan); color: white; }
+  .footer-text {
+    margin-top: 60px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo-text">SEAGULL <span>MARITIME</span></div>
+  <div class="subtitle">Portal Access</div>
+
+  <div class="portals">
+    <a class="portal-card" href="dd/index.html">
+      <span class="portal-icon">📋</span>
+      <h2>Due Diligence Portal</h2>
+      <p>Compliance documentation for authorised client review. Access code required.</p>
+      <span class="badge badge-gold">Client Access</span>
+    </a>
+
+    <a class="portal-card" href="campaign/index.html">
+      <span class="portal-icon">⚓</span>
+      <h2>Your Watch. Our Standard.</h2>
+      <p>Compliance awareness campaign portal. Bulletins, flash cards, documents, and reporting.</p>
+      <span class="badge badge-cyan">Internal</span>
+    </a>
+  </div>
+
+  <div class="footer-text">Seagull Maritime Ltd &nbsp;|&nbsp; Confidential &nbsp;|&nbsp; 2026</div>
+</div>
+</body>
+</html>
