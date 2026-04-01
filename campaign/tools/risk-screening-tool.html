@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk Screening Tool | Seagull Maritime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #003C72;
+    --navy-dark: #002A52;
+    --navy-deeper: #001D3A;
+    --cyan: #00A3D9;
+    --cyan-light: #4DC4E8;
+    --cyan-pale: #E6F6FC;
+    --white: #FFFFFF;
+    --off-white: #F8FAFB;
+    --light-grey: #F4F7FA;
+    --mid-grey: #E8EDF2;
+    --border-grey: #D5DCE3;
+    --slate: #42515A;
+    --slate-light: #6B7C88;
+    --green: #2E7D4F;
+    --green-bg: #E8F5ED;
+    --green-border: #A8D5B8;
+    --amber: #D4842A;
+    --amber-bg: #FFF3E0;
+    --amber-border: #F5C882;
+    --red: #C0392B;
+    --red-bg: #FDECEB;
+    --red-border: #E8A8A3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--navy);
+    background: var(--off-white);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(0, 42, 82, 0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 30px;
+    display: flex; justify-content: space-between; align-items: center; height: 60px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 12px; text-decoration: none;
+  }
+  .nav-brand-text {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+    color: white; line-height: 1.1;
+  }
+  .nav-brand-text .nb-highlight { color: var(--cyan-light); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: rgba(255,255,255,0.65); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan-light); }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--navy-deeper) 0%, var(--navy) 50%, var(--navy-dark) 100%);
+    padding: 100px 30px 50px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -200px; right: -150px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,163,217,0.08) 0%, transparent 70%);
+  }
+  .hero-grid {
+    position: absolute; top: 0; right: 0; width: 50%; height: 100%; opacity: 0.03;
+    background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto; position: relative; z-index: 2;
+  }
+  .hero-breadcrumb {
+    font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 16px;
+  }
+  .hero-breadcrumb a { color: var(--cyan-light); text-decoration: none; }
+  .hero-breadcrumb a:hover { text-decoration: underline; }
+  .hero-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 36px;
+    color: white; margin-bottom: 10px; letter-spacing: -0.5px;
+  }
+  .hero-ref {
+    font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px;
+    color: var(--cyan-light); letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .hero-desc {
+    font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.7);
+    max-width: 620px; line-height: 1.7;
+  }
+
+  /* ===== MAIN ===== */
+  .main { max-width: 800px; margin: 0 auto; padding: 40px 30px 80px; }
+
+  /* Progress bar */
+  .progress-bar {
+    display: flex; gap: 4px; margin-bottom: 36px;
+  }
+  .progress-segment {
+    flex: 1; height: 6px; border-radius: 3px; background: var(--mid-grey);
+    transition: background 0.4s;
+  }
+  .progress-segment.active { background: var(--cyan); }
+  .progress-segment.done { background: var(--green); }
+
+  /* Dimension badge */
+  .dimension-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 4px; margin-bottom: 20px;
+  }
+  .dimension-badge.security { background: rgba(0,60,114,0.1); color: var(--navy); }
+  .dimension-badge.safety { background: rgba(0,163,217,0.12); color: var(--cyan); }
+  .dimension-badge.sanctions { background: rgba(192,57,43,0.1); color: var(--red); }
+
+  /* Question card */
+  .question-card {
+    background: white; border-radius: 12px; padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid var(--mid-grey);
+    margin-bottom: 24px;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-number {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 11px;
+    color: var(--cyan); letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .question-text {
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 17px;
+    color: var(--navy); margin-bottom: 20px; line-height: 1.4;
+  }
+
+  /* Option buttons */
+  .options-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .option-btn {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--light-grey); border: 2px solid transparent;
+    border-radius: 8px; padding: 14px 18px; cursor: pointer;
+    transition: all 0.2s; text-align: left; width: 100%;
+    font-family: 'Open Sans', sans-serif; font-size: 14px; color: var(--navy);
+  }
+  .option-btn:hover { border-color: var(--cyan); background: var(--cyan-pale); }
+  .option-btn.selected { border-color: var(--cyan); background: var(--cyan-pale); }
+  .option-btn.selected .option-radio { background: var(--cyan); border-color: var(--cyan); }
+  .option-btn.selected .option-radio::after { opacity: 1; }
+
+  .option-btn.dontknow {
+    background: #FFF8F0; border-color: transparent;
+  }
+  .option-btn.dontknow:hover { border-color: var(--amber); }
+  .option-btn.dontknow.selected { border-color: var(--amber); background: var(--amber-bg); }
+  .option-btn.dontknow.selected .option-radio { background: var(--amber); border-color: var(--amber); }
+
+  .option-btn.red-flag {
+    background: #FFF5F5;
+  }
+  .option-btn.red-flag:hover { border-color: var(--red); }
+  .option-btn.red-flag.selected { border-color: var(--red); background: var(--red-bg); }
+  .option-btn.red-flag.selected .option-radio { background: var(--red); border-color: var(--red); }
+
+  .option-radio {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--border-grey); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; position: relative;
+  }
+  .option-radio::after {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: white; opacity: 0; transition: opacity 0.2s;
+  }
+
+  /* Multi-select checkbox style */
+  .option-btn.multi .option-radio { border-radius: 4px; }
+  .option-btn.multi .option-radio::after { border-radius: 2px; width: 10px; height: 10px; }
+
+  /* Free text input */
+  .text-input {
+    width: 100%; padding: 14px 18px; border: 2px solid var(--mid-grey);
+    border-radius: 8px; font-family: 'Open Sans', sans-serif; font-size: 14px;
+    color: var(--navy); transition: border-color 0.2s; background: white;
+  }
+  .text-input:focus { outline: none; border-color: var(--cyan); }
+  .text-input::placeholder { color: var(--slate-light); }
+
+  .input-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .input-row .text-input { flex: 1; }
+
+  .input-label {
+    font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 11px;
+    letter-spacing: 0.5px; color: var(--slate-light); margin-bottom: 6px;
+    display: block;
+  }
+
+  /* Navigation buttons */
+  .nav-buttons {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--mid-grey);
+  }
+
+  .btn {
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: 1px; text-transform: uppercase; border: none;
+    padding: 12px 28px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-back {
+    background: var(--light-grey); color: var(--slate);
+  }
+  .btn-back:hover { background: var(--mid-grey); }
+  .btn-next {
+    background: var(--cyan); color: white;
+  }
+  .btn-next:hover { background: #0090c0; }
+  .btn-next:disabled { background: var(--border-grey); cursor: not-allowed; }
+  .btn-submit {
+    background: var(--navy); color: white;
+  }
+  .btn-submit:hover { background: var(--navy-dark); }
+
+  /* ===== RESULTS ===== */
+  .results-container { display: none; }
+
+  .result-header {
+    text-align: center; padding: 40px 0 30px;
+  }
+  .result-rating {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 32px;
+    letter-spacing: 2px; padding: 16px 40px; border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .result-rating.green { background: var(--green-bg); color: var(--green); border: 2px solid var(--green-border); }
+  .result-rating.amber { background: var(--amber-bg); color: var(--amber); border: 2px solid var(--amber-border); }
+  .result-rating.red { background: var(--red-bg); color: var(--red); border: 2px solid var(--red-border); }
+
+  .result-rating-icon { font-size: 36px; }
+
+  .result-summary {
+    font-size: 15px; color: var(--slate); max-width: 600px; margin: 0 auto; line-height: 1.7;
+  }
+
+  /* Dimension result cards */
+  .dimension-results {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    margin: 30px 0;
+  }
+  .dim-result-card {
+    background: white; border-radius: 10px; padding: 20px;
+    border: 1px solid var(--mid-grey); text-align: center;
+  }
+  .dim-result-label {
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--slate-light);
+    margin-bottom: 8px;
+  }
+  .dim-result-badge {
+    display: inline-block; font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: 13px; letter-spacing: 1px; padding: 6px 16px; border-radius: 20px;
+  }
+  .dim-result-badge.green { background: var(--green-bg); color: var(--green); }
+  .dim-result-badge.amber { background: var(--amber-bg); color: var(--amber); }
+  .dim-result-badge.red { background: var(--red-bg); color: var(--red); }
+
+  /* Coverage and gaps */
+  .result-section {
+    background: white; border-radius: 12px; padding: 28px;
+    border: 1px solid var(--mid-grey); margin-bottom: 20px;
+  }
+  .result-section-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px;
+    color: var(--navy); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .coverage-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--light-grey);
+    font-size: 13px;
+  }
+  .coverage-item:last-child { border-bottom: none; }
+  .coverage-icon { font-size: 16px; }
+  .coverage-ref {
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px;
+    color: var(--cyan); letter-spacing: 0.5px;
+  }
+
+  .gap-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 14px; margin-bottom: 8px;
+    background: var(--amber-bg); border-radius: 8px; border-left: 4px solid var(--amber);
+    font-size: 13px; color: var(--slate);
+  }
+  .gap-item.critical {
+    background: var(--red-bg); border-left-color: var(--red);
+  }
+
+  /* Unknowns section */
+  .unknown-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 14px; margin-bottom: 8px;
+    background: #FFF8F0; border-radius: 8px; border-left: 4px solid var(--amber);
+    font-size: 13px; color: var(--slate);
+  }
+
+  /* Screening record */
+  .screening-record {
+    background: var(--light-grey); border-radius: 10px; padding: 20px;
+    margin-top: 20px; font-size: 12px; color: var(--slate-light);
+  }
+  .screening-record strong { color: var(--navy); }
+
+  /* Action buttons */
+  .result-actions {
+    display: flex; gap: 12px; justify-content: center; margin-top: 30px;
+  }
+  .btn-action {
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px;
+    letter-spacing: 1px; text-transform: uppercase; padding: 12px 24px;
+    border-radius: 6px; cursor: pointer; border: 2px solid var(--border-grey);
+    background: white; color: var(--navy); transition: all 0.2s;
+  }
+  .btn-action:hover { border-color: var(--cyan); color: var(--cyan); }
+  .btn-action.primary { background: var(--navy); color: white; border-color: var(--navy); }
+  .btn-action.primary:hover { background: var(--navy-dark); }
+
+  /* ===== SCREENER INFO BOX ===== */
+  .info-box {
+    background: var(--cyan-pale); border-radius: 8px; padding: 14px 18px;
+    margin-top: 16px; font-size: 13px; color: var(--navy); line-height: 1.5;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .info-box .info-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Hidden */
+  .hidden { display: none !important; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .hero-title { font-size: 26px; }
+    .dimension-results { grid-template-columns: 1fr; }
+    .result-actions { flex-direction: column; }
+    .input-row { flex-direction: column; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../" class="nav-brand">
+      <div class="nav-brand-text">SEAGULL<br><span class="nb-highlight">MARITIME</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../">Campaign</a></li>
+      <li><a href="../../dd/">Due Diligence</a></li>
+      <li><a href="https://report.seagullmaritimeltd.com" target="_blank">Report</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-breadcrumb"><a href="../">Campaign</a> &rsaquo; Tools</div>
+    <h1 class="hero-title">Risk Screening Tool</h1>
+    <div class="hero-ref">SM/INT/DOC/003 &mdash; V1.0</div>
+    <p class="hero-desc">Pre-assessment gateway for new engagements, clients, regions, and operational changes. This tool determines whether existing risk assessments provide adequate coverage or whether a formal assessment is required.</p>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- INTRO CARD (before screening starts) -->
+  <div id="intro-card">
+    <div class="question-card" style="text-align:center; padding:40px;">
+      <div style="font-size:48px; margin-bottom:16px;">&#x1F6E1;&#xFE0F;</div>
+      <h2 style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:22px; color:var(--navy); margin-bottom:12px;">Before You Commit, Screen It</h2>
+      <p style="font-size:14px; color:var(--slate); max-width:500px; margin:0 auto 8px; line-height:1.7;">This tool screens new engagements across three dimensions: <strong>Security & Business</strong>, <strong>Safety</strong>, and <strong>Sanctions</strong>. It takes 2-3 minutes.</p>
+      <p style="font-size:13px; color:var(--slate-light); max-width:500px; margin:0 auto 24px; line-height:1.6;">Every question has a "Don't Know" option. It's always better to ask than to guess. Don't know routes you to the GCD for clarification.</p>
+
+      <div style="margin-bottom:24px;">
+        <label class="input-label">Your name</label>
+        <input type="text" id="screener-name" class="text-input" placeholder="e.g. Olga Petrova" style="max-width:360px; margin:0 auto;">
+      </div>
+
+      <button class="btn btn-next" onclick="startScreening()" style="font-size:13px; padding:14px 40px;">Begin Screening</button>
+    </div>
+  </div>
+
+  <!-- SCREENING FLOW -->
+  <div id="screening-flow" class="hidden">
+    <div class="progress-bar" id="progress-bar"></div>
+    <div id="question-container"></div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" id="btn-back" onclick="goBack()">Back</button>
+      <div>
+        <button class="btn btn-next" id="btn-next" onclick="goNext()">Next</button>
+        <button class="btn btn-submit hidden" id="btn-submit" onclick="submitScreening()">Submit Screening</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results-container" class="results-container"></div>
+
+</div>
+
+<script>
+// ===== QUESTION DATA =====
+const questions = [
+  // DIMENSION 1 — Security & Business
+  {
+    id: "1.1", dimension: "security", number: "QUESTION 1.1",
+    text: "What type of activity is this screening for?",
+    type: "single",
+    options: [
+      { label: "New client enquiry or bid", risk: "amber" },
+      { label: "New tasking for existing client", risk: "green" },
+      { label: "Change to existing operation (vessel, route, personnel, scope)", risk: "amber" },
+      { label: "Vessel charter or acquisition", risk: "amber" },
+      { label: "Other", risk: "amber", freeText: true },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  {
+    id: "1.2", dimension: "security", number: "QUESTION 1.2",
+    text: "What is the operating region?",
+    type: "single",
+    options: [
+      { label: "Indian Ocean Region (IOR)", risk: "green", note: "Existing RA-004 in place" },
+      { label: "West Africa / Gulf of Guinea (WAF/GOG)", risk: "green", note: "Existing RA-004 in place" },
+      { label: "Persian Gulf / Strait of Hormuz", risk: "amber", note: "Auto-checks conflict status" },
+      { label: "Red Sea / Gulf of Aden", risk: "red", note: "Active Houthi threat — auto-RED" },
+      { label: "South American waters", risk: "amber", note: "Auto-checks regional events" },
+      { label: "Other region not listed", risk: "red", freeText: true },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  {
+    id: "1.3", dimension: "security", number: "QUESTION 1.3",
+    text: "What sector is the client in?",
+    type: "single",
+    options: [
+      { label: "Shipping / tanker operations", risk: "green" },
+      { label: "Oil and gas / energy", risk: "green" },
+      { label: "Government / military", risk: "amber" },
+      { label: "Fishing / fisheries protection", risk: "amber" },
+      { label: "Offshore / subsea", risk: "green" },
+      { label: "Other", risk: "amber", freeText: true },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  {
+    id: "1.4", dimension: "security", number: "QUESTION 1.4",
+    text: "Enter the client company name for sanctions screening.",
+    type: "text",
+    placeholder: "Client company name",
+    sanctions: true
+  },
+  {
+    id: "1.5", dimension: "security", number: "QUESTION 1.5",
+    text: "Enter the vessel name and/or IMO number (if applicable).",
+    type: "dual-text",
+    fields: [
+      { id: "vessel-name", label: "Vessel name", placeholder: "e.g. MV Seagull Star" },
+      { id: "vessel-imo", label: "IMO number", placeholder: "e.g. 9290323" }
+    ],
+    hasNA: true
+  },
+  {
+    id: "1.6", dimension: "security", number: "QUESTION 1.6",
+    text: "What is the flag state of the vessel?",
+    type: "single",
+    options: [
+      { label: "Known, approved flag state", risk: "green" },
+      { label: "High-risk or restricted flag state (Iran, North Korea, Syria, Russia, Venezuela, Myanmar)", risk: "red" },
+      { label: "Not applicable (shore-based)", risk: "green" },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  {
+    id: "1.7", dimension: "security", number: "QUESTION 1.7",
+    text: "What is the approximate contract value and duration?",
+    type: "single",
+    options: [
+      { label: "Under $50k / single transit", risk: "green" },
+      { label: "$50k\u2013$250k / multi-transit or short-term programme", risk: "green" },
+      { label: "Over $250k / long-term programme", risk: "amber" },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  {
+    id: "1.8", dimension: "security", number: "QUESTION 1.8",
+    text: "Does this engagement require weapons carriage?",
+    type: "single",
+    options: [
+      { label: "Yes", risk: "amber" },
+      { label: "No", risk: "green" },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  {
+    id: "1.9", dimension: "security", number: "QUESTION 1.9",
+    text: "Does this involve Seagull personnel boarding a client vessel?",
+    type: "single",
+    options: [
+      { label: "Yes", risk: "green" },
+      { label: "No", risk: "green" },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  // DIMENSION 2 — Safety
+  {
+    id: "2.1", dimension: "safety", number: "QUESTION 2.1",
+    text: "Does this involve a vessel type Seagull has previously worked on?",
+    type: "single",
+    options: [
+      { label: "Yes \u2014 standard commercial vessel (tanker, bulk carrier, container)", risk: "green" },
+      { label: "Yes \u2014 specialist vessel (LNG/LPG, FPSO, offshore platform)", risk: "amber" },
+      { label: "No \u2014 new vessel type not previously assessed", risk: "red" },
+      { label: "Not applicable (shore-based)", risk: "green" },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  {
+    id: "2.2", dimension: "safety", number: "QUESTION 2.2",
+    text: "Are all required personnel competencies available for this operation?",
+    type: "single",
+    options: [
+      { label: "Yes \u2014 full team available with current certifications", risk: "green" },
+      { label: "Gaps exist \u2014 need to recruit or source additional personnel", risk: "amber" },
+      { label: "Not applicable (shore-based)", risk: "green" },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  {
+    id: "2.3", dimension: "safety", number: "QUESTION 2.3",
+    text: "Does the operation involve any of the following specific hazards?",
+    type: "multi",
+    instruction: "Select all that apply",
+    options: [
+      { label: "Small craft / RHIB operations", risk: "green", ra: "SM/HSE/RA/004", brag: "SM/CAM/BRAG/003" },
+      { label: "Vessel-to-vessel transfer", risk: "green", ra: "SM/HSE/RA/002", brag: "SM/CAM/BRAG/001" },
+      { label: "Weapons handling or armoury operations", risk: "green", ra: "SM/HSE/RA/007", brag: "SM/CAM/BRAG/006" },
+      { label: "Extreme heat or adverse environmental conditions", risk: "green", ra: "SM/HSE/RA/009", brag: "SM/CAM/BRAG/008" },
+      { label: "Working at height or in confined spaces", risk: "amber", ra: null },
+      { label: "Night operations", risk: "amber", ra: null },
+      { label: "None of the above / standard operations", risk: "green", exclusive: true },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow", exclusive: true }
+    ]
+  },
+  {
+    id: "2.4", dimension: "safety", number: "QUESTION 2.4",
+    text: "Will personnel be deployed continuously for more than 28 days?",
+    type: "single",
+    options: [
+      { label: "Yes \u2014 fatigue management and welfare considerations apply", risk: "amber" },
+      { label: "No", risk: "green" },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  },
+  {
+    id: "2.5", dimension: "safety", number: "QUESTION 2.5",
+    text: "Are there any environmental or site-specific conditions not covered by existing risk assessments?",
+    type: "single",
+    options: [
+      { label: "No \u2014 standard conditions", risk: "green" },
+      { label: "Yes", risk: "amber", freeText: true },
+      { label: "Don\u2019t Know / Unsure", risk: "dontknow" }
+    ]
+  }
+];
+
+// RA Library mapping
+const raLibrary = {
+  "SM/HSE/RA/002": { title: "Vessel Transfer Operations", brag: "SM/CAM/BRAG/001" },
+  "SM/HSE/RA/003": { title: "Security Duties \u2014 Client Vessel", brag: "SM/CAM/BRAG/002" },
+  "SM/HSE/RA/004": { title: "RHIB and Craft Launch Operations", brag: "SM/CAM/BRAG/003" },
+  "SM/HSE/RA/005": { title: "Vessel Routine Operations", brag: "SM/CAM/BRAG/004" },
+  "SM/HSE/RA/006": { title: "Office Workplace", brag: "SM/CAM/BRAG/005" },
+  "SM/HSE/RA/007": { title: "Weapons Handling and Armoury", brag: "SM/CAM/BRAG/006" },
+  "SM/HSE/RA/008": { title: "Remote Working", brag: "SM/CAM/BRAG/007" },
+  "SM/HSE/RA/009": { title: "Heat Stress and Environmental", brag: "SM/CAM/BRAG/008" },
+  "SM/SEC/RA/001": { title: "IOR Piracy Operations (RA-004)", brag: null },
+  "SM/SEC/RA/002": { title: "WAF/GOG Operations (RA-004)", brag: null }
+};
+
+// State
+let currentQuestion = 0;
+let answers = {};
+let screenerName = "";
+
+function startScreening() {
+  screenerName = document.getElementById("screener-name").value.trim();
+  if (!screenerName) {
+    document.getElementById("screener-name").style.borderColor = "var(--red)";
+    document.getElementById("screener-name").focus();
+    return;
+  }
+  document.getElementById("intro-card").classList.add("hidden");
+  document.getElementById("screening-flow").classList.remove("hidden");
+  buildProgressBar();
+  renderQuestion();
+}
+
+function buildProgressBar() {
+  const bar = document.getElementById("progress-bar");
+  bar.innerHTML = "";
+  for (let i = 0; i < questions.length; i++) {
+    const seg = document.createElement("div");
+    seg.className = "progress-segment";
+    seg.id = "prog-" + i;
+    bar.appendChild(seg);
+  }
+  updateProgress();
+}
+
+function updateProgress() {
+  for (let i = 0; i < questions.length; i++) {
+    const seg = document.getElementById("prog-" + i);
+    seg.className = "progress-segment";
+    if (i < currentQuestion) seg.classList.add("done");
+    else if (i === currentQuestion) seg.classList.add("active");
+  }
+}
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const container = document.getElementById("question-container");
+
+  const dimClass = q.dimension === "security" ? "security" : q.dimension === "safety" ? "safety" : "sanctions";
+  const dimLabel = q.dimension === "security" ? "Dimension 1 \u2014 Security & Business" : q.dimension === "safety" ? "Dimension 2 \u2014 Safety" : "Dimension 3 \u2014 Sanctions";
+
+  let html = `<span class="dimension-badge ${dimClass}">${dimLabel}</span>`;
+  html += `<div class="question-card">`;
+  html += `<div class="question-number">${q.number}</div>`;
+  html += `<div class="question-text">${q.text}</div>`;
+
+  if (q.type === "single") {
+    html += `<div class="options-list">`;
+    q.options.forEach((opt, i) => {
+      let cls = "option-btn";
+      if (opt.risk === "dontknow") cls += " dontknow";
+      else if (opt.risk === "red") cls += " red-flag";
+
+      const isSelected = answers[q.id] && answers[q.id].index === i;
+      if (isSelected) cls += " selected";
+
+      let label = opt.label;
+      if (opt.note) label += ` <span style="font-size:11px; color:var(--slate-light); font-style:italic;">\u2014 ${opt.note}</span>`;
+
+      html += `<button class="${cls}" onclick="selectOption('${q.id}', ${i}, '${opt.risk}', ${!!opt.freeText})" data-idx="${i}">`;
+      html += `<span class="option-radio"></span><span>${label}</span></button>`;
+    });
+    html += `</div>`;
+
+    // Free text box if selected option has freeText
+    if (answers[q.id] && answers[q.id].freeText) {
+      html += `<div style="margin-top:12px;"><input type="text" class="text-input" id="freetext-${q.id}" placeholder="Please specify..." value="${answers[q.id].freeTextValue || ""}" oninput="updateFreeText('${q.id}', this.value)"></div>`;
+    }
+  }
+  else if (q.type === "multi") {
+    if (q.instruction) html += `<p style="font-size:12px; color:var(--slate-light); margin-bottom:12px; font-style:italic;">${q.instruction}</p>`;
+    html += `<div class="options-list">`;
+    const selected = answers[q.id] ? answers[q.id].indices : [];
+    q.options.forEach((opt, i) => {
+      let cls = "option-btn multi";
+      if (opt.risk === "dontknow") cls += " dontknow";
+      if (selected.includes(i)) cls += " selected";
+      html += `<button class="${cls}" onclick="toggleMulti('${q.id}', ${i}, ${!!opt.exclusive})" data-idx="${i}">`;
+      html += `<span class="option-radio"></span><span>${opt.label}</span></button>`;
+    });
+    html += `</div>`;
+  }
+  else if (q.type === "text") {
+    const val = answers[q.id] ? answers[q.id].value : "";
+    html += `<input type="text" class="text-input" id="text-${q.id}" placeholder="${q.placeholder || ''}" value="${val}" oninput="updateTextAnswer('${q.id}', this.value)">`;
+    html += `<div style="margin-top:8px;">`;
+    const isDK = answers[q.id] && answers[q.id].dontknow;
+    html += `<button class="option-btn dontknow ${isDK ? 'selected' : ''}" onclick="toggleTextDK('${q.id}')" style="margin-top:4px;"><span class="option-radio"></span><span>Don\u2019t Know / Unsure</span></button>`;
+    html += `</div>`;
+    if (q.sanctions) {
+      html += `<div class="info-box"><span class="info-icon">\u2139\uFE0F</span><span>This entry will be automatically checked against OFAC, UK, and EU sanctions databases when you submit the screening.</span></div>`;
+    }
+  }
+  else if (q.type === "dual-text") {
+    html += `<div class="input-row">`;
+    q.fields.forEach(f => {
+      const val = answers[q.id] ? (answers[q.id][f.id] || "") : "";
+      html += `<div style="flex:1;"><label class="input-label">${f.label}</label><input type="text" class="text-input" id="${f.id}" placeholder="${f.placeholder}" value="${val}" oninput="updateDualText('${q.id}', '${f.id}', this.value)"></div>`;
+    });
+    html += `</div>`;
+    if (q.hasNA) {
+      const isNA = answers[q.id] && answers[q.id].na;
+      const isDK = answers[q.id] && answers[q.id].dontknow;
+      html += `<button class="option-btn ${isNA ? 'selected' : ''}" onclick="toggleDualNA('${q.id}')" style="margin-top:4px;"><span class="option-radio"></span><span>Not applicable</span></button>`;
+      html += `<button class="option-btn dontknow ${isDK ? 'selected' : ''}" onclick="toggleDualDK('${q.id}')" style="margin-top:4px;"><span class="option-radio"></span><span>Don\u2019t Know / Unsure</span></button>`;
+    }
+  }
+
+  html += `</div>`;
+  container.innerHTML = html;
+
+  // Update nav buttons
+  document.getElementById("btn-back").style.visibility = currentQuestion === 0 ? "hidden" : "visible";
+  const isLast = currentQuestion === questions.length - 1;
+  document.getElementById("btn-next").classList.toggle("hidden", isLast);
+  document.getElementById("btn-submit").classList.toggle("hidden", !isLast);
+
+  updateProgress();
+}
+
+function selectOption(qId, idx, risk, hasFreeText) {
+  answers[qId] = { index: idx, risk, freeText: hasFreeText, freeTextValue: "" };
+  renderQuestion();
+}
+
+function updateFreeText(qId, val) {
+  if (answers[qId]) answers[qId].freeTextValue = val;
+}
+
+function toggleMulti(qId, idx, isExclusive) {
+  if (!answers[qId]) answers[qId] = { indices: [], risks: [] };
+  const a = answers[qId];
+  const q = questions.find(x => x.id === qId);
+
+  if (isExclusive) {
+    a.indices = [idx];
+    a.risks = [q.options[idx].risk];
+  } else {
+    // Remove exclusive selections
+    a.indices = a.indices.filter(i => !q.options[i].exclusive);
+    a.risks = a.indices.map(i => q.options[i].risk);
+
+    if (a.indices.includes(idx)) {
+      a.indices = a.indices.filter(i => i !== idx);
+    } else {
+      a.indices.push(idx);
+    }
+    a.risks = a.indices.map(i => q.options[i].risk);
+  }
+  renderQuestion();
+}
+
+function updateTextAnswer(qId, val) {
+  if (!answers[qId]) answers[qId] = {};
+  answers[qId].value = val;
+  answers[qId].dontknow = false;
+}
+
+function toggleTextDK(qId) {
+  if (!answers[qId]) answers[qId] = {};
+  answers[qId].dontknow = !answers[qId].dontknow;
+  if (answers[qId].dontknow) answers[qId].value = "";
+  renderQuestion();
+}
+
+function updateDualText(qId, fieldId, val) {
+  if (!answers[qId]) answers[qId] = {};
+  answers[qId][fieldId] = val;
+  answers[qId].na = false;
+  answers[qId].dontknow = false;
+}
+
+function toggleDualNA(qId) {
+  if (!answers[qId]) answers[qId] = {};
+  answers[qId].na = !answers[qId].na;
+  if (answers[qId].na) answers[qId].dontknow = false;
+  renderQuestion();
+}
+
+function toggleDualDK(qId) {
+  if (!answers[qId]) answers[qId] = {};
+  answers[qId].dontknow = !answers[qId].dontknow;
+  if (answers[qId].dontknow) answers[qId].na = false;
+  renderQuestion();
+}
+
+function goBack() {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestion();
+  }
+}
+
+function goNext() {
+  if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
+    renderQuestion();
+  }
+}
+
+// ===== RESULTS ENGINE =====
+function submitScreening() {
+  // Calculate ratings per dimension
+  const dimRatings = { security: "green", safety: "green", sanctions: "green" };
+  const unknowns = [];
+  const gaps = [];
+  const coveredRAs = new Set();
+  const flaggedItems = [];
+
+  // Always include baseline RAs for vessel operations
+  coveredRAs.add("SM/HSE/RA/003"); // Security duties
+  coveredRAs.add("SM/HSE/RA/005"); // Routine ops
+
+  questions.forEach(q => {
+    const a = answers[q.id];
+    if (!a) return;
+
+    if (q.type === "single") {
+      const opt = q.options[a.index];
+      if (opt.risk === "dontknow") {
+        unknowns.push({ qId: q.id, question: q.text });
+        dimRatings[q.dimension] = escalate(dimRatings[q.dimension], "amber");
+      } else if (opt.risk === "red") {
+        dimRatings[q.dimension] = "red";
+        flaggedItems.push({ qId: q.id, question: q.text, answer: opt.label, dimension: q.dimension });
+      } else if (opt.risk === "amber") {
+        dimRatings[q.dimension] = escalate(dimRatings[q.dimension], "amber");
+      }
+    }
+    else if (q.type === "multi" && a.indices) {
+      a.indices.forEach(i => {
+        const opt = q.options[i];
+        if (opt.risk === "dontknow") {
+          unknowns.push({ qId: q.id, question: q.text });
+          dimRatings[q.dimension] = escalate(dimRatings[q.dimension], "amber");
+        } else if (opt.risk === "red") {
+          dimRatings[q.dimension] = "red";
+        } else if (opt.risk === "amber") {
+          dimRatings[q.dimension] = escalate(dimRatings[q.dimension], "amber");
+          if (!opt.ra) gaps.push({ hazard: opt.label, note: "No existing RA covers this hazard" });
+        }
+        if (opt.ra) coveredRAs.add(opt.ra);
+      });
+    }
+    else if (q.type === "text") {
+      if (a.dontknow) {
+        unknowns.push({ qId: q.id, question: q.text });
+        dimRatings[q.dimension] = escalate(dimRatings[q.dimension], "amber");
+      }
+    }
+    else if (q.type === "dual-text") {
+      if (a.dontknow) {
+        unknowns.push({ qId: q.id, question: q.text });
+        dimRatings[q.dimension] = escalate(dimRatings[q.dimension], "amber");
+      }
+    }
+  });
+
+  // Region-based RA mapping
+  const regionAnswer = answers["1.2"];
+  if (regionAnswer && regionAnswer.index !== undefined) {
+    const regionOpt = questions.find(q => q.id === "1.2").options[regionAnswer.index];
+    if (regionOpt.label.includes("IOR")) coveredRAs.add("SM/SEC/RA/001");
+    if (regionOpt.label.includes("WAF")) coveredRAs.add("SM/SEC/RA/002");
+  }
+
+  // Boarding = add vessel transfer RA
+  const boardingAnswer = answers["1.9"];
+  if (boardingAnswer && boardingAnswer.index === 0) {
+    coveredRAs.add("SM/HSE/RA/002");
+  }
+
+  // Sanctions check (simulated — flags if client name entered)
+  const clientAnswer = answers["1.4"];
+  if (clientAnswer && clientAnswer.value && clientAnswer.value.length > 0) {
+    // In production, this would hit the sanctions DB
+    // For now, simulate clean result
+    dimRatings.sanctions = "green";
+  }
+
+  // Check flag state for sanctions dimension
+  const flagAnswer = answers["1.6"];
+  if (flagAnswer && flagAnswer.index !== undefined) {
+    const flagOpt = questions.find(q => q.id === "1.6").options[flagAnswer.index];
+    if (flagOpt.risk === "red") {
+      dimRatings.sanctions = "red";
+      flaggedItems.push({ qId: "1.6", question: "Flag state", answer: flagOpt.label, dimension: "sanctions" });
+    }
+  }
+
+  // Overall rating = worst of all dimensions
+  const riskOrder = { green: 0, amber: 1, red: 2 };
+  const overall = Object.values(dimRatings).reduce((worst, r) => riskOrder[r] > riskOrder[worst] ? r : worst, "green");
+
+  // Render results
+  renderResults(overall, dimRatings, coveredRAs, gaps, unknowns, flaggedItems);
+}
+
+function escalate(current, to) {
+  const order = { green: 0, amber: 1, red: 2 };
+  return order[to] > order[current] ? to : current;
+}
+
+function renderResults(overall, dimRatings, coveredRAs, gaps, unknowns, flaggedItems) {
+  document.getElementById("screening-flow").classList.add("hidden");
+  const container = document.getElementById("results-container");
+  container.style.display = "block";
+
+  const ratingLabels = { green: "GREEN", amber: "AMBER", red: "RED" };
+  const ratingIcons = { green: "\u2705", amber: "\u26A0\uFE0F", red: "\uD83D\uDED1" };
+  const ratingMessages = {
+    green: "Existing risk assessments cover this scenario. Proceed with the identified coverage below.",
+    amber: "Partial coverage or unresolved questions identified. Review flagged items with your line manager. GCD review recommended before contractual commitment.",
+    red: "Critical gaps, sanctions flags, or conflict zone alerts identified. Do not proceed or commit to this engagement. Contact the Group Compliance Director immediately."
+  };
+
+  let html = `<div class="result-header">`;
+  html += `<div class="result-rating ${overall}"><span class="result-rating-icon">${ratingIcons[overall]}</span> ${ratingLabels[overall]}</div>`;
+  html += `<p class="result-summary">${ratingMessages[overall]}</p>`;
+  html += `</div>`;
+
+  // Dimension breakdown
+  html += `<div class="dimension-results">`;
+  html += `<div class="dim-result-card"><div class="dim-result-label">Security & Business</div><div class="dim-result-badge ${dimRatings.security}">${ratingLabels[dimRatings.security]}</div></div>`;
+  html += `<div class="dim-result-card"><div class="dim-result-label">Safety</div><div class="dim-result-badge ${dimRatings.safety}">${ratingLabels[dimRatings.safety]}</div></div>`;
+  html += `<div class="dim-result-card"><div class="dim-result-label">Sanctions</div><div class="dim-result-badge ${dimRatings.sanctions}">${ratingLabels[dimRatings.sanctions]}</div></div>`;
+  html += `</div>`;
+
+  // Critical flags
+  if (flaggedItems.length > 0) {
+    html += `<div class="result-section">`;
+    html += `<div class="result-section-title">\uD83D\uDED1 Critical Flags</div>`;
+    flaggedItems.forEach(f => {
+      html += `<div class="gap-item critical"><span>\u26A0\uFE0F</span><span><strong>${f.qId}</strong> \u2014 ${f.answer}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Unknowns
+  if (unknowns.length > 0) {
+    html += `<div class="result-section">`;
+    html += `<div class="result-section-title">\u2753 Unresolved Questions \u2014 Clarify with GCD</div>`;
+    unknowns.forEach(u => {
+      html += `<div class="unknown-item"><span>\u2753</span><span><strong>${u.qId}</strong> \u2014 ${u.question}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Coverage
+  html += `<div class="result-section">`;
+  html += `<div class="result-section-title">\uD83D\uDCCB Existing Coverage</div>`;
+  if (coveredRAs.size > 0) {
+    Array.from(coveredRAs).sort().forEach(ref => {
+      const ra = raLibrary[ref];
+      if (ra) {
+        html += `<div class="coverage-item"><span class="coverage-icon">\u2705</span><span class="coverage-ref">${ref}</span><span>\u2014 ${ra.title}`;
+        if (ra.brag) html += ` <span style="font-size:11px; color:var(--cyan);">(BRAG: ${ra.brag})</span>`;
+        html += `</span></div>`;
+      }
+    });
+  } else {
+    html += `<p style="font-size:13px; color:var(--slate-light); padding:10px 0;">No existing risk assessments mapped for this scenario.</p>`;
+  }
+  html += `</div>`;
+
+  // Gaps
+  if (gaps.length > 0) {
+    html += `<div class="result-section">`;
+    html += `<div class="result-section-title">\u26A0\uFE0F Gaps Identified</div>`;
+    gaps.forEach(g => {
+      html += `<div class="gap-item"><span>\u26A0\uFE0F</span><span><strong>${g.hazard}</strong> \u2014 ${g.note}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Screening record
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const timeStr = now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+
+  html += `<div class="screening-record">`;
+  html += `<strong>Screening Record</strong><br>`;
+  html += `Completed by: <strong>${screenerName}</strong><br>`;
+  html += `Date: ${dateStr} at ${timeStr}<br>`;
+  html += `Overall Rating: <strong>${ratingLabels[overall]}</strong><br>`;
+  html += `Reference: SM/INT/DOC/003 v1.0<br>`;
+  html += `<span style="font-size:11px; margin-top:6px; display:block;">This record serves as evidence of risk screening at the point of business decision-making.</span>`;
+  html += `</div>`;
+
+  // Action buttons
+  html += `<div class="result-actions">`;
+  html += `<button class="btn-action" onclick="window.print()">Print / Save PDF</button>`;
+  html += `<button class="btn-action primary" onclick="resetScreening()">New Screening</button>`;
+  html += `</div>`;
+
+  container.innerHTML = html;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function resetScreening() {
+  currentQuestion = 0;
+  answers = {};
+  screenerName = "";
+  document.getElementById("results-container").style.display = "none";
+  document.getElementById("screening-flow").classList.add("hidden");
+  document.getElementById("intro-card").classList.remove("hidden");
+  document.getElementById("screener-name").value = "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+
+</body>
+</html>
