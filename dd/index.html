@@ -489,9 +489,21 @@
   </div>
 
   <main class="portal-content">
+    <div class="section-intro" style="border-left: 4px solid var(--gold); background: linear-gradient(135deg, #fdf8f0 0%, #fef9f2 100%);">
+      <h3 style="color: var(--gold);">Pre-Completed Due Diligence Questionnaire</h3>
+      <p>Based on our understanding of client due diligence requirements and the OCIMF PMSC Guidance questionnaire, we have prepared a pre-completed checklist to support your assessment needs. This document cross-references the evidence contained within this portal and can be used as a companion to the sections below.</p>
+      <p style="margin-top: 8px;">If you require a bespoke completion tailored to your specific requirements, or have additional questions, please speak to your commercial manager or contact us directly.</p>
+      <div style="margin-top: 12px;">
+        <a href="docs/SM-SEC-DOC-001-OCIMF-Questionnaire.pdf" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--navy); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 500;">
+          <span style="background: var(--gold); color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700;">PDF</span>
+          OCIMF PMSC Questionnaire — Pre-Completed
+        </a>
+      </div>
+    </div>
+
     <div class="section-intro">
       <h3>Navigation Guide</h3>
-      <p>This document pack provides comprehensive evidence of Seagull Maritime's compliance with OCIMF PMSC Guidance, Shell PMSC Audit Requirements, and international maritime security standards. Documents are organised into 10 sections below. Click any section to expand and access individual documents. All documents are view-only.</p>
+      <p>This document pack provides comprehensive evidence of Seagull Maritime's compliance with OCIMF PMSC Guidance, Shell PMSC Audit Requirements, and international maritime security standards. Documents are organised into 9 sections below. Click any section to expand and access individual documents. All documents are view-only.</p>
     </div>
 
     <div class="sections-grid" id="sectionsGrid">
@@ -580,53 +592,57 @@ const SECTIONS = [
   {
     num: 1,
     title: 'Company Registration & Information',
-    desc: 'Corporate structure, registration, ownership verification, financial standing, and office locations.',
+    desc: 'Corporate structure, registration, ownership verification, and legal governance disclosures.',
     ocimf: '1.1–1.10',
     docs: [
       { sub: 'Company Profile' },
-      { name: 'Company Organisation Chart', href: 'docs/s1/profile/Company%20Organisation%20Chart.jpg', icon: 'IMG' },
-      { name: 'Company Profile', href: 'docs/s1/profile/Company%20Profile.pdf', icon: 'PDF' },
-      { sub: 'Registration & Ownership' },
-      { name: 'Certificate of Registration (2011)', href: 'docs/s1/registration/20110912%20Certificate%20of%20Registration.pdf', icon: 'PDF' },
-      { name: 'Certificate of Change of Name (2013)', href: 'docs/s1/registration/20133007%20Certificate%20of%20Change%20of%20Name.pdf', icon: 'PDF' },
-      { name: 'Notification of Change of Address (2017)', href: 'docs/s1/registration/20170102%20Notification%20of%20Change%20of%20Registered%20Address.pdf', icon: 'PDF' },
+      { name: 'Corporate Structure & Organisation Chart', href: 'docs/s1/Seagull-Maritime-Corporate-Structure-and-Organisation.html', icon: 'HTML' },
+      { name: 'Company Profile 2026', href: 'docs/s1/profile/Company%20Profile.pdf', icon: 'PDF' },
+      { name: 'Platform Locations — March 2026', href: 'docs/s1/profile/Platform%20Locations%20March%202026.pdf', icon: 'PDF' },
+      { sub: 'Registration & Incorporation' },
       { name: 'Altered Certificate of Registration (2021)', href: 'docs/s1/registration/20211108%20Altered%20Certificate%20of%20Registration.pdf', icon: 'PDF' },
-      { name: 'Ownership Declaration (2024)', href: 'docs/s1/registration/20241411%20Ownership%20Declaration.pdf', icon: 'PDF' },
-      { sub: 'Financial Standing' },
-      { name: 'Audit Confirmation — March 2025', href: 'docs/s1/financial/Audit%20Confirmation%20-%20March%202025.pdf', icon: 'PDF' },
-      { name: 'Platform Locations — February 2026', href: 'docs/s1/Platform%20Locations%20February%202026.pdf', icon: 'PDF' },
+      { name: 'Maltese Company Incorporation Documents', href: 'docs/s1/registration/Seagull%20Malta%20Company%20Incorporation%20Documents.pdf', icon: 'PDF' },
+      { sub: 'Ownership & Governance' },
+      { name: 'UBO Declaration', href: 'docs/s1/legal/UBO%20DECLARATION.pdf', icon: 'PDF' },
+      { name: 'UBO Structure Explanation', href: 'docs/s1/legal/UBO%20STRUCTURE%20EXPLANATION.pdf', icon: 'PDF' },
+      { name: 'Shareholder & Ownership Confirmation', href: 'docs/s1/legal/SHAREHOLDER%20%26%20OWNERSHIP%20CONFIRMATION.pdf', icon: 'PDF' },
+      { name: 'Mergers, Acquisitions & Ownership Disclosure', href: 'docs/s1/legal/MERGERS%2C%20ACQUISITIONS%20AND%20OWNERSHIP%20DISCLOSURE.pdf', icon: 'PDF' },
+      { name: 'Government Affiliation Disclosure', href: 'docs/s1/legal/GOVERNMENT%20AFFILIATION%20DISCLOSURE.pdf', icon: 'PDF' },
+      { name: 'Group Corporate Structure Statement', href: 'docs/s1/legal/GROUP%20CORPORATE%20STRUCTURE%20STATEMENT.pdf', icon: 'PDF' },
+      { name: 'Legal Confirmation — Policy & Compliance', href: 'docs/s1/legal/LEGAL%20CONFIRMATION%20POLICY%20AND%20COMPLIANCE.pdf', icon: 'PDF' },
+      { name: 'Legal Function & Governance Statement', href: 'docs/s1/legal/LEGAL%20FUNCTION%20AND%20GOVERNANCE%20STATEMENT.pdf', icon: 'PDF' },
     ]
   },
   {
     num: 2,
     title: 'Compliance & Accreditation',
-    desc: 'ISO certifications, ICoCA membership, flag state authorisations, and compliance register.',
+    desc: 'ISO certifications, ICoCA membership, and flag state licences.',
     ocimf: '1.6, 2.1–2.5',
     docs: [
       { sub: 'Accreditations' },
-      { name: 'ISO 18788:2015 Certificate', href: 'docs/s2/accreditations/Seagull%20Maritime%20-%20ISO_18788_2015%20certificate.pdf', icon: 'PDF' },
-      { name: 'ISO 28000:2022 Certificate', href: 'docs/s2/accreditations/Seagull%20Maritime%20-%20ISO_28000_2022%20certificate.pdf', icon: 'PDF' },
-      { name: 'ISO 28007 Certificate', href: 'docs/s2/accreditations/iso28007.pdf', icon: 'PDF' },
-      { name: 'ISO 9001:2015 Certificate', href: 'docs/s2/accreditations/Seagull%20Maritime%20-%20ISO_9001_2015%20certificate.pdf', icon: 'PDF' },
-      { name: 'ICoCA Certified Member Certificate', href: 'docs/s2/accreditations/ICoCA%20Certified%20Member%20Certificate%20Seagull%20Maritime%20.pdf', icon: 'PDF' },
-      { sub: 'Flag State Authorisations' },
-      { name: 'UK PMSC Authorisation (0007.GB)', href: 'docs/s2/flags/0007.GB.PMSC_Seagull%20Maritime.pdf', icon: 'PDF' },
-      { name: 'Liberia — Letter of Authorisation', href: 'docs/s2/liberia/Seagull%20Malta%20Letter%20of%20Authorization_Liberia%202026.pdf', icon: 'PDF' },
-      { name: 'Panama — Flag State Authorisations', href: 'docs/s2/panama/APPROVAL%20CERTIFICATION%20-%20SEAGULL%20MARITIME%20LTD(Panama).PDF', icon: 'PDF' },
-      { name: 'Palau — Flag State Authorisations', href: 'docs/s2/palau/', icon: 'PDF' },
-      { name: 'Compliance Requirements Register (M-2003)', href: 'docs/s2/M-2003%20Compliance%20Requirements%20Register.pdf', icon: 'PDF' },
+      { name: 'ISO 18788:2015 Certificate (Exp. 03/09/2028)', href: 'docs/s2/accreditations/Seagull%20Maritime%20-%20ISO_18788_2015%20certificate.pdf', icon: 'PDF' },
+      { name: 'ISO 28000:2022 Certificate (Exp. 27/11/2027)', href: 'docs/s2/accreditations/Seagull%20Maritime%20-%20ISO_28000_2022%20certificate.pdf', icon: 'PDF' },
+      { name: 'ISO 28007:2015 Certificate (Exp. 27/11/2027)', href: 'docs/s2/accreditations/iso28007.pdf', icon: 'PDF' },
+      { name: 'ISO 9001:2015 Certificate (Exp. 03/09/2028)', href: 'docs/s2/accreditations/Seagull%20Maritime%20-%20ISO_9001_2015%20certificate.pdf', icon: 'PDF' },
+      { name: 'ICoCA Certified Member Certificate (Exp. 22/06/2026)', href: 'docs/s2/accreditations/ICoCA%20Certified%20Member%20Certificate%20Seagull%20Maritime%20.pdf', icon: 'PDF' },
+      { sub: 'Flag State Licences' },
+      { name: 'Guinea-Bissau — Licence Approval', href: 'docs/s2/flags/0007.GB.PMSC_Seagull%20Maritime.pdf', icon: 'PDF' },
+      { name: 'Liberia — Flag State Licence Documents', href: 'docs/s2/liberia/Liberia%20Flag%20State%20Licence%20Documents.pdf', icon: 'PDF' },
+      { name: 'Panama — Flag State Licence Documents', href: 'docs/s2/panama/Panama%20Flag%20State%20Licence%20Documents.pdf', icon: 'PDF' },
     ]
   },
   {
     num: 3,
     title: 'Standard Operating Procedures',
-    desc: 'Embarked team operations, LNG/LPG additional procedures, and standing orders.',
+    desc: 'Standard Operating Procedures for Seagull Maritime. Seagull Maritime is transitioning to a revised SOP framework. Current SOPs have been issued; personnel complete mandatory training via the company\u2019s online training platform before operational use. Transitional SOPs remain effective during this period.',
     ocimf: '3.1–3.8',
     docs: [
+      { sub: 'Current SOPs' },
+      { name: 'Standard Operating Procedures — Indian Ocean v1.0', href: 'docs/s3/Seagull%20Maritime%20Standard%20Operating%20Procedures%20-%20Indian%20Ocean%20v1.0.pdf', icon: 'PDF' },
+      { sub: 'Transitional SOPs' },
       { name: 'Embarked Teams Manual (M-3001)', href: 'docs/s3/M-3001%20Embarked%20Teams%20Manual.pdf', icon: 'PDF' },
       { name: 'Embarked Team Procedures (SOP-3001)', href: 'docs/s3/SOP-3001%20Embarked%20Team%20Procedures%20.pdf', icon: 'PDF' },
       { name: 'LNG, LPG, Tankers Additional Procedure (SOP-3002)', href: 'docs/s3/SOP-3002%20LNG,%20LPG,%20Tankers%20Additional%20Procedure.pdf', icon: 'PDF' },
-      { name: 'Standing Orders — Stowaway Operations (SOP-7778)', href: 'docs/s3/SOP-7778_STANDING_ORDERS_–_STOWAWAY_OPERATIONS.pdf', icon: 'PDF' },
     ]
   },
   {
@@ -635,37 +651,38 @@ const SECTIONS = [
     desc: 'Company rules governing use of force, escalation procedures, and proportionality framework.',
     ocimf: '4.1–4.4',
     docs: [
-      { name: 'Rules on the Use of Force', href: 'docs/s4/Rules%20on%20the%20Use%20of%20Force.pdf', icon: 'PDF' },
+      { name: 'Rules on the Use of Force v1.0', href: 'docs/s4/SM-SEC-PRO-003%20-%20Rules%20on%20the%20Use%20of%20Force%20v1.0.pdf', icon: 'PDF' },
     ]
   },
   {
     num: 5,
     title: 'Management Procedures',
-    desc: 'Document control, risk assessment, crisis response, incident investigation, and emergency procedures.',
+    desc: 'Document control, risk assessment, incident management, audit, and compliance procedures issued under the Seagull Maritime integrated management system.',
     ocimf: '1.4, 1.10, 5.1–5.6',
     docs: [
-      { name: 'Document Control Procedure (SOP-1001)', href: 'docs/s5/SOP-1001%20Document%20Control%20Procedure.pdf', icon: 'PDF' },
-      { name: 'Control of Records Procedure (SOP-1002)', href: 'docs/s5/SOP-1002%20Control%20of%20Records%20Procedure.pdf', icon: 'PDF' },
-      { name: 'Internal & External Communication (SOP-1003)', href: 'docs/s5/SOP-1003%20IMS%20Internal%20&%20External%20Communication%20Procedures.pdf', icon: 'PDF' },
-      { name: 'Command and Control Procedures (SOP-1009)', href: 'docs/s5/SOP-1009%20Command%20and%20Control%20Procedures.pdf', icon: 'PDF' },
-      { name: 'Control of Non-conformances (SOP-1020)', href: 'docs/s5/SOP-1020%20Control%20of%20Non-conformances%20Procedure.pdf', icon: 'PDF' },
-      { name: 'Corrective Action Procedure (SOP-1023)', href: 'docs/s5/SOP-1023%20Corrective%20Action%20Procedure.pdf', icon: 'PDF' },
-      { name: 'Risk Assessment Procedure (SOP-2001)', href: 'docs/s5/SOP-2001%20Risk%20Assessment%20Procedure.pdf', icon: 'PDF' },
-      { name: 'Crisis Response Procedures (SOP-2002)', href: 'docs/s5/SOP-2002%20Crisis%20Response%20Procedures.pdf', icon: 'PDF' },
-      { name: 'Emergency Procedures Ops Centre (SOP-2005)', href: 'docs/s5/SOP-2005%20Emergency%20Procedures%20OPS%20Center.pdf', icon: 'PDF' },
-      { name: 'Incident Investigation & Reporting (SOP-3005)', href: 'docs/s5/SOP-3005%20Incident%20Investigation,%20Managing%20And%20Reporting%20.pdf', icon: 'PDF' },
+      { name: 'Non-Conformance, OFI and Corrective Action Management (SM/INT/PRO/001)', href: 'docs/s5/SM-INT-PRO-001%20-%20Non-Conformance%20OFI%20and%20Corrective%20Action%20Management%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Control of Documents (SM/INT/PRO/002)', href: 'docs/s5/SM-INT-PRO-002%20-%20Control%20of%20Documents%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Internal Audit (SM/INT/PRO/003)', href: 'docs/s5/SM-INT-PRO-003%20-%20Internal%20Audit%20v1.0.pdf', icon: 'PDF' },
+      { name: 'External References and Standards (SM/INT/PRO/004)', href: 'docs/s5/SM-INT-PRO-004%20-%20External%20References%20and%20Standards%20Procedure%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Control of Records (SM/INT/PRO/005)', href: 'docs/s5/SM-INT-PRO-005%20-%20Control%20of%20Records%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Incident and Crisis Management (SM/INT/PRO/006)', href: 'docs/s5/SM-INT-PRO-006%20-%20Incident%20and%20Crisis%20Management%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Hazard Identification and Risk Assessment (SM/HSE/PRO/001)', href: 'docs/s5/SM-HSE-PRO-001%20-%20Hazard%20Identification%20and%20Risk%20Assessment%20Procedure%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Legal and Regulatory Compliance (SM/HSE/PRO/002)', href: 'docs/s5/SM-HSE-PRO-002%20-%20Legal%20and%20Regulatory%20Compliance%20Procedure%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Security and Business Risk Assessment (SM/SEC/PRO/001)', href: 'docs/s5/SM-SEC-PRO-001%20-%20Security%20and%20Business%20Risk%20Assessment%20Procedure%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Due Diligence and Client Vetting (SM/SEC/PRO/002)', href: 'docs/s5/SM-SEC-PRO-002%20-%20Due%20Diligence%20and%20Client%20Vetting%20Procedure%20v1.0.pdf', icon: 'PDF' },
     ]
   },
   {
     num: 6,
     title: 'Personnel Management',
-    desc: 'Recruitment, screening, training programmes, competency records, and example personnel files.',
+    desc: 'Recruitment, screening, induction, firearms competency, training programmes, and example personnel files.',
     ocimf: '6.1–6.8',
     docs: [
-      { name: 'Training, Competency and Awareness (SOP-1005)', href: 'docs/s6/SOP-1005%20Training,%20Competency%20and%20Awareness%20Procedures.pdf', icon: 'PDF' },
-      { name: 'Recruitment and Screening Procedure (SOP-1026)', href: 'docs/s6/SOP-1026%20Recruitment%20and%20Screening%20Procedure%20.pdf', icon: 'PDF' },
-      { name: 'MSO Training Syllabus — Online Course', href: 'docs/s6/MSO%20Training%20Syllabus%20-%20Online%20Course.pdf', icon: 'PDF' },
-      { name: 'MSO Syllabus', href: 'docs/s6/Syllabus%20-%20MSO.pdf', icon: 'PDF' },
+      { name: 'PCASP Induction and Deployment (SM/INT/PRO/007)', href: 'docs/s6/SM-INT-PRO-007%20-%20PCASP%20Induction%20and%20Deployment%20v1.0.pdf', icon: 'PDF' },
+      { name: 'PCASP Recruitment and Screening (SM/INT/PRO/008)', href: 'docs/s6/SM-INT-PRO-008%20-%20PCASP%20Recruitment%20and%20Screening%20v1.0.pdf', icon: 'PDF' },
+      { name: 'PCASP Recruitment and Screening — Shell (SM/INT/PRO/008-A)', href: 'docs/s6/SM-INT-PRO-008-A%20-%20PCASP%20Recruitment%20and%20Screening%20-%20Shell%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Firearms Competency (SM/INT/PRO/009)', href: 'docs/s6/SM-INT-PRO-009%20-%20Firearms%20Competency%20v1.0.pdf', icon: 'PDF' },
+      { name: 'MSO Course Program (SM/INT/DOC/005)', href: 'docs/s6/SM-INT-DOC-005%20-%20MSO%20Course%20Program%20v1.0.pdf', icon: 'PDF' },
       { sub: 'Example Personnel Files' },
       { name: 'MSO Documents — Sample Personnel Pack', href: 'docs/s6/mso-docs/', icon: 'PDF' },
     ]
@@ -673,11 +690,10 @@ const SECTIONS = [
   {
     num: 7,
     title: 'Weapons Management',
-    desc: 'End user certificates, UK export licences, weapons transfer agreements, and management procedures.',
+    desc: 'Weapons and equipment management, UK export licences, and example end user certificates.',
     ocimf: '7.1–7.6',
     docs: [
-      { name: 'Weapons & Security Equipment (SOP-3003)', href: 'docs/s7/SOP-3003%20Weapons%20&%20Security%20Equipment.pdf', icon: 'PDF' },
-      { name: 'Weapons Inventory', href: 'docs/s7/Weapons%20spreadsheet.xlsx', icon: 'XLS' },
+      { name: 'Annex G — Weapons & Equipment Management (SM/OPS/SOP/001-G)', href: 'docs/s7/SM-OPS-SOP-001-G%20-%20Annex%20G%20-%20Weapons%20%26%20Equipment%20Management%20v1.0.pdf', icon: 'PDF' },
       { sub: 'UK Export Licences (GBSIT)' },
       { name: 'GBSIT2016/00163', href: 'docs/s7/gbsit163/20160909%20-%20BIS%20-%20GBSIT2016_00163%20Licence.pdf', icon: 'PDF' },
       { name: 'GBSIT2016/00168', href: 'docs/s7/gbsit168/20160912%20-%20BIS%20-%20GBSIT2016_00168%20Licence%20(1).pdf', icon: 'PDF' },
@@ -685,7 +701,7 @@ const SECTIONS = [
       { name: 'GBSIT2017/00031', href: 'docs/s7/gbsit031/20170125%20-%20DIT%20-%20GBSIT2017-00031.pdf', icon: 'PDF' },
       { name: 'GBSIT2017/00144', href: 'docs/s7/gbsit144/20170524%20-%20DIT%20-%20GBSIT2017-00144.pdf', icon: 'PDF' },
       { name: 'GBSIT2019/00039', href: 'docs/s7/gbsit039/20190409%20-%20DIT%20-%20GBSIT2019-00039%20(PMB)(signed)%20(2).pdf', icon: 'PDF' },
-      { sub: 'End User Certificates' },
+      { sub: 'Example End User Certificates' },
       { name: 'End User Certificate 25DJ1350', href: 'docs/s7/eu1350/25DJ1350%20SEAGULL.pdf', icon: 'PDF' },
       { name: 'End User Certificate 25DJ1351', href: 'docs/s7/eu1351/25DJ1351%20SEAGULL.pdf', icon: 'PDF' },
       { name: 'End User Certificate 25DJ1352', href: 'docs/s7/eu1352/25DJ1352%20SEAGULL.pdf', icon: 'PDF' },
@@ -693,39 +709,35 @@ const SECTIONS = [
   },
   {
     num: 8,
-    title: 'Company Policies & Procedures',
-    desc: 'Full suite of corporate policies covering security, quality, H&S, ethics, HR, and data protection.',
+    title: 'Company Policies',
+    desc: 'Full suite of corporate policies covering security operations, quality, health & safety, environmental, ethics, HR, and data protection. Organised by management system.',
     ocimf: '1.3, 8.1–8.4',
     docs: [
-      { name: 'Security Policy', href: 'docs/s8/policies/SM%20POL%20-%20Security%20Policy.pdf', icon: 'PDF' },
-      { name: 'Quality Policy', href: 'docs/s8/policies/SM%20POL%20-%20Quality%20Policy.pdf', icon: 'PDF' },
-      { name: 'Health & Safety Policy', href: 'docs/s8/policies/SM%20POL%20-%20Health%20&%20Safety%20Policy.pdf', icon: 'PDF' },
-      { name: 'Human Rights Policy', href: 'docs/s8/policies/SM%20POL%20-%20Human%20Rights%20Policy.pdf', icon: 'PDF' },
-      { name: 'Anti-Bribery, Corruption & Business Ethics', href: 'docs/s8/policies/SM%20POL%20-%20Anti-Bribery,%20Corruption%20&%20Business%20Ethics.pdf', icon: 'PDF' },
-      { name: 'Code of Conduct', href: 'docs/s8/policies/SM%20POL%20-%20Code%20of%20Conduct.pdf', icon: 'PDF' },
-      { name: 'Environmental Policy', href: 'docs/s8/policies/SM%20POL%20-%20Environmental%20Policy.pdf', icon: 'PDF' },
-      { name: 'Equal Opportunities Policy', href: 'docs/s8/policies/SM%20POL%20-%20Equal%20Opportunities%20Policy.pdf', icon: 'PDF' },
-      { name: 'Grievance & Whistleblowing Policy', href: 'docs/s8/policies/SM%20POL%20-%20Grievance%20&%20Whistleblowing%20Policy.pdf', icon: 'PDF' },
-      { name: 'Personal Data Protection Policy', href: 'docs/s8/policies/SM%20POL%20-%20Personal%20Data%20Protection%20Policy.pdf', icon: 'PDF' },
-      { name: 'Recruitment Policy', href: 'docs/s8/policies/SM%20POL%20-%20Recruitment%20Policy.pdf', icon: 'PDF' },
-      { name: 'Risk Policy', href: 'docs/s8/policies/SM%20POL%20-%20Risk%20Policy.pdf', icon: 'PDF' },
-      { name: 'Training Policy', href: 'docs/s8/policies/SM%20POL%20-%20Training%20Policy.pdf', icon: 'PDF' },
-      { name: 'Statement of Conformance', href: 'docs/s8/policies/SM%20POL%20-%20Statement%20of%20Conformance.pdf', icon: 'PDF' },
+      /* — Health, Safety & Environment (ISO 45001) — */
+      { name: 'OH&S Policy (SM/HSE/POL/001)', href: 'docs/s8/policies/SM-HSE-POL-001%20-%20OHS%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Environmental Policy (SM/HSE/POL/002)', href: 'docs/s8/policies/SM-HSE-POL-002%20-%20Environmental%20Policy%20v1.0.pdf', icon: 'PDF' },
+      /* — Security Management (ISO 18788 / 28007 / 28000) — */
+      { name: 'Security & Security Operations Policy (SM/SEC/POL/001)', href: 'docs/s8/policies/SM-SEC-POL-001%20-%20Security%20and%20Security%20Operations%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Human Rights Policy (SM/SEC/POL/002)', href: 'docs/s8/policies/SM-SEC-POL-002%20-%20Human%20Rights%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Statement of Conformance (SM/SEC/POL/003)', href: 'docs/s8/policies/SM-SEC-POL-003%20-%20Statement%20of%20Conformance%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Security Policy Statement (SM/SEC/POL/004)', href: 'docs/s8/policies/SM-SEC-POL-004%20-%20Security%20Policy%20Statement%20v1.0.pdf', icon: 'PDF' },
+      /* — Quality Management (ISO 9001) — */
+      { name: 'Quality Policy (SM/QMS/POL/001)', href: 'docs/s8/policies/SM-QMS-POL-001%20-%20Quality%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Quality Policy Statement (SM/QMS/POL/002)', href: 'docs/s8/policies/SM-QMS-POL-002%20-%20Quality%20Policy%20Statement%20v1.0.pdf', icon: 'PDF' },
+      /* — Integrated / Cross-cutting — */
+      { name: 'Anti-Bribery, Corruption & Business Ethics (SM/INT/POL/001)', href: 'docs/s8/policies/SM-INT-POL-001%20-%20Anti-Bribery%20Corruption%20and%20Business%20Ethics%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Code of Conduct (SM/INT/POL/002)', href: 'docs/s8/policies/SM-INT-POL-002%20-%20Code%20of%20Conduct%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Equal Opportunities Policy (SM/INT/POL/003)', href: 'docs/s8/policies/SM-INT-POL-003%20-%20Equal%20Opportunities%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Grievance & Whistleblowing Policy (SM/INT/POL/004)', href: 'docs/s8/policies/SM-INT-POL-004%20-%20Grievance%20and%20Whistleblowing%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Personal Data Protection Policy (SM/INT/POL/005)', href: 'docs/s8/policies/SM-INT-POL-005%20-%20Personal%20Data%20Protection%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Recruitment Policy (SM/INT/POL/006)', href: 'docs/s8/policies/SM-INT-POL-006%20-%20Recruitment%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Risk Management Policy (SM/INT/POL/007)', href: 'docs/s8/policies/SM-INT-POL-007%20-%20Risk%20Management%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Social Media Policy (SM/INT/POL/008)', href: 'docs/s8/policies/SM-INT-POL-008%20-%20Social%20Media%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Training Policy (SM/INT/POL/009)', href: 'docs/s8/policies/SM-INT-POL-009%20-%20Training%20Policy%20v1.0.pdf', icon: 'PDF' },
     ]
   },
   {
     num: 9,
-    title: 'Testimonials & References',
-    desc: 'Client testimonials, performance reports, and recommendation letters.',
-    ocimf: '9.1',
-    docs: [
-      { name: 'Client Recommendation Letter', href: 'docs/s9/Recommendation%20Letter.pdf', icon: 'PDF' },
-      { name: 'Performance & Trip Report (PTR)', href: 'docs/s9/ptr/PTR.pdf', icon: 'PDF' },
-      { name: 'MV Cosmograph Performance Report — March 2024', href: 'docs/s9/012736%20-%20COSMOGRAPH%20March%202024.pdf', icon: 'PDF' },
-    ]
-  },
-  {
-    num: 10,
     title: 'Insurance',
     desc: 'Professional indemnity, liability insurance certificates, and personal accident cover.',
     ocimf: '10.1–10.3',
