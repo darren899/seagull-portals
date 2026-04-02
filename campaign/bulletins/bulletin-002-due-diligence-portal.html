@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seagull Maritime - Due Diligence Portal - Bulletin 002</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #f0f0f0;
+            font-family: 'Open Sans', sans-serif;
+            color: #42515A;
+        }
+
+        .container {
+            width: 595px;
+            height: 842px;
+            background: white;
+            margin: 20px auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #003C72 0%, #004d8f 100%);
+            color: white;
+            padding: 18px 20px 14px;
+            border-bottom: 4px solid #00A3D9;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .campaign-tagline {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-align: left;
+            flex: 1;
+        }
+
+        .bulletin-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            background: #00A3D9;
+            padding: 3px 10px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .seagull-branding {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.95;
+        }
+
+        .topic-section {
+            background: linear-gradient(90deg, #003C72 0%, #004d8f 100%);
+            color: white;
+            padding: 14px 20px;
+            border-bottom: 3px solid #4DC4E8;
+        }
+
+        .topic-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .topic-sub {
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-top: 3px;
+            letter-spacing: 0.3px;
+        }
+
+        .content {
+            flex: 1;
+            overflow: hidden;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .intro {
+            font-size: 11.5px;
+            line-height: 1.6;
+            color: #42515A;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E0E5EA;
+        }
+
+        .url-bar {
+            background: #003C72;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .url-icon {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        .url-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .url-sub {
+            font-size: 9px;
+            opacity: 0.8;
+            margin-top: 1px;
+        }
+
+        .features {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .feature-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .feature {
+            border-left: 4px solid;
+            padding: 10px 12px;
+            border-radius: 2px;
+            flex: 1;
+        }
+
+        .feature.navy { border-left-color: #003C72; background: rgba(0, 60, 114, 0.04); }
+        .feature.blue { border-left-color: #00A3D9; background: rgba(0, 163, 217, 0.04); }
+        .feature.slate { border-left-color: #42515A; background: rgba(66, 81, 90, 0.04); }
+        .feature.gold { border-left-color: #C4975C; background: rgba(196, 151, 92, 0.04); }
+
+        .feature-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .feature.navy .feature-title { color: #003C72; }
+        .feature.blue .feature-title { color: #00A3D9; }
+        .feature.slate .feature-title { color: #42515A; }
+        .feature.gold .feature-title { color: #C4975C; }
+
+        .feature-text {
+            font-size: 10px;
+            line-height: 1.55;
+            color: #42515A;
+        }
+
+        .feature-text strong {
+            color: #003C72;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #003C72, #004d8f);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        .highlight-item {
+            flex: 1;
+            text-align: center;
+            padding: 6px 4px;
+        }
+
+        .highlight-item + .highlight-item {
+            border-left: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .highlight-num {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #4DC4E8;
+        }
+
+        .highlight-label {
+            font-size: 8.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .action-strip {
+            background: #C4975C;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 4px;
+            font-size: 10.5px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .action-strip strong {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            display: block;
+            margin-bottom: 3px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer {
+            background: #003C72;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            border-top: 2px solid #00A3D9;
+        }
+
+        .footer-tagline {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .footer-details {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            font-size: 8px;
+        }
+
+        .footer-detail { opacity: 0.9; }
+
+        @media print {
+            html, body { background: white; margin: 0; padding: 0; }
+            .container { width: 100%; height: 100%; margin: 0; box-shadow: none; page-break-after: always; }
+            .content { overflow: visible; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-top">
+                <div class="campaign-tagline">YOUR WATCH.<br>OUR STANDARD.</div>
+                <div class="bulletin-number">Bulletin 002</div>
+            </div>
+            <div class="header-title">Commercial &amp; Operations Update</div>
+            <div class="seagull-branding">SEAGULL MARITIME</div>
+        </div>
+
+        <div class="topic-section">
+            <div class="topic-title">Due Diligence Portal</div>
+            <div class="topic-sub">New client-facing DD procedure and self-service document portal — Live April 2026</div>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                We have launched a new Due Diligence and Client Vetting Procedure (SM/SEC/PRO/002) and a dedicated online document portal to support all client due diligence requirements. This replaces our previous process of manually compiling DD packs per request.
+            </div>
+
+            <div class="url-bar">
+                <div>
+                    <div class="url-text">portals.seagullmaritimeltd.com</div>
+                    <div class="url-sub">Password-protected &bull; Unique access code per client &bull; View-only documents</div>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature-col">
+                    <div class="feature navy">
+                        <div class="feature-title">What Is The Portal?</div>
+                        <div class="feature-text">
+                            A secure, password-protected online document library containing our full DD evidence pack. Documents are organised into <strong>9 sections</strong> aligned to the OCIMF PMSC Guidance checklist and Shell audit requirements. Each client receives a unique access code and can browse, view and download documents at any time.
+                        </div>
+                    </div>
+
+                    <div class="feature blue">
+                        <div class="feature-title">Pre-Completed Questionnaire</div>
+                        <div class="feature-text">
+                            The portal includes our <strong>OCIMF PMSC Guidance Checklist</strong> pre-completed with approved Seagull Maritime responses across all 68 questions. Every answer cross-references the relevant evidence documents within the portal, so reviewers can verify our responses immediately.
+                        </div>
+                    </div>
+
+                    <div class="feature gold">
+                        <div class="feature-title">Bespoke Questionnaires</div>
+                        <div class="feature-text">
+                            If a client has their own DD questionnaire or specific requirements beyond the OCIMF standard, we can provide a <strong>bespoke completion within 72 hours</strong>. Speak to compliance directly to arrange this.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-col">
+                    <div class="feature slate">
+                        <div class="feature-title">Portal Sections</div>
+                        <div class="feature-text">
+                            <strong>S1</strong> Company Registration &amp; Structure<br>
+                            <strong>S2</strong> OCIMF Experience &amp; Knowledge<br>
+                            <strong>S3</strong> Certifications &amp; Accreditations<br>
+                            <strong>S4</strong> Insurance Documentation<br>
+                            <strong>S5</strong> Procedures &amp; SOPs<br>
+                            <strong>S6</strong> Personnel Management<br>
+                            <strong>S7</strong> Weapons &amp; Flag State<br>
+                            <strong>S8</strong> Company Policies (17 policies)<br>
+                            <strong>S9</strong> Insurance Certificates
+                        </div>
+                    </div>
+
+                    <div class="feature navy">
+                        <div class="feature-title">How To Use It</div>
+                        <div class="feature-text">
+                            <strong>1.</strong> Commercial team requests an access code from the GCD<br>
+                            <strong>2.</strong> Client receives the portal URL and their unique code<br>
+                            <strong>3.</strong> Client enters code + company name to access<br>
+                            <strong>4.</strong> All documents available for immediate review<br>
+                            <strong>5.</strong> Bespoke requests handled within 72 hours
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-item">
+                    <div class="highlight-num">9</div>
+                    <div class="highlight-label">Document Sections</div>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-num">68</div>
+                    <div class="highlight-label">OCIMF Answers</div>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-num">72h</div>
+                    <div class="highlight-label">Bespoke Turnaround</div>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-num">24/7</div>
+                    <div class="highlight-label">Portal Access</div>
+                </div>
+            </div>
+
+            <div class="action-strip">
+                <strong>Commercial Team: Contact the GCD to request access codes for your clients.</strong>
+                All DD requests should now be directed to the portal. Manual DD pack compilation is no longer required.
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-tagline">YOUR WATCH. OUR STANDARD.</div>
+            <div class="footer-details">
+                <span class="footer-detail">Seagull Maritime</span>
+                <span class="footer-detail">April 2026</span>
+                <span class="footer-detail">SM-CAM-BUL-002</span>
+                <span class="footer-detail">compliance@seagullmaritimeltd.com</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
