@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seagull Maritime — Due Diligence Document Portal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #003C72;
+    --navy-dark: #002a52;
+    --navy-light: #0a5a9e;
+    --tint: #E6EDF5;
+    --gold: #C4975C;
+    --gold-light: #e8c98a;
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #1a1a2e;
+    --text-light: #5a6275;
+    --red: #c0392b;
+    --green: #27ae60;
+    --border: #dde3eb;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* ===== ACCESS GATE ===== */
+  #gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, var(--navy-light) 100%);
+  }
+
+  .gate-card {
+    background: white;
+    border-radius: 16px;
+    padding: 48px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .gate-logo {
+    width: 220px;
+    margin-bottom: 32px;
+  }
+
+  .gate-card h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .gate-card p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .gate-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 3px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .gate-input:focus { border-color: var(--navy); }
+  .gate-input.error { border-color: var(--red); animation: shake 0.4s; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  .gate-btn {
+    width: 100%;
+    padding: 14px 16px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .gate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 60, 114, 0.3);
+  }
+
+  .gate-btn:active { transform: translateY(0); }
+
+  .gate-error {
+    color: var(--red);
+    font-size: 12px;
+    margin-top: 12px;
+    min-height: 16px;
+  }
+
+  .gate-footer {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 28px;
+    line-height: 1.6;
+  }
+
+  /* ===== PORTAL HEADER ===== */
+  .portal-header { background: white; border-bottom: 1px solid var(--border); }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: var(--tint);
+  }
+
+  .header-logo { height: 40px; }
+
+  .header-meta {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  .header-meta strong { color: var(--text); }
+
+  .header-hero {
+    padding: 40px;
+    text-align: center;
+  }
+
+  .header-hero h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .header-hero h2 {
+    font-size: 18px;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  .header-badges {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .badge-gold {
+    background: var(--gold);
+    color: white;
+  }
+
+  .badge-outline {
+    border: 1.5px solid var(--navy);
+    color: var(--navy);
+    background: transparent;
+  }
+
+  /* ===== SECURITY BANNER ===== */
+  .security-banner {
+    background: var(--red);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== WATERMARK ===== */
+  .watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: 120px;
+    font-weight: 700;
+    color: rgba(0, 60, 114, 0.08);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== PORTAL CONTENT ===== */
+  .portal-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-intro {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    margin-bottom: 32px;
+    border: 1px solid var(--border);
+  }
+
+  .section-intro h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+
+  .section-intro p {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  .sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .section-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .section-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 60, 114, 0.12);
+    border-color: var(--gold);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+    color: white;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .card-number {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gold);
+    color: white;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .card-body {
+    padding: 20px;
+    max-height: 1000px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .card-body.collapsed { max-height: 0; padding: 0 20px; }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .ocimf-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 8px;
+    background: var(--tint);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 4px;
+  }
+
+  .doc-list {
+    list-style: none;
+  }
+
+  .subfolder-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    text-transform: uppercase;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .subfolder-label:first-child { margin-top: 0; }
+
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .doc-item:last-child { border-bottom: none; }
+
+  .doc-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--tint);
+    color: var(--navy);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .doc-name {
+    flex: 1;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .doc-link {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    background: var(--navy);
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .doc-link:hover {
+    background: var(--navy-light);
+    transform: translateY(-1px);
+  }
+
+  .doc-link:active { transform: translateY(0); }
+
+  /* ===== PORTAL FOOTER ===== */
+  .portal-footer {
+    background: var(--tint);
+    padding: 32px 40px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-light);
+    border-top: 1px solid var(--border);
+    line-height: 1.8;
+  }
+
+  .portal-footer strong { color: var(--text); }
+
+  /* ===== EXPIRED STATE ===== */
+  #expired {
+    display: none;
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  #expired h2 { color: var(--red); margin-bottom: 16px; }
+  #expired p { color: var(--text-light); }
+
+  /* Print blocking */
+  @media print {
+    body::before {
+      content: "PRINTING NOT PERMITTED — CONFIDENTIAL DOCUMENT";
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-35deg);
+      font-size: 48px;
+      color: rgba(192, 57, 43, 0.3);
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    .portal-content { display: none !important; }
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header-top { padding: 16px 20px; }
+    .header-hero { padding: 28px 20px; }
+    .header-hero h1 { font-size: 22px; }
+    .portal-content { padding: 20px 12px; }
+    .sections-grid { grid-template-columns: 1fr; }
+    .gate-card { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+<!-- ===== ACCESS GATE ===== -->
+<div id="gate">
+  <div class="gate-card">
+    <img src="../../assets/SMlogo_landscape.png" alt="Seagull Maritime" class="gate-logo">
+    <h1>Due Diligence Document Portal</h1>
+    <p>This portal contains confidential compliance documentation prepared for authorised review only. Enter your access code and company name to proceed.</p>
+    <input type="text" id="accessCode" class="gate-input" placeholder="ACCESS CODE" maxlength="12" autocomplete="off" spellcheck="false">
+    <input type="text" id="companyName" class="gate-input" placeholder="YOUR COMPANY NAME" maxlength="60" autocomplete="off" spellcheck="false" style="margin-top: 12px; letter-spacing: normal; text-transform: none;">
+    <button class="gate-btn" onclick="authenticate()">Access Documents</button>
+    <div class="gate-error" id="gateError"></div>
+    <div class="gate-footer">
+      All documents are confidential and proprietary to Seagull Maritime Ltd.<br>
+      Unauthorised access or distribution is prohibited.
+    </div>
+  </div>
+</div>
+
+<!-- ===== EXPIRED STATE ===== -->
+<div id="expired">
+  <h2>Access Expired</h2>
+  <p>Your access to this document portal has expired.<br>
+  Please contact Seagull Maritime to request renewal.</p>
+  <p style="margin-top: 24px; font-size: 13px;"><strong>Email:</strong> compliance@seagullmaritimeltd.com</p>
+</div>
+
+<!-- ===== PORTAL ===== -->
+<div id="portal">
+  <div class="watermark" id="watermark"></div>
+
+  <header class="portal-header">
+    <div class="header-top">
+      <img src="../../assets/SMlogo_landscape.png" alt="Seagull Maritime" class="header-logo">
+      <div class="header-meta">
+        <strong>Prepared for: <span id="clientName"></span></strong><br>
+        Reference: <span id="portalRef"></span><br>
+        Valid until: <span id="portalExpiry"></span>
+      </div>
+    </div>
+    <div class="header-hero">
+      <h1>Due Diligence Document Pack</h1>
+      <h2>West Africa (Gulf of Guinea) — 2026</h2>
+      <div class="header-badges">
+        <span class="badge badge-gold">ISO 18788</span>
+        <span class="badge badge-gold">ISO 28000</span>
+        <span class="badge badge-gold">ISO 28007</span>
+        <span class="badge badge-gold">ISO 9001</span>
+        <span class="badge badge-outline">ICoCA Certified Member</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="security-banner">
+    CONFIDENTIAL — PREPARED EXCLUSIVELY FOR <span id="bannerClient"></span> — UNAUTHORISED DISTRIBUTION PROHIBITED
+  </div>
+
+  <main class="portal-content">
+    <div class="section-intro" style="border-left: 4px solid var(--gold); background: linear-gradient(135deg, #fdf8f0 0%, #fef9f2 100%);">
+      <h3 style="color: var(--gold);">Pre-Completed Due Diligence Questionnaire</h3>
+      <p>Based on our understanding of client due diligence requirements and the OCIMF PMSC Guidance questionnaire, we have prepared a pre-completed WAF Escorting Due Diligence Checklist to support your assessment needs. This document cross-references the evidence contained within this portal and can be used as a companion to the sections below.</p>
+      <p style="margin-top: 8px;">If you require a bespoke completion tailored to your specific requirements, or have additional questions, please speak to your commercial manager or contact us directly.</p>
+      <div style="margin-top: 12px;">
+        <a href="#" data-placeholder="true" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--navy); color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 500;">
+          <span style="background: var(--gold); color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: 700;">PDF</span>
+          WAF PMSC Questionnaire — Pre-Completed
+        </a>
+      </div>
+    </div>
+
+    <div class="section-intro">
+      <h3>Navigation Guide</h3>
+      <p>This document pack provides comprehensive evidence of Seagull Maritime's compliance with OCIMF PMSC Guidance, Shell PMSC Audit Requirements, and international maritime security standards. Documents are organised into 10 sections below. Click any section to expand and access individual documents. All documents are view-only.</p>
+    </div>
+
+    <div class="sections-grid" id="sectionsGrid">
+      <!-- Populated by JS -->
+    </div>
+  </main>
+
+  <footer class="portal-footer">
+    <strong>Seagull Maritime Ltd</strong> — 64 "Excalibur" B Bontadini Street, Birikirkara BKR1737, Malta<br>
+    ISO 18788 | ISO 28000 | ISO 28007 | ISO 9001 | ICoCA Certified Member<br><br>
+    All documents within this portal are confidential and proprietary. Reproduction, distribution, or sharing<br>
+    of this portal link or its contents without written authorisation from Seagull Maritime is strictly prohibited.<br><br>
+    <strong>Document Reference:</strong> <span id="footerRef"></span> | <strong>Portal Version:</strong> 1.0 | <strong>Last Updated:</strong> April 2026
+  </footer>
+</div>
+
+<script>
+// ================================================================
+// AUTO-ROTATING WEEKLY ACCESS CODE
+// Code format: SG + week-starting Monday date (DDMMYY)
+// Example: Week of 31 March 2026 = SG310326
+//
+// Internal staff can work out the code from the date.
+// Clients must request the current code from Commercial.
+// Code expires automatically at end of each Sunday (7-day window).
+//
+// To override with a manual code (e.g. for a demo), add it below.
+// Manual codes take priority over the auto-generated weekly code.
+// ================================================================
+const MANUAL_CODES = {
+  'DEMO2026': { expiry: '2026-12-31' },
+  // Add manual override codes here if needed
+};
+
+function getWeeklyCode() {
+  const now = new Date();
+  // Find Monday of current week
+  const day = now.getDay();
+  const diff = day === 0 ? -6 : 1 - day; // Monday = 1
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diff);
+
+  const dd = String(monday.getDate()).padStart(2, '0');
+  const mm = String(monday.getMonth() + 1).padStart(2, '0');
+  const yy = String(monday.getFullYear()).slice(-2);
+
+  return {
+    code: 'SG' + dd + mm + yy,
+    expiry: getEndOfWeek(monday),
+    monday: monday
+  };
+}
+
+function getEndOfWeek(monday) {
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23, 59, 59, 999);
+  return sunday;
+}
+
+function isValidCode(input) {
+  const upper = input.toUpperCase();
+
+  // Check manual codes first
+  if (MANUAL_CODES[upper]) {
+    const exp = new Date(MANUAL_CODES[upper].expiry + 'T23:59:59');
+    if (new Date() <= exp) return { valid: true, expiry: exp };
+    return { valid: false, expired: true };
+  }
+
+  // Check auto-generated weekly code
+  const weekly = getWeeklyCode();
+  if (upper === weekly.code) {
+    return { valid: true, expiry: weekly.expiry };
+  }
+
+  return { valid: false, expired: false };
+}
+
+// ================================================================
+// DOCUMENT SECTIONS
+// Links point to self-hosted PDF files served alongside this portal.
+// Drop PDFs into the matching docs/ subfolder.
+// ================================================================
+const SECTIONS = [
+  {
+    num: 1,
+    title: 'Company Structure & Legal',
+    desc: 'Corporate structure, registration, ownership verification, and legal governance disclosures.',
+    ocimf: '1.1–1.10',
+    docs: [
+      { sub: 'Company Profile' },
+      { name: 'Company Profile', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Corporate Structure & Organisation Chart', href: '#', icon: 'HTML', placeholder: true },
+      { sub: 'Seagull Nigeria Registration' },
+      { name: 'Seagull Nigeria Certificate of Incorporation (CAC)', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Seagull Malta Registration' },
+      { name: 'Seagull Maritime Certificate of Incorporation (Malta)', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Memorandum and Articles of Association (MEMART)', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Nigerian Regulatory Approvals' },
+      { name: 'Navy MOU', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'NSCDC Licence', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'NIMASA Certificate', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'DPR Permit', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+  {
+    num: 2,
+    title: 'Accreditations & Certifications',
+    desc: 'ISO certifications, ICoCA membership, and relevant regional certifications.',
+    ocimf: '1.6, 2.1–2.5',
+    docs: [
+      { sub: 'ISO Certifications' },
+      { name: 'ISO 9001 Certificate', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'ISO 18788 Certificate', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'ISO 28007 Certificate', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'ISO 45001 Certificate (pending)', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'International Memberships' },
+      { name: 'ICoCA Membership', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Regional Certifications' },
+      { name: 'MASPAN Certification', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+  {
+    num: 3,
+    title: 'Standard Operating Procedures',
+    desc: 'Security Escort Vessel (SEV) Standard Operating Procedures and Rules on the Use of Force.',
+    ocimf: '3.1–3.8, 4.1–4.4',
+    docs: [
+      { sub: 'Current SOPs' },
+      { name: 'WAF SEV SOP', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'MSLO Role & Responsibilities (Appendix A)', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Use of Force' },
+      { name: 'Rules on Use of Force', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'RUF Cards', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+  {
+    num: 4,
+    title: 'Policies',
+    desc: 'Full suite of corporate policies covering security operations, quality, health & safety, environmental, ethics, HR, and data protection.',
+    ocimf: '1.3, 8.1–8.4',
+    docs: [
+      { sub: 'Security Management' },
+      { name: 'Security Management Policy', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Human Rights Policy', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Health, Safety & Environment' },
+      { name: 'Health & Safety Policy', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Ethics & Compliance' },
+      { name: 'Anti-Bribery, Corruption & Ethics Policy', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Sanctions Policy', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Management & Governance' },
+      { name: 'Risk Management Policy', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Quality Policy', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Environmental Policy', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Code of Conduct', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Data Protection Policy', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+  {
+    num: 5,
+    title: 'Procedures',
+    desc: 'Document control, risk assessment, incident management, audit, and compliance procedures.',
+    ocimf: '1.4, 1.10, 5.1–5.6',
+    docs: [
+      { name: 'SEV Approval Procedure', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Supplier Approval — SEV', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Due Diligence Response Procedure', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'NCR/OFI/CAPA Management', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Control of Documents', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Internal Audit', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Incident and Crisis Management', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'SEV Critical Spares RA Procedure', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+  {
+    num: 6,
+    title: 'Risk Assessments',
+    desc: 'Security and operational risk assessments for SEV-specific activities and services.',
+    ocimf: '5.1–5.3',
+    docs: [
+      { sub: 'SEV Operations' },
+      { name: 'SEV Critical Spares Risk Assessment (template)', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'MV Mediator IV Critical Spares RA (example)', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Health & Safety Risk Assessments' },
+      { name: 'H&S RA — Vessel Transfer Operations', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'H&S RA — Security Operations', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'H&S RA — Night Operations', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+  {
+    num: 7,
+    title: 'Training & Personnel',
+    desc: 'Training programmes, competence matrices, personnel development, and example training records.',
+    ocimf: '6.1–6.8',
+    docs: [
+      { sub: 'Training Programmes' },
+      { name: 'Human Rights PCASP Training', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Human Rights Staff & Management Training', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Competence & Records' },
+      { name: 'Training and Competence Matrix', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'MSLO Training Records (placeholder)', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Crew Training Records (placeholder)', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+  {
+    num: 8,
+    title: 'Insurance',
+    desc: 'Professional indemnity, liability, personnel insurance, and hull coverage for Security Escort Vessels.',
+    ocimf: '10.1–10.3',
+    docs: [
+      { sub: 'Liability Insurance' },
+      { name: 'P&I Insurance', href: '#', icon: 'PDF', placeholder: true },
+      { name: '3rd Party Liability Insurance', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Coverage' },
+      { name: 'Personnel Insurance', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Hull Insurance (SEVs)', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+  {
+    num: 9,
+    title: 'SEV Documentation',
+    desc: 'Security Escort Vessel register, individual vessel documentation, and operational templates.',
+    ocimf: '3.1–3.8',
+    docs: [
+      { sub: 'SEV Register & Fleet' },
+      { name: 'SEV Register (placeholder)', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Individual SEV Folders (placeholder)', href: '#', icon: 'PDF', placeholder: true },
+      { sub: 'Templates & Resources' },
+      { name: 'SEV Checklist Template', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Supplier DD Questionnaire Template', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+  {
+    num: 10,
+    title: 'Testimonials & References',
+    desc: 'Client testimonials, engagement references, and operational track record in West Africa region.',
+    ocimf: '1.2',
+    docs: [
+      { name: 'Client Testimonials', href: '#', icon: 'PDF', placeholder: true },
+      { name: 'Previous Engagement References', href: '#', icon: 'PDF', placeholder: true },
+    ]
+  },
+];
+
+// ================================================================
+// AUTHENTICATION
+// ================================================================
+function authenticate() {
+  const code = document.getElementById('accessCode').value.trim();
+  const company = document.getElementById('companyName').value.trim();
+  const codeInput = document.getElementById('accessCode');
+  const companyInput = document.getElementById('companyName');
+  const error = document.getElementById('gateError');
+
+  if (!code) {
+    codeInput.classList.add('error');
+    error.textContent = 'Please enter your access code.';
+    setTimeout(() => codeInput.classList.remove('error'), 400);
+    return;
+  }
+
+  if (!company) {
+    companyInput.classList.add('error');
+    error.textContent = 'Please enter your company name.';
+    setTimeout(() => companyInput.classList.remove('error'), 400);
+    return;
+  }
+
+  const result = isValidCode(code);
+
+  if (!result.valid && result.expired) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('expired').style.display = 'block';
+    logAccess(code, company, 'FAILED — expired');
+    return;
+  }
+
+  if (!result.valid) {
+    codeInput.classList.add('error');
+    error.textContent = 'Invalid access code. Please check and try again.';
+    setTimeout(() => codeInput.classList.remove('error'), 400);
+    logAccess(code, company, 'FAILED — invalid code');
+    return;
+  }
+
+  // Success — show portal
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('portal').style.display = 'block';
+
+  // Generate reference from company name
+  const companyShort = company.replace(/[^a-zA-Z0-9]/g, '').substring(0, 6).toUpperCase();
+  const ref = 'SM-DD-' + companyShort + '-' + new Date().getFullYear();
+
+  // Populate client details from the company name they entered
+  document.getElementById('clientName').textContent = company;
+  document.getElementById('portalRef').textContent = ref;
+  document.getElementById('portalExpiry').textContent = formatDate(result.expiry);
+  document.getElementById('bannerClient').textContent = company.toUpperCase();
+  document.getElementById('watermark').textContent = company;
+  document.getElementById('footerRef').textContent = ref;
+
+  // Build sections
+  buildSections();
+  logAccess(code, company, 'SUCCESS');
+}
+
+// Enter key support on both inputs
+document.getElementById('accessCode').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('companyName').focus();
+});
+document.getElementById('companyName').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') authenticate();
+});
+
+// ================================================================
+// BUILD PORTAL SECTIONS
+// ================================================================
+function buildSections() {
+  const grid = document.getElementById('sectionsGrid');
+
+  SECTIONS.forEach(section => {
+    const card = document.createElement('div');
+    card.className = 'section-card';
+
+    let docsHtml = '';
+    section.docs.forEach(doc => {
+      if (doc.sub) {
+        docsHtml += `<div class="subfolder-label">${doc.sub}</div>`;
+      } else {
+        docsHtml += `
+          <li class="doc-item">
+            <div class="doc-icon">${doc.icon || 'PDF'}</div>
+            <span class="doc-name">${doc.name}</span>
+            <a href="${doc.href}" target="_blank" rel="noopener" class="doc-link" onclick="logDocView('${doc.name}')" ${doc.placeholder ? 'data-placeholder="true"' : ''}>View</a>
+          </li>`;
+      }
+    });
+
+    card.innerHTML = `
+      <div class="card-header" onclick="this.parentElement.querySelector('.card-body').classList.toggle('collapsed')">
+        <div class="card-number">${section.num}</div>
+        <div>
+          <div class="card-title">${section.title}</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">${section.desc}<br><span class="ocimf-tag">OCIMF Ref: ${section.ocimf}</span></div>
+        <ul class="doc-list">${docsHtml}</ul>
+      </div>`;
+
+    grid.appendChild(card);
+  });
+}
+
+// ================================================================
+// LOGGING
+// Sends access events to a webhook. Replace URL with your
+// Google Apps Script web app URL or similar endpoint.
+// ================================================================
+function logAccess(code, company, result) {
+  const payload = {
+    timestamp: new Date().toISOString(),
+    code: code,
+    company: company,
+    result: result,
+    userAgent: navigator.userAgent,
+    portal: 'WAF-2026'
+  };
+
+  // Uncomment and replace URL when webhook is ready:
+  // fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+  //   method: 'POST',
+  //   mode: 'no-cors',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(payload)
+  // }).catch(() => {});
+
+  console.log('Access log:', payload);
+}
+
+function logDocView(docName) {
+  const payload = {
+    timestamp: new Date().toISOString(),
+    client: document.getElementById('clientName').textContent,
+    document: docName,
+    portal: 'WAF-2026'
+  };
+
+  // Uncomment when webhook ready:
+  // fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+  //   method: 'POST',
+  //   mode: 'no-cors',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(payload)
+  // }).catch(() => {});
+
+  console.log('Doc view:', payload);
+}
+
+// ================================================================
+// UTILITIES
+// ================================================================
+function formatDate(d) {
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+// Disable keyboard shortcuts for copying/printing
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P' || e.key === 's' || e.key === 'S')) {
+    e.preventDefault();
+    return false;
+  }
+});
+</script>
+</body>
+</html>

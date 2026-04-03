@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seagull Maritime — Due Diligence Document Portal — Columbia Shipmanagement</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #1B3A5C;
+    --navy-dark: #132942;
+    --navy-light: #2a5a8e;
+    --tint: #E8EDF3;
+    --orange: #E8611A;
+    --orange-light: #f0944e;
+    --orange-dark: #c74e10;
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #1a1a2e;
+    --text-light: #5a6275;
+    --red: #c0392b;
+    --green: #27ae60;
+    --border: #dde3eb;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* ===== PORTAL ===== */
+  .watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: 80px;
+    font-weight: 700;
+    color: rgba(27, 58, 92, 0.04);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1000;
+    letter-spacing: 8px;
+  }
+
+  /* Header */
+  .portal-header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+    color: white;
+    padding: 0;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .header-logos {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .header-logo { height: 44px; }
+  .header-logo-csm { height: 40px; }
+
+  .logo-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .header-meta {
+    text-align: right;
+    font-size: 12px;
+    opacity: 0.8;
+    line-height: 1.6;
+  }
+
+  .header-meta strong { opacity: 1; }
+
+  /* Year selector */
+  .year-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 40px;
+    background: rgba(0,0,0,0.15);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .year-selector-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    margin-right: 4px;
+  }
+
+  .year-btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .year-btn.active {
+    background: var(--orange);
+    color: white;
+    border-color: var(--orange);
+  }
+
+  .year-btn.inactive {
+    background: transparent;
+    color: rgba(255,255,255,0.4);
+    border-color: rgba(255,255,255,0.15);
+    cursor: default;
+  }
+
+  .year-btn.inactive::after {
+    content: ' (Coming)';
+    font-size: 10px;
+    font-weight: 400;
+  }
+
+  .download-all-btn {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: var(--orange);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s;
+  }
+
+  .download-all-btn:hover { background: var(--orange-dark); }
+
+  .download-all-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .download-all-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  .header-hero {
+    padding: 48px 40px;
+    max-width: 900px;
+  }
+
+  .header-hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .header-hero h2 {
+    font-size: 16px;
+    font-weight: 400;
+    opacity: 0.7;
+    margin-bottom: 20px;
+  }
+
+  .header-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-orange { background: var(--orange); color: white; }
+  .badge-outline { border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+
+  /* Security banner */
+  .security-banner {
+    background: var(--navy-dark);
+    color: var(--orange-light);
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  /* Content */
+  .portal-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .section-intro {
+    margin-bottom: 40px;
+    padding: 24px 28px;
+    background: white;
+    border-radius: 12px;
+    border-left: 4px solid var(--orange);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+
+  .section-intro h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .section-intro p {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  .questionnaire-box {
+    border-left: 4px solid var(--orange);
+    background: linear-gradient(135deg, #fef6f0 0%, #fef8f3 100%);
+  }
+
+  .questionnaire-box h3 { color: var(--orange); }
+
+  .doc-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--navy);
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background 0.2s;
+    margin-top: 4px;
+  }
+
+  .doc-download-btn:hover { background: var(--navy-dark); }
+
+  .doc-badge {
+    background: var(--orange);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  /* Section cards */
+  .sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .section-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+
+  .section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .card-header {
+    background: var(--navy);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .card-number {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .card-body {
+    padding: 16px 20px;
+  }
+
+  .card-body.collapsed {
+    display: none;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .doc-list { list-style: none; }
+
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--tint);
+    font-size: 12px;
+  }
+
+  .doc-item:last-child { border-bottom: none; }
+
+  .doc-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--tint);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+
+  .doc-name {
+    flex: 1;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .doc-link {
+    color: var(--navy);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--navy);
+    border-radius: 4px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .doc-link:hover {
+    background: var(--navy);
+    color: white;
+  }
+
+  .subfolder-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 0 6px;
+    border-bottom: 2px solid var(--tint);
+    margin-top: 6px;
+  }
+
+  /* OCIMF mapping */
+  .ocimf-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    background: var(--tint);
+    border-radius: 3px;
+    color: var(--navy);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Footer */
+  .portal-footer {
+    background: var(--navy-dark);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 11px;
+    line-height: 1.8;
+  }
+
+  .portal-footer strong { color: var(--orange-light); }
+
+  /* Print blocking */
+  @media print {
+    body::before {
+      content: "PRINTING NOT PERMITTED — CONFIDENTIAL DOCUMENT";
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-35deg);
+      font-size: 48px;
+      color: rgba(192, 57, 43, 0.3);
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    .portal-content { display: none !important; }
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header-top { padding: 16px 20px; }
+    .header-hero { padding: 28px 20px; }
+    .header-hero h1 { font-size: 22px; }
+    .portal-content { padding: 20px 12px; }
+    .sections-grid { grid-template-columns: 1fr; }
+    .year-selector { padding: 12px 20px; flex-wrap: wrap; }
+    .download-all-btn { margin-left: 0; margin-top: 8px; width: 100%; justify-content: center; }
+    .header-logos { gap: 16px; }
+    .header-logo { height: 32px; }
+    .header-logo-csm { height: 28px; }
+  }
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="watermark">COLUMBIA SHIPMANAGEMENT</div>
+
+<div id="portal">
+  <header class="portal-header">
+    <div class="header-top">
+      <div class="header-logos">
+        <img src="../../assets/SMlogo_landscape.png" alt="Seagull Maritime" class="header-logo">
+        <div class="logo-divider"></div>
+        <img src="csm_logo.png" alt="Columbia Shipmanagement" class="header-logo-csm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <span style="display:none; align-items:center; font-size:14px; font-weight:600; color:var(--orange-light); letter-spacing:0.5px;">COLUMBIA SHIPMANAGEMENT</span>
+      </div>
+      <div class="header-meta">
+        <strong>Prepared for: COLUMBIA SHIPMANAGEMENT</strong><br>
+        Reference: SM-DD-CSM-2026<br>
+        Valid until: 31 December 2026
+      </div>
+    </div>
+
+    <div class="year-selector">
+      <span class="year-selector-label">Document Pack:</span>
+      <button class="year-btn active" onclick="showYear(2026)">DD 2026</button>
+      <button class="year-btn inactive" title="Available from January 2027">DD 2027</button>
+      <button class="download-all-btn" id="downloadAllBtn" onclick="downloadAll()">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        Download All Documents (ZIP)
+      </button>
+    </div>
+
+    <div class="header-hero">
+      <h1>Due Diligence Document Pack</h1>
+      <h2>Indian Ocean Region — 2026</h2>
+      <div class="header-badges">
+        <span class="badge badge-orange">ISO 18788</span>
+        <span class="badge badge-orange">ISO 28000</span>
+        <span class="badge badge-orange">ISO 28007</span>
+        <span class="badge badge-orange">ISO 9001</span>
+        <span class="badge badge-outline">ICoCA Certified Member</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="security-banner">
+    CONFIDENTIAL — PREPARED EXCLUSIVELY FOR COLUMBIA SHIPMANAGEMENT — UNAUTHORISED DISTRIBUTION PROHIBITED
+  </div>
+
+  <main class="portal-content">
+
+    <!-- Pre-Completed Questionnaires -->
+    <div class="section-intro questionnaire-box">
+      <h3>Pre-Completed Due Diligence Questionnaires</h3>
+      <p>Based on our understanding of client due diligence requirements, we have prepared pre-completed checklists to support your assessment needs. These documents cross-reference the evidence contained within this portal and can be used as a companion to the sections below.</p>
+      <p style="margin-top: 8px;">If you require a bespoke completion tailored to your specific requirements, or have additional questions, please speak to your commercial manager or contact us directly.</p>
+      <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px;">
+        <a href="../docs/SM-SEC-DOC-001%20-%20OCIMF%20PMSC%20Due%20Diligence%20Checklist%20-%20Completed%20Responses%20v1.0.pdf" class="doc-download-btn" target="_blank" rel="noopener">
+          <span class="doc-badge">PDF</span>
+          OCIMF PMSC Questionnaire — Pre-Completed
+        </a>
+        <a href="CSM-DD-Checklist-2026.pdf" class="doc-download-btn" target="_blank" rel="noopener">
+          <span class="doc-badge">PDF</span>
+          CSM PMSC Due Diligence Checklist — 2026
+        </a>
+        <a href="CSM-DD-Checklist-2024.pdf" class="doc-download-btn" target="_blank" rel="noopener" style="opacity: 0.75;">
+          <span class="doc-badge">PDF</span>
+          CSM PMSC Due Diligence Checklist — 2024 (Previous)
+        </a>
+        <a href="CSM-Audit-Report-2026.pdf" class="doc-download-btn" target="_blank" rel="noopener">
+          <span class="doc-badge">PDF</span>
+          Table Top DD Audit Report — 2026
+        </a>
+      </div>
+    </div>
+
+    <!-- Navigation Guide -->
+    <div class="section-intro">
+      <h3>Navigation Guide</h3>
+      <p>This document pack provides comprehensive evidence of Seagull Maritime's compliance with OCIMF PMSC Guidance, Shell PMSC Audit Requirements, and international maritime security standards. Documents are organised into 9 sections below. Click any section to expand and access individual documents. All documents are view-only.</p>
+    </div>
+
+    <div class="sections-grid" id="sectionsGrid">
+      <!-- Populated by JS -->
+    </div>
+  </main>
+
+  <footer class="portal-footer">
+    <strong>Seagull Maritime Ltd</strong> — 64 "Excalibur" B Bontadini Street, Birikirkara BKR1737, Malta<br>
+    ISO 18788 | ISO 28000 | ISO 28007 | ISO 9001 | ICoCA Certified Member<br><br>
+    All documents within this portal are confidential and proprietary. Reproduction, distribution, or sharing<br>
+    of this portal link or its contents without written authorisation from Seagull Maritime is strictly prohibited.<br><br>
+    <strong>Document Reference:</strong> SM-DD-CSM-2026 | <strong>Portal Version:</strong> 1.0 | <strong>Last Updated:</strong> April 2026
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+// ================================================================
+// DOCUMENT SECTIONS
+// All docs reference the shared ../docs/ folder (no duplication)
+// ================================================================
+const SECTIONS = [
+  {
+    num: 1,
+    title: 'Company Registration & Information',
+    desc: 'Corporate structure, registration, ownership verification, and legal governance disclosures.',
+    ocimf: '1.1–1.10',
+    docs: [
+      { sub: 'Company Profile' },
+      { name: 'Corporate Structure & Organisation Chart', href: '../docs/s1/Seagull-Maritime-Corporate-Structure-and-Organisation.html', icon: 'HTML' },
+      { name: 'Company Profile 2026', href: '../docs/s1/profile/Company%20Profile.pdf', icon: 'PDF' },
+      { name: 'Platform Locations — March 2026', href: '../docs/s1/profile/Platform%20Locations%20March%202026.pdf', icon: 'PDF' },
+      { sub: 'Registration & Incorporation' },
+      { name: 'Altered Certificate of Registration (2021)', href: '../docs/s1/registration/20211108%20Altered%20Certificate%20of%20Registration.pdf', icon: 'PDF' },
+      { name: 'Maltese Company Incorporation Documents', href: '../docs/s1/registration/Seagull%20Malta%20Company%20Incorporation%20Documents.pdf', icon: 'PDF' },
+      { sub: 'Ownership & Governance' },
+      { name: 'UBO Declaration', href: '../docs/s1/legal/UBO%20DECLARATION.pdf', icon: 'PDF' },
+      { name: 'UBO Structure Explanation', href: '../docs/s1/legal/UBO%20STRUCTURE%20EXPLANATION.pdf', icon: 'PDF' },
+      { name: 'Shareholder & Ownership Confirmation', href: '../docs/s1/legal/SHAREHOLDER%20%26%20OWNERSHIP%20CONFIRMATION.pdf', icon: 'PDF' },
+      { name: 'Mergers, Acquisitions & Ownership Disclosure', href: '../docs/s1/legal/MERGERS%2C%20ACQUISITIONS%20AND%20OWNERSHIP%20DISCLOSURE.pdf', icon: 'PDF' },
+      { name: 'Government Affiliation Disclosure', href: '../docs/s1/legal/GOVERNMENT%20AFFILIATION%20DISCLOSURE.pdf', icon: 'PDF' },
+      { name: 'Group Corporate Structure Statement', href: '../docs/s1/legal/GROUP%20CORPORATE%20STRUCTURE%20STATEMENT.pdf', icon: 'PDF' },
+      { name: 'Legal Confirmation — Policy & Compliance', href: '../docs/s1/legal/LEGAL%20CONFIRMATION%20POLICY%20AND%20COMPLIANCE.pdf', icon: 'PDF' },
+      { name: 'Legal Function & Governance Statement', href: '../docs/s1/legal/LEGAL%20FUNCTION%20AND%20GOVERNANCE%20STATEMENT.pdf', icon: 'PDF' },
+    ]
+  },
+  {
+    num: 2,
+    title: 'Compliance & Accreditation',
+    desc: 'ISO certifications, ICoCA membership, and flag state licences.',
+    ocimf: '1.6, 2.1–2.5',
+    docs: [
+      { sub: 'Accreditations' },
+      { name: 'ISO 18788:2015 Certificate (Exp. 03/09/2028)', href: '../docs/s2/accreditations/Seagull%20Maritime%20-%20ISO_18788_2015%20certificate.pdf', icon: 'PDF' },
+      { name: 'ISO 28000:2022 Certificate (Exp. 27/11/2027)', href: '../docs/s2/accreditations/Seagull%20Maritime%20-%20ISO_28000_2022%20certificate.pdf', icon: 'PDF' },
+      { name: 'ISO 28007:2015 Certificate (Exp. 27/11/2027)', href: '../docs/s2/accreditations/iso28007.pdf', icon: 'PDF' },
+      { name: 'ISO 9001:2015 Certificate (Exp. 03/09/2028)', href: '../docs/s2/accreditations/Seagull%20Maritime%20-%20ISO_9001_2015%20certificate.pdf', icon: 'PDF' },
+      { name: 'ICoCA Certified Member Certificate (Exp. 22/06/2026)', href: '../docs/s2/accreditations/ICoCA%20Certified%20Member%20Certificate%20Seagull%20Maritime%20.pdf', icon: 'PDF' },
+      { sub: 'Flag State Licences' },
+      { name: 'Guinea-Bissau — Licence Approval', href: '../docs/s2/flags/0007.GB.PMSC_Seagull%20Maritime.pdf', icon: 'PDF' },
+      { name: 'Liberia — Flag State Licence Documents', href: '../docs/s2/liberia/Liberia%20Flag%20State%20Licence%20Documents.pdf', icon: 'PDF' },
+      { name: 'Panama — Flag State Licence Documents', href: '../docs/s2/panama/Panama%20Flag%20State%20Licence%20Documents.pdf', icon: 'PDF' },
+    ]
+  },
+  {
+    num: 3,
+    title: 'Standard Operating Procedures',
+    desc: 'Standard Operating Procedures for Seagull Maritime. Seagull Maritime is transitioning to a revised SOP framework. Current SOPs have been issued; personnel complete mandatory training via the company\u2019s online training platform before operational use. Transitional SOPs remain effective during this period.',
+    ocimf: '3.1–3.8',
+    docs: [
+      { sub: 'Current SOPs' },
+      { name: 'Standard Operating Procedures — Indian Ocean v1.0', href: '../docs/s3/Seagull%20Maritime%20Standard%20Operating%20Procedures%20-%20Indian%20Ocean%20v1.0.pdf', icon: 'PDF' },
+      { sub: 'Transitional SOPs' },
+      { name: 'Embarked Teams Manual (M-3001)', href: '../docs/s3/M-3001%20Embarked%20Teams%20Manual.pdf', icon: 'PDF' },
+      { name: 'Embarked Team Procedures (SOP-3001)', href: '../docs/s3/SOP-3001%20Embarked%20Team%20Procedures%20.pdf', icon: 'PDF' },
+      { name: 'LNG, LPG, Tankers Additional Procedure (SOP-3002)', href: '../docs/s3/SOP-3002%20LNG,%20LPG,%20Tankers%20Additional%20Procedure.pdf', icon: 'PDF' },
+    ]
+  },
+  {
+    num: 4,
+    title: 'Rules on the Use of Force',
+    desc: 'Company rules governing use of force, escalation procedures, and proportionality framework.',
+    ocimf: '4.1–4.4',
+    docs: [
+      { name: 'Rules on the Use of Force v1.0', href: '../docs/s4/SM-SEC-PRO-003%20-%20Rules%20on%20the%20Use%20of%20Force%20v1.0.pdf', icon: 'PDF' },
+    ]
+  },
+  {
+    num: 5,
+    title: 'Management Procedures',
+    desc: 'Document control, risk assessment, incident management, audit, and compliance procedures issued under the Seagull Maritime integrated management system.',
+    ocimf: '1.4, 1.10, 5.1–5.6',
+    docs: [
+      { name: 'Non-Conformance, OFI and Corrective Action Management (SM/INT/PRO/001)', href: '../docs/s5/SM-INT-PRO-001%20-%20Non-Conformance%20OFI%20and%20Corrective%20Action%20Management%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Control of Documents (SM/INT/PRO/002)', href: '../docs/s5/SM-INT-PRO-002%20-%20Control%20of%20Documents%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Internal Audit (SM/INT/PRO/003)', href: '../docs/s5/SM-INT-PRO-003%20-%20Internal%20Audit%20v1.0.pdf', icon: 'PDF' },
+      { name: 'External References and Standards (SM/INT/PRO/004)', href: '../docs/s5/SM-INT-PRO-004%20-%20External%20References%20and%20Standards%20Procedure%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Control of Records (SM/INT/PRO/005)', href: '../docs/s5/SM-INT-PRO-005%20-%20Control%20of%20Records%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Incident and Crisis Management (SM/INT/PRO/006)', href: '../docs/s5/SM-INT-PRO-006%20-%20Incident%20and%20Crisis%20Management%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Hazard Identification and Risk Assessment (SM/HSE/PRO/001)', href: '../docs/s5/SM-HSE-PRO-001%20-%20Hazard%20Identification%20and%20Risk%20Assessment%20Procedure%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Legal and Regulatory Compliance (SM/HSE/PRO/002)', href: '../docs/s5/SM-HSE-PRO-002%20-%20Legal%20and%20Regulatory%20Compliance%20Procedure%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Security and Business Risk Assessment (SM/SEC/PRO/001)', href: '../docs/s5/SM-SEC-PRO-001%20-%20Security%20and%20Business%20Risk%20Assessment%20Procedure%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Due Diligence and Client Vetting (SM/SEC/PRO/002)', href: '../docs/s5/SM-SEC-PRO-002%20-%20Due%20Diligence%20and%20Client%20Vetting%20Procedure%20v1.0.pdf', icon: 'PDF' },
+    ]
+  },
+  {
+    num: 6,
+    title: 'Personnel Management',
+    desc: 'Recruitment, screening, induction, firearms competency, training programmes, and example personnel files.',
+    ocimf: '6.1–6.8',
+    docs: [
+      { name: 'PCASP Induction and Deployment (SM/INT/PRO/007)', href: '../docs/s6/SM-INT-PRO-007%20-%20PCASP%20Induction%20and%20Deployment%20v1.0.pdf', icon: 'PDF' },
+      { name: 'PCASP Recruitment and Screening (SM/INT/PRO/008)', href: '../docs/s6/SM-INT-PRO-008%20-%20PCASP%20Recruitment%20and%20Screening%20v1.0.pdf', icon: 'PDF' },
+      { name: 'PCASP Recruitment and Screening — Shell (SM/INT/PRO/008-A)', href: '../docs/s6/SM-INT-PRO-008-A%20-%20PCASP%20Recruitment%20and%20Screening%20-%20Shell%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Firearms Competency (SM/INT/PRO/009)', href: '../docs/s6/SM-INT-PRO-009%20-%20Firearms%20Competency%20v1.0.pdf', icon: 'PDF' },
+      { name: 'MSO Course Program (SM/INT/DOC/005)', href: '../docs/s6/SM-INT-DOC-005%20-%20MSO%20Course%20Program%20v1.0.pdf', icon: 'PDF' },
+      { sub: 'Example Personnel Files' },
+      { name: 'MSO Documents — Sample Personnel Pack', href: '../docs/s6/Sample%20MSO%20Pack.pdf', icon: 'PDF' },
+    ]
+  },
+  {
+    num: 7,
+    title: 'Weapons Management',
+    desc: 'Weapons and equipment management, UK export licences, and example end user certificates.',
+    ocimf: '7.1–7.6',
+    docs: [
+      { name: 'Annex G — Weapons & Equipment Management (SM/OPS/SOP/001-G)', href: '../docs/s7/SM-OPS-SOP-001-G%20-%20Annex%20G%20-%20Weapons%20%26%20Equipment%20Management%20v1.0.pdf', icon: 'PDF' },
+      { sub: 'UK Export Licences (GBSIT)' },
+      { name: 'GBSIT2016/00163', href: '../docs/s7/gbsit163/20160909%20-%20BIS%20-%20GBSIT2016_00163%20Licence.pdf', icon: 'PDF' },
+      { name: 'GBSIT2016/00168', href: '../docs/s7/gbsit168/20160912%20-%20BIS%20-%20GBSIT2016_00168%20Licence%20(1).pdf', icon: 'PDF' },
+      { name: 'GBSIT2016/00171', href: '../docs/s7/gbsit171/GBSIT2016_00171%20Licence.pdf', icon: 'PDF' },
+      { name: 'GBSIT2017/00031', href: '../docs/s7/gbsit031/20170125%20-%20DIT%20-%20GBSIT2017-00031.pdf', icon: 'PDF' },
+      { name: 'GBSIT2017/00144', href: '../docs/s7/gbsit144/20170524%20-%20DIT%20-%20GBSIT2017-00144.pdf', icon: 'PDF' },
+      { name: 'GBSIT2019/00039', href: '../docs/s7/gbsit039/20190409%20-%20DIT%20-%20GBSIT2019-00039%20(PMB)(signed)%20(2).pdf', icon: 'PDF' },
+      { sub: 'Example End User Certificates' },
+      { name: 'End User Certificate 25DJ1350', href: '../docs/s7/eu1350/25DJ1350%20SEAGULL.pdf', icon: 'PDF' },
+      { name: 'End User Certificate 25DJ1351', href: '../docs/s7/eu1351/25DJ1351%20SEAGULL.pdf', icon: 'PDF' },
+      { name: 'End User Certificate 25DJ1352', href: '../docs/s7/eu1352/25DJ1352%20SEAGULL.pdf', icon: 'PDF' },
+    ]
+  },
+  {
+    num: 8,
+    title: 'Company Policies',
+    desc: 'Full suite of corporate policies covering security operations, quality, health & safety, environmental, ethics, HR, and data protection. Organised by management system.',
+    ocimf: '1.3, 8.1–8.4',
+    docs: [
+      { name: 'OH&S Policy (SM/HSE/POL/001)', href: '../docs/s8/policies/SM-HSE-POL-001%20-%20OHS%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Environmental Policy (SM/HSE/POL/002)', href: '../docs/s8/policies/SM-HSE-POL-002%20-%20Environmental%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Security & Security Operations Policy (SM/SEC/POL/001)', href: '../docs/s8/policies/SM-SEC-POL-001%20-%20Security%20and%20Security%20Operations%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Human Rights Policy (SM/SEC/POL/002)', href: '../docs/s8/policies/SM-SEC-POL-002%20-%20Human%20Rights%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Statement of Conformance (SM/SEC/POL/003)', href: '../docs/s8/policies/SM-SEC-POL-003%20-%20Statement%20of%20Conformance%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Security Policy Statement (SM/SEC/POL/004)', href: '../docs/s8/policies/SM-SEC-POL-004%20-%20Security%20Policy%20Statement%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Quality Policy (SM/QMS/POL/001)', href: '../docs/s8/policies/SM-QMS-POL-001%20-%20Quality%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Quality Policy Statement (SM/QMS/POL/002)', href: '../docs/s8/policies/SM-QMS-POL-002%20-%20Quality%20Policy%20Statement%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Anti-Bribery, Corruption & Business Ethics (SM/INT/POL/001)', href: '../docs/s8/policies/SM-INT-POL-001%20-%20Anti-Bribery%20Corruption%20and%20Business%20Ethics%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Code of Conduct (SM/INT/POL/002)', href: '../docs/s8/policies/SM-INT-POL-002%20-%20Code%20of%20Conduct%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Equal Opportunities Policy (SM/INT/POL/003)', href: '../docs/s8/policies/SM-INT-POL-003%20-%20Equal%20Opportunities%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Grievance & Whistleblowing Policy (SM/INT/POL/004)', href: '../docs/s8/policies/SM-INT-POL-004%20-%20Grievance%20and%20Whistleblowing%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Personal Data Protection Policy (SM/INT/POL/005)', href: '../docs/s8/policies/SM-INT-POL-005%20-%20Personal%20Data%20Protection%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Recruitment Policy (SM/INT/POL/006)', href: '../docs/s8/policies/SM-INT-POL-006%20-%20Recruitment%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Risk Management Policy (SM/INT/POL/007)', href: '../docs/s8/policies/SM-INT-POL-007%20-%20Risk%20Management%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Social Media Policy (SM/INT/POL/008)', href: '../docs/s8/policies/SM-INT-POL-008%20-%20Social%20Media%20Policy%20v1.0.pdf', icon: 'PDF' },
+      { name: 'Training Policy (SM/INT/POL/009)', href: '../docs/s8/policies/SM-INT-POL-009%20-%20Training%20Policy%20v1.0.pdf', icon: 'PDF' },
+    ]
+  },
+  {
+    num: 9,
+    title: 'Insurance',
+    desc: 'Professional indemnity, liability insurance certificates, and personal accident cover.',
+    ocimf: '10.1–10.3',
+    docs: [
+      { name: 'Seagull Maritime Malta — LI Policy 2025-26', href: '../docs/s10/Seagull%20Maritime%20Malta%20LI%20Policy%202025-26.pdf', icon: 'PDF' },
+      { name: 'Personal Accident Insurance Certificate', href: '../docs/s10/Lloyds%20&%20Companies%20Authorised%20Personal%20Accident%20Insurance%20-%20Seagull%20Maritime.pdf', icon: 'PDF' },
+    ]
+  },
+];
+
+// ================================================================
+// BUILD PORTAL SECTIONS
+// ================================================================
+function buildSections() {
+  const grid = document.getElementById('sectionsGrid');
+
+  SECTIONS.forEach(section => {
+    const card = document.createElement('div');
+    card.className = 'section-card';
+
+    let docsHtml = '';
+    section.docs.forEach(doc => {
+      if (doc.sub) {
+        docsHtml += `<div class="subfolder-label">${doc.sub}</div>`;
+      } else {
+        docsHtml += `
+          <li class="doc-item">
+            <div class="doc-icon">${doc.icon || 'PDF'}</div>
+            <span class="doc-name">${doc.name}</span>
+            <a href="${doc.href}" target="_blank" rel="noopener" class="doc-link" onclick="logDocView('${doc.name}')">View</a>
+          </li>`;
+      }
+    });
+
+    card.innerHTML = `
+      <div class="card-header" onclick="this.parentElement.querySelector('.card-body').classList.toggle('collapsed')">
+        <div class="card-number">${section.num}</div>
+        <div>
+          <div class="card-title">${section.title}</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">${section.desc}<br><span class="ocimf-tag">OCIMF Ref: ${section.ocimf}</span></div>
+        <ul class="doc-list">${docsHtml}</ul>
+      </div>`;
+
+    grid.appendChild(card);
+  });
+}
+
+// ================================================================
+// YEAR SELECTOR
+// ================================================================
+function showYear(year) {
+  if (year === 2026) {
+    // Already showing 2026 — this is the only active year
+    return;
+  }
+  // 2027+ will be handled when content exists
+}
+
+// ================================================================
+// ZIP DOWNLOAD (JSZip)
+// Collects all PDFs from the sections and bundles them
+// ================================================================
+async function downloadAll() {
+  const btn = document.getElementById('downloadAllBtn');
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;animation:spin 1s linear infinite"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z" opacity="0.3"/><path d="M12 2a10 10 0 019.95 9h-2.02A8 8 0 0012 4V2z"/></svg> Preparing ZIP...';
+
+  // Add spin animation
+  if (!document.getElementById('spinStyle')) {
+    const style = document.createElement('style');
+    style.id = 'spinStyle';
+    style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
+    document.head.appendChild(style);
+  }
+
+  const zip = new JSZip();
+  let fileCount = 0;
+  let errors = 0;
+
+  for (const section of SECTIONS) {
+    const folderName = `S${section.num} - ${section.title}`;
+    const folder = zip.folder(folderName);
+
+    for (const doc of section.docs) {
+      if (doc.sub || !doc.href) continue;
+      // Only download PDFs
+      if (!doc.href.toLowerCase().endsWith('.pdf')) continue;
+
+      try {
+        const response = await fetch(doc.href);
+        if (response.ok) {
+          const blob = await response.blob();
+          const fileName = decodeURIComponent(doc.href.split('/').pop());
+          folder.file(fileName, blob);
+          fileCount++;
+        } else {
+          errors++;
+        }
+      } catch (e) {
+        errors++;
+      }
+    }
+  }
+
+  // Also add the questionnaires
+  try {
+    const ocimfResp = await fetch('../docs/SM-SEC-DOC-001%20-%20OCIMF%20PMSC%20Due%20Diligence%20Checklist%20-%20Completed%20Responses%20v1.0.pdf');
+    if (ocimfResp.ok) {
+      zip.file('OCIMF PMSC Questionnaire - Pre-Completed.pdf', await ocimfResp.blob());
+      fileCount++;
+    }
+  } catch(e) {}
+
+  try {
+    const csmResp = await fetch('CSM-DD-Checklist-2026.pdf');
+    if (csmResp.ok) {
+      zip.file('CSM PMSC Due Diligence Checklist - 2026.pdf', await csmResp.blob());
+      fileCount++;
+    }
+  } catch(e) {}
+
+  try {
+    const csm24Resp = await fetch('CSM-DD-Checklist-2024.pdf');
+    if (csm24Resp.ok) {
+      zip.file('CSM PMSC Due Diligence Checklist - 2024 (Previous).pdf', await csm24Resp.blob());
+      fileCount++;
+    }
+  } catch(e) {}
+
+  try {
+    const auditResp = await fetch('CSM-Audit-Report-2026.pdf');
+    if (auditResp.ok) {
+      zip.file('Table Top DD Audit Report - 2026.pdf', await auditResp.blob());
+      fileCount++;
+    }
+  } catch(e) {}
+
+  if (fileCount > 0) {
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;animation:spin 1s linear infinite"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z" opacity="0.3"/><path d="M12 2a10 10 0 019.95 9h-2.02A8 8 0 0012 4V2z"/></svg> Creating ZIP (' + fileCount + ' files)...';
+
+    const content = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(content);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Seagull Maritime - DD Pack - Columbia Shipmanagement - 2026.zip';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = originalText;
+
+  if (errors > 0) {
+    console.log(`ZIP download: ${fileCount} files packaged, ${errors} files could not be fetched`);
+  }
+}
+
+// ================================================================
+// LOGGING
+// ================================================================
+function logDocView(docName) {
+  const payload = {
+    timestamp: new Date().toISOString(),
+    client: 'Columbia Shipmanagement',
+    document: docName,
+    portal: 'CSM-2026'
+  };
+
+  // Uncomment when webhook ready:
+  // fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+  //   method: 'POST',
+  //   mode: 'no-cors',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(payload)
+  // }).catch(() => {});
+
+  console.log('Doc view:', payload);
+}
+
+// ================================================================
+// INIT
+// ================================================================
+buildSections();
+
+// Disable keyboard shortcuts for copying/printing
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P' || e.key === 's' || e.key === 'S')) {
+    e.preventDefault();
+    return false;
+  }
+});
+</script>
+</body>
+</html>
