@@ -710,7 +710,7 @@ const SECTIONS = [
     ocimf: '10.1–10.3',
     docs: [
       { name: 'Seagull Maritime Malta — LI Policy 2025-26', href: '../docs/s10/Seagull%20Maritime%20Malta%20LI%20Policy%202025-26.pdf', icon: 'PDF' },
-      { name: 'Personal Accident Insurance Certificate', href: '../docs/s10/Lloyds%20&%20Companies%20Authorised%20Personal%20Accident%20Insurance%20-%20Seagull%20Maritime.pdf', icon: 'PDF' },
+      { name: 'Personal Accident Insurance Certificate', href: '../docs/s10/Lloyds%20%26%20Companies%20Authorised%20Personal%20Accident%20Insurance%20-%20Seagull%20Maritime.pdf', icon: 'PDF' },
     ]
   },
 ];
@@ -773,18 +773,25 @@ function showYear(year) {
 async function downloadAll() {
   const btn = document.getElementById('downloadAllBtn');
   const originalText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;animation:spin 1s linear infinite"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z" opacity="0.3"/><path d="M12 2a10 10 0 019.95 9h-2.02A8 8 0 0012 4V2z"/></svg> Preparing ZIP...';
 
-  // Add spin animation
-  if (!document.getElementById('spinStyle')) {
-    const style = document.createElement('style');
-    style.id = 'spinStyle';
-    style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
-    document.head.appendChild(style);
-  }
+  try {
+    if (typeof JSZip === 'undefined') {
+      alert('ZIP library is still loading. Please wait a moment and try again.');
+      return;
+    }
 
-  const zip = new JSZip();
+    btn.disabled = true;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;animation:spin 1s linear infinite"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16z" opacity="0.3"/><path d="M12 2a10 10 0 019.95 9h-2.02A8 8 0 0012 4V2z"/></svg> Preparing ZIP...';
+
+    // Add spin animation
+    if (!document.getElementById('spinStyle')) {
+      const style = document.createElement('style');
+      style.id = 'spinStyle';
+      style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
+      document.head.appendChild(style);
+    }
+
+    const zip = new JSZip();
   let fileCount = 0;
   let errors = 0;
 
@@ -858,6 +865,8 @@ async function downloadAll() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  } else {
+    alert('Unable to fetch documents for ZIP. This may be a temporary issue — please try again in a moment.');
   }
 
   btn.disabled = false;
@@ -865,6 +874,13 @@ async function downloadAll() {
 
   if (errors > 0) {
     console.log(`ZIP download: ${fileCount} files packaged, ${errors} files could not be fetched`);
+  }
+
+  } catch (err) {
+    console.error('ZIP download error:', err);
+    alert('There was a problem creating the ZIP file. Please try again or contact us for assistance.');
+    btn.disabled = false;
+    btn.innerHTML = originalText;
   }
 }
 
