@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SM-CAM-BUL-001 — Safe Vessel Transfers | Seagull Maritime</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #003C72;
+            --navy-dark: #002A52;
+            --cyan: #00A3D9;
+            --cyan-light: #4DC4E8;
+            --cyan-pale: #E6F6FC;
+            --slate: #42515A;
+            --slate-light: #6B7C88;
+            --off-white: #F8FAFB;
+            --light-grey: #F4F7FA;
+            --mid-grey: #E8EDF2;
+            --critical: #C0392B;
+            --success: #2E7D4F;
+            --warning: #D4842A;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #EAEAEA;
+            font-family: 'Open Sans', sans-serif;
+            color: var(--slate);
+        }
+
+        /* ===== A4 CONTAINER ===== */
+        .page {
+            width: 595px;
+            min-height: 842px;
+            background: white;
+            margin: 20px auto;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== COMBINED NAVY HEADER ===== */
+        .header-block {
+            background: var(--navy);
+            padding: 18px 24px 16px;
+            position: relative;
+        }
+
+        .header-block::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--cyan);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .company-logo {
+            height: 28px;
+            width: auto;
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 28px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .campaign-brand {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.15;
+        }
+
+        .campaign-brand .cb-top {
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+        .campaign-brand .cb-bottom {
+            font-weight: 500;
+            font-size: 8px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--cyan-light);
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .category-badge {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 3px;
+            color: white;
+        }
+
+        .category-badge.hs-alert { background: var(--critical); }
+        .category-badge.risk-alert { background: var(--warning); }
+        .category-badge.system-change { background: var(--cyan); }
+        .category-badge.new-procedure { background: var(--success); }
+        .category-badge.general { background: rgba(255,255,255,0.15); }
+
+        .bulletin-ref {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 10px;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.5px;
+        }
+
+        /* Title within header block */
+        .header-title h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            color: white;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .title-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 6px;
+        }
+
+        .title-meta span {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* ===== PILLAR INDICATOR ===== */
+        .pillar-strip {
+            display: flex;
+            gap: 0;
+            background: var(--light-grey);
+            border-bottom: 1px solid var(--mid-grey);
+        }
+
+        .pillar-tag {
+            flex: 1;
+            text-align: center;
+            padding: 7px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .pillar-tag.assess { color: var(--navy); }
+        .pillar-tag.report { color: var(--cyan); }
+        .pillar-tag.deliver { color: var(--slate); }
+
+        .pillar-tag.active {
+            background: white;
+            border-bottom: 2px solid;
+        }
+
+        .pillar-tag.assess.active { border-bottom-color: var(--navy); }
+        .pillar-tag.report.active { border-bottom-color: var(--cyan); }
+        .pillar-tag.deliver.active { border-bottom-color: var(--slate); }
+
+        .pillar-tag:not(.active) { opacity: 0.35; }
+
+        .pillar-tag .dot {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .pillar-tag.assess .dot { background: var(--navy); }
+        .pillar-tag.report .dot { background: var(--cyan); }
+        .pillar-tag.deliver .dot { background: var(--slate); }
+
+        /* ===== CONTENT ===== */
+        .content {
+            flex: 1;
+            padding: 16px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .lead {
+            font-size: 11.5px;
+            line-height: 1.6;
+            color: var(--slate);
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--mid-grey);
+        }
+
+        .lead strong { color: var(--navy); }
+
+        .section { display: flex; flex-direction: column; gap: 6px; }
+
+        .section-header { display: flex; align-items: center; gap: 10px; }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-icon.navy { background: var(--navy); }
+        .section-icon.cyan { background: var(--cyan); }
+        .section-icon.slate { background: var(--slate); }
+        .section-icon.critical { background: var(--critical); }
+
+        .section-icon svg {
+            width: 13px;
+            height: 13px;
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .section h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--navy);
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .section ul {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .section li {
+            font-size: 10.5px;
+            line-height: 1.5;
+            padding: 2px 0 2px 16px;
+            position: relative;
+            color: var(--slate);
+        }
+
+        .section li::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 9px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan);
+        }
+
+        .section li strong { color: var(--navy); font-weight: 600; }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .ppe-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px 12px;
+        }
+
+        .ppe-item {
+            font-size: 10px;
+            padding: 3px 0 3px 14px;
+            position: relative;
+            color: var(--slate);
+        }
+
+        .ppe-item::before {
+            content: '\2713';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
+            font-size: 10px;
+        }
+
+        .hazard-item::before { color: var(--critical) !important; }
+        .hazard-item { color: var(--critical) !important; }
+
+        .callout {
+            background: var(--critical);
+            color: white;
+            padding: 9px 16px;
+            border-radius: 4px;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .info-box {
+            background: var(--cyan-pale);
+            border-left: 3px solid var(--cyan);
+            padding: 8px 12px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .info-box p {
+            font-size: 9.5px;
+            line-height: 1.5;
+            color: var(--navy);
+        }
+
+        .info-box strong { font-weight: 700; }
+
+        /* ===== RELATED DOCUMENTS ===== */
+        .related-docs {
+            margin: 0 24px;
+            padding: 12px 14px;
+            background: var(--light-grey);
+            border: 1px solid var(--mid-grey);
+            border-radius: 4px;
+        }
+
+        .related-docs h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 9px;
+            color: var(--navy);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .ref-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 16px;
+        }
+
+        .ref-item {
+            font-size: 7.5px;
+            color: var(--slate);
+        }
+
+        .ref-item .ref-code {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        /* ===== QR SECTION ===== */
+        .qr-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 14px 24px;
+        }
+
+        .qr-code {
+            width: 70px;
+            height: 70px;
+        }
+
+        .qr-text h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 10px;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+
+        .qr-text p {
+            font-size: 8.5px;
+            color: var(--slate);
+            line-height: 1.4;
+        }
+
+        .qr-text .qr-url {
+            font-weight: 600;
+            color: var(--cyan);
+            font-size: 7.5px;
+            margin-top: 4px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--navy);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .footer-brand {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.2;
+        }
+
+        .footer-brand .fb-tagline { font-weight: 800; font-size: 11px; }
+        .footer-brand .fb-tagline .fb-your { color: white; }
+        .footer-brand .fb-tagline .fb-our { color: var(--cyan-light); }
+
+        .footer-brand .fb-company {
+            font-weight: 400;
+            font-size: 9px;
+            color: rgba(255,255,255,0.45);
+            letter-spacing: 1px;
+        }
+
+        .footer-right { text-align: right; }
+
+        .footer-ref {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 9px;
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 0.5px;
+        }
+
+        .footer-date {
+            font-size: 8px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 2px;
+        }
+
+        .footer-url {
+            font-size: 7px;
+            color: rgba(255,255,255,0.3);
+            margin-top: 2px;
+        }
+
+        /* ===== PRINT ===== */
+        @media print {
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+            html, body { background: white !important; margin: 0; padding: 0; width: 210mm; }
+            .page { width: 210mm; min-height: 297mm; margin: 0; box-shadow: none; page-break-after: always; overflow: hidden; }
+            .pillar-strip { border-bottom-color: var(--mid-grey) !important; }
+        }
+
+        @media (max-width: 650px) {
+            .page { width: 100%; min-height: auto; margin: 10px; box-shadow: none; }
+            .header-title h1 { font-size: 18px; }
+            .two-col { grid-template-columns: 1fr; }
+            .ppe-grid { grid-template-columns: 1fr; }
+            .ref-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+
+        <!-- ===== COMBINED NAVY HEADER ===== -->
+        <div class="header-block">
+            <div class="header-top">
+                <div class="header-left">
+                    <img src="../../assets/SMlogo_landscape_white.png" alt="Seagull Maritime" class="company-logo">
+                    <div class="header-divider"></div>
+                    <div class="campaign-brand">
+                        <div class="cb-top">YOUR WATCH.</div>
+                        <div class="cb-bottom">OUR STANDARD.</div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <span class="category-badge hs-alert">H&amp;S ALERT</span>
+                    <span class="bulletin-ref">Bulletin 001</span>
+                </div>
+            </div>
+            <div class="header-title">
+                <h1>Safe Vessel Transfers</h1>
+                <div class="title-meta">
+                    <span>April 2026</span>
+                    <span>SM-CAM-BUL-001 v1.0</span>
+                    <span>Applies to: All PCASP &amp; Vessel Personnel</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PILLAR INDICATOR ===== -->
+        <div class="pillar-strip">
+            <div class="pillar-tag assess active"><span class="dot"></span>ASSESS</div>
+            <div class="pillar-tag report active"><span class="dot"></span>REPORT</div>
+            <div class="pillar-tag deliver active"><span class="dot"></span>DELIVER</div>
+        </div>
+
+        <!-- ===== CONTENT ===== -->
+        <div class="content">
+
+            <p class="lead">
+                Vessel transfers are one of the <strong>highest-risk activities</strong> in maritime security operations.
+                Every transfer requires proper preparation, the right PPE, and clear communication between all parties.
+                <strong>No shortcuts. No exceptions.</strong>
+            </p>
+
+            <div class="two-col">
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon navy">
+                            <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>
+                        </div>
+                        <h2>Before Every Transfer</h2>
+                    </div>
+                    <ul>
+                        <li>Consult the transfer method statement</li>
+                        <li>Confirm weather and sea conditions</li>
+                        <li>Obtain Master approval before proceeding</li>
+                        <li>Verify pilot ladder rigged and inspected</li>
+                        <li>Establish comms with pilot boat crew</li>
+                        <li>Ensure rescue equipment ready</li>
+                        <li>Brief all personnel, confirm fitness</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon cyan">
+                            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <h2>Required PPE</h2>
+                    </div>
+                    <ul>
+                        <li>SOLAS lifejacket or PFD</li>
+                        <li>Safety helmet (chin strap)</li>
+                        <li>Non-slip safety footwear</li>
+                        <li>Work gloves</li>
+                        <li>AIS MOB / PLB (if issued)</li>
+                        <li>Weather-appropriate clothing</li>
+                    </ul>
+                    <div class="info-box">
+                        <p><strong>No PPE = No Transfer.</strong> Do not begin without all equipment verified and fitted.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon critical">
+                        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </div>
+                    <h2>Key Hazards</h2>
+                </div>
+                <div class="ppe-grid" style="gap: 2px 12px;">
+                    <span class="ppe-item hazard-item">Falling between boat and hull</span>
+                    <span class="ppe-item hazard-item">Vessel movement from swell/wake</span>
+                    <span class="ppe-item hazard-item">Slips on wet or oily surfaces</span>
+                    <span class="ppe-item hazard-item">Ladder failure or incorrect rigging</span>
+                    <span class="ppe-item hazard-item">Crushing between vessel hulls</span>
+                    <span class="ppe-item hazard-item">Poor weather / reduced visibility</span>
+                    <span class="ppe-item hazard-item">Fatigue or loss of balance</span>
+                    <span class="ppe-item hazard-item">Inadequate communication</span>
+                </div>
+            </div>
+
+            <div class="callout">If in doubt — stop the transfer</div>
+
+            <div class="two-col">
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon navy">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <h2>During Transfer</h2>
+                    </div>
+                    <ul>
+                        <li>One person transfers at a time</li>
+                        <li><strong>Three points of contact</strong> on ladder at all times</li>
+                        <li>Face the ladder — never turn your back</li>
+                        <li>Move steadily — do not rush</li>
+                        <li>Follow crew and coxswain instructions</li>
+                        <li>Abort immediately if conditions change</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon cyan">
+                            <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                        </div>
+                        <h2>After Transfer</h2>
+                    </div>
+                    <ul>
+                        <li>Confirm all personnel safely onboard</li>
+                        <li>Secure pilot ladder and equipment</li>
+                        <li>Report any defects, damage, or near misses</li>
+                        <li>Inform Master or Team Leader of completion</li>
+                    </ul>
+                    <div class="info-box">
+                        <p><strong>Report near misses</strong> via the Seagull Safety Reporting App at <strong>report.seagullmaritimeltd.com</strong></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== RELATED DOCUMENTS ===== -->
+        <div class="related-docs">
+            <h3>Related Documents</h3>
+            <div class="ref-grid">
+                <div class="ref-item"><span class="ref-code">SM/HSE/RA/002</span> Vessel Transfer Operations Risk Assessment</div>
+                <div class="ref-item"><span class="ref-code">SM/CAM/BRAG/001</span> Vessel Transfer Operations BRAG</div>
+                <div class="ref-item"><span class="ref-code">SM/OPS/SOP/001-A</span> Annex A — Deployment &amp; Embarkation</div>
+                <div class="ref-item"><span class="ref-code">SM/OPS/SOP/001-H</span> Annex H — Disembarkation &amp; Post Transit</div>
+                <div class="ref-item"><span class="ref-code">SM/HSE/PRO/001</span> Hazard ID and Risk Assessment Procedure</div>
+                <div class="ref-item"><span class="ref-code">SM/CAM/FC/001</span> Vessel Transfers Toolbox Talk Flash Cards</div>
+            </div>
+        </div>
+
+        <!-- ===== QR CODE SECTION ===== -->
+        <div class="qr-section">
+            <img src="../../assets/safety-app-qr.png" alt="Safety App QR Code" class="qr-code">
+            <div class="qr-text">
+                <h4>REPORT IT.</h4>
+                <p>Scan to open the Seagull Safety<br>Reporting App. Report hazards,<br>near misses, and incidents.</p>
+                <p class="qr-url">report.seagullmaritimeltd.com</p>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div class="footer">
+            <div class="footer-brand">
+                <div class="fb-tagline">
+                    <span class="fb-your">YOUR WATCH. </span><span class="fb-our">OUR STANDARD.</span>
+                </div>
+                <div class="fb-company">SEAGULL MARITIME</div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-ref">SM-CAM-BUL-001</div>
+                <div class="footer-date">April 2026</div>
+                <div class="footer-url">portals.seagullmaritimeltd.com/campaign</div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

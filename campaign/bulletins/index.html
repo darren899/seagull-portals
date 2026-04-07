@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Awareness Bulletins | Seagull Maritime</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #003C72;
+    --navy-dark: #002A52;
+    --cyan: #00A3D9;
+    --cyan-light: #4DC4E8;
+    --cyan-pale: #E6F6FC;
+    --slate: #42515A;
+    --slate-light: #6B7C88;
+    --off-white: #F8FAFB;
+    --light-grey: #F4F7FA;
+    --mid-grey: #E8EDF2;
+    --critical: #C0392B;
+    --success: #2E7D4F;
+    --warning: #D4842A;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--slate);
+  }
+
+  .header {
+    background: var(--navy);
+    padding: 24px 30px;
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .header-left img { height: 28px; }
+  .header-left .divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,0.15);
+  }
+  .header-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+  }
+  .header-brand .yw { color: white; }
+  .header-brand .os { color: var(--cyan-light); }
+  .back-link {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--cyan-light); }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+  }
+
+  .page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .page-subtitle {
+    font-size: 14px;
+    color: var(--slate-light);
+    margin-bottom: 36px;
+  }
+
+  .bulletin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .bulletin-card {
+    background: white;
+    border: 1px solid var(--mid-grey);
+    border-radius: 10px;
+    padding: 24px;
+    display: flex;
+    gap: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .bulletin-card:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 4px 16px rgba(0,163,217,0.08);
+  }
+
+  .badge {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: white;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .badge-alert { background: var(--critical); }
+  .badge-change { background: var(--cyan); }
+  .badge-new { background: var(--success); }
+  .badge-update { background: var(--navy); }
+
+  .bulletin-content h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .bulletin-meta {
+    font-size: 11px;
+    color: var(--slate-light);
+    margin-bottom: 6px;
+  }
+  .bulletin-summary {
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.6;
+  }
+  .new-tag {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--cyan-pale);
+    color: var(--cyan);
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .footer {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 30px 40px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--slate-light);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <img src="../../assets/SMlogo_landscape_white.png" alt="Seagull Maritime">
+      <div class="divider"></div>
+      <div class="header-brand"><span class="yw">YOUR WATCH.</span> <span class="os">OUR STANDARD.</span></div>
+    </div>
+    <a href="../index.html" class="back-link">&larr; Campaign Portal</a>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">Awareness Bulletins</h1>
+  <p class="page-subtitle">Short, sharp updates on what's changing and what you need to know.</p>
+
+  <div class="bulletin-list">
+
+    <a class="bulletin-card" href="bulletin-001-vessel-transfers-v2.html">
+      <div class="badge badge-alert">H&S<br>ALERT</div>
+      <div class="bulletin-content">
+        <h3>Safe Vessel Transfers — Key Safety Requirements <span class="new-tag">NEW</span></h3>
+        <div class="bulletin-meta">SM-CAM-BUL-001 &nbsp;|&nbsp; April 2026</div>
+        <div class="bulletin-summary">PPE requirements, transfer procedures, and critical safety reminders for all personnel involved in vessel-to-vessel transfers. Includes printable flash cards.</div>
+      </div>
+    </a>
+
+    <!-- ADD NEW BULLETINS HERE — most recent at the top -->
+
+  </div>
+</div>
+
+<div class="footer">
+  Seagull Maritime Ltd &nbsp;|&nbsp; Your Watch. Our Standard. &nbsp;|&nbsp; 2026
+</div>
+
+</body>
+</html>

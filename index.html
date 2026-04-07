@@ -4,120 +4,210 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seagull Maritime — Portals</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
     --navy: #003C72;
-    --navy-dark: #002a52;
+    --navy-dark: #002A52;
     --cyan: #00A3D9;
     --cyan-light: #4DC4E8;
+    --slate: #42515A;
     --gold: #C4975C;
   }
   body {
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: 'Open Sans', -apple-system, sans-serif;
     background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
   }
+
   .container {
     text-align: center;
-    padding: 40px;
-  }
-  .logo-text {
-    font-size: 18px;
-    font-weight: 700;
-    color: white;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-  }
-  .logo-text span { color: var(--cyan); font-weight: 400; }
-  .subtitle {
-    font-size: 12px;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 50px;
-  }
-  .portals {
+    padding: 40px 24px;
+    flex: 1;
     display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
   }
+
+  .logo { margin-bottom: 12px; }
+  .logo img { height: 48px; }
+
+  .subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+
+  .portals {
+    display: grid;
+    grid-template-columns: repeat(2, 260px);
+    gap: 20px;
+    justify-content: center;
+  }
+
   .portal-card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 12px;
-    padding: 40px 36px;
-    width: 280px;
+    padding: 32px 28px;
     text-decoration: none;
     transition: all 0.3s;
     cursor: pointer;
+    text-align: left;
+    position: relative;
+    display: flex;
+    flex-direction: column;
   }
   .portal-card:hover {
     background: rgba(255,255,255,0.1);
-    transform: translateY(-4px);
+    transform: translateY(-3px);
     box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    border-color: rgba(255,255,255,0.15);
   }
-  .portal-icon {
-    font-size: 36px;
-    margin-bottom: 18px;
-    display: block;
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
   }
+  .card-icon svg { width: 20px; height: 20px; }
+
+  .icon-gold { background: rgba(196,151,92,0.2); }
+  .icon-cyan { background: rgba(0,163,217,0.2); }
+  .icon-navy { background: rgba(255,255,255,0.08); }
+
   .portal-card h2 {
-    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
     font-weight: 700;
     color: white;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .portal-card p {
-    font-size: 13px;
-    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
     line-height: 1.5;
+    margin-bottom: 14px;
+    flex: 1;
   }
-  .portal-card .badge {
+
+  .badge {
     display: inline-block;
-    font-size: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8px;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
     padding: 4px 10px;
     border-radius: 3px;
-    margin-top: 14px;
   }
   .badge-gold { background: var(--gold); color: white; }
+  .badge-gold-outline { border: 1px solid var(--gold); color: var(--gold); }
   .badge-cyan { background: var(--cyan); color: white; }
-  .footer-text {
-    margin-top: 60px;
+  .badge-cyan-outline { border: 1px solid var(--cyan); color: var(--cyan); }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
     font-size: 11px;
-    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.5px;
+  }
+  .footer-brand .yw { color: white; }
+  .footer-brand .os { color: var(--cyan-light); }
+  .footer-text {
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  @media (max-width: 600px) {
+    .portals { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; gap: 8px; text-align: center; }
   }
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="logo-text">SEAGULL <span>MARITIME</span></div>
+  <div class="logo">
+    <img src="assets/SMlogo_landscape_white.png" alt="Seagull Maritime">
+  </div>
   <div class="subtitle">Portal Access</div>
 
   <div class="portals">
+
     <a class="portal-card" href="dd/index.html">
-      <span class="portal-icon">📋</span>
-      <h2>Due Diligence Portal</h2>
-      <p>Compliance documentation for authorised client review. Access code required.</p>
+      <div class="card-icon icon-gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C4975C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <h2>Due Diligence — IOR</h2>
+      <p>Indian Ocean Region compliance documentation for authorised client review. Access code required.</p>
+      <span class="badge badge-gold">Client Access</span>
+    </a>
+
+    <a class="portal-card" href="dd/waf/index.html">
+      <div class="card-icon icon-gold">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C4975C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <h2>Due Diligence — WAF</h2>
+      <p>West Africa SEV operations compliance documentation. Access code required.</p>
       <span class="badge badge-gold">Client Access</span>
     </a>
 
     <a class="portal-card" href="campaign/index.html">
-      <span class="portal-icon">⚓</span>
+      <div class="card-icon icon-cyan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00A3D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+        </svg>
+      </div>
       <h2>Your Watch. Our Standard.</h2>
-      <p>Compliance awareness campaign portal. Bulletins, flash cards, documents, and reporting.</p>
+      <p>Compliance awareness campaign. Bulletins, risk assessment guides, flash cards, and reporting.</p>
       <span class="badge badge-cyan">Internal</span>
     </a>
-  </div>
 
+    <a class="portal-card" href="campaign/tools/risk-screening-tool.html">
+      <div class="card-icon icon-cyan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00A3D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <h2>Risk Screening Tool</h2>
+      <p>Pre-engagement risk screening for new operations. Identify gaps and required assessments.</p>
+      <span class="badge badge-cyan">Internal</span>
+    </a>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-brand">
+    <span class="yw">YOUR WATCH.</span> <span class="os">OUR STANDARD.</span>
+  </div>
   <div class="footer-text">Seagull Maritime Ltd &nbsp;|&nbsp; Confidential &nbsp;|&nbsp; 2026</div>
 </div>
 </body>
