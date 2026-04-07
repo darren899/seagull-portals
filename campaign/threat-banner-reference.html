@@ -1,0 +1,87 @@
+<!--
+  THREAT BANNER — Reference Implementation
+  From: portals.seagullmaritimeltd.com/campaign
+
+  How it works:
+  - Fixed banner at top of page, sits above the main nav
+  - Pulsing red dot indicates active threat
+  - Updated weekly (Monday 8am) via automated task or manually for critical changes
+  - Threat levels: Critical (red #C0392B), Substantial (amber #D4842A), Moderate (cyan #00A3D9)
+  - Border bottom colour matches threat level
+  - Date stamp shows when last reviewed (even if content unchanged)
+
+  For the Safety Reporting App:
+  - Could sit as a persistent banner at the top of the app
+  - Could be fetched from a shared JSON endpoint that both portal and app consume
+  - Or the app could simply embed the same HTML snippet
+-->
+
+<style>
+  .threat-banner {
+    background: linear-gradient(90deg, #002A52 0%, #003C72 100%);
+    padding: 10px 30px;
+    border-bottom: 2px solid #C0392B; /* Change colour to match threat level */
+    font-family: 'Open Sans', sans-serif;
+  }
+  .threat-banner-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .threat-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .threat-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .threat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #C0392B; /* Match threat level colour */
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .threat-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #C0392B; /* Match threat level colour */
+  }
+  .threat-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+  }
+  .threat-text strong { color: white; }
+  .threat-date {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 9px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.5px;
+  }
+</style>
+
+<div class="threat-banner">
+  <div class="threat-banner-inner">
+    <div class="threat-left">
+      <div class="threat-indicator">
+        <div class="threat-dot"></div>
+        <span class="threat-label">UKMTO: Critical</span>
+      </div>
+      <span class="threat-text"><strong>Strait of Hormuz</strong> — Transit down 94%. ~3,000 vessels stranded. Iranian missile, UAV &amp; USV threats active. Red Sea resumption threatened. All risk assessments under review.</span>
+    </div>
+    <span class="threat-date">Updated: 7 Apr 2026</span>
+  </div>
+</div>

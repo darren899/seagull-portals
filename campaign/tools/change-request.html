@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Change Request | Seagull Maritime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #003C72;
+    --navy-dark: #002A52;
+    --navy-deeper: #001D3A;
+    --cyan: #00A3D9;
+    --cyan-light: #4DC4E8;
+    --cyan-pale: #E6F6FC;
+    --white: #FFFFFF;
+    --off-white: #F8FAFB;
+    --light-grey: #F4F7FA;
+    --mid-grey: #E8EDF2;
+    --border-grey: #D5DCE3;
+    --slate: #42515A;
+    --slate-light: #6B7C88;
+    --green: #2E7D4F;
+    --green-bg: #E8F5ED;
+    --green-border: #A8D5B8;
+    --amber: #D4842A;
+    --amber-bg: #FFF3E0;
+    --red: #C0392B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--navy);
+    background: var(--off-white);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(0, 42, 82, 0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 30px;
+    display: flex; justify-content: space-between; align-items: center; height: 60px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 12px; text-decoration: none;
+  }
+  .nav-brand img { height: 32px; }
+  .nav-brand-text {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+    color: white; line-height: 1.1;
+  }
+  .nav-brand-text .nb-highlight { color: var(--cyan-light); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: rgba(255,255,255,0.65); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan-light); }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--navy-deeper) 0%, var(--navy) 50%, var(--navy-dark) 100%);
+    padding: 100px 30px 50px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -200px; right: -150px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,163,217,0.08) 0%, transparent 70%);
+  }
+  .hero-grid {
+    position: absolute; top: 0; right: 0; width: 50%; height: 100%; opacity: 0.03;
+    background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto; position: relative; z-index: 2;
+  }
+  .hero-breadcrumb {
+    font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 16px;
+  }
+  .hero-breadcrumb a { color: var(--cyan-light); text-decoration: none; }
+  .hero-breadcrumb a:hover { text-decoration: underline; }
+  .hero-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 36px;
+    color: white; margin-bottom: 10px; letter-spacing: -0.5px;
+  }
+  .hero-ref {
+    font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px;
+    color: var(--cyan-light); letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .hero-desc {
+    font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.7);
+    max-width: 620px; line-height: 1.7;
+  }
+
+  /* ===== MAIN ===== */
+  .main { max-width: 700px; margin: 0 auto; padding: 40px 30px 80px; }
+
+  /* ===== FORM CARD ===== */
+  .form-card {
+    background: white; border-radius: 12px; padding: 36px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid var(--mid-grey);
+    margin-bottom: 24px;
+  }
+  .form-card h2 {
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px;
+    color: var(--navy); margin-bottom: 6px;
+  }
+  .form-card .card-desc {
+    font-size: 13px; color: var(--slate-light); margin-bottom: 24px; line-height: 1.6;
+  }
+
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block; font-family: 'Montserrat', sans-serif; font-weight: 600;
+    font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: var(--navy); margin-bottom: 6px;
+  }
+  .form-group label .required { color: var(--red); margin-left: 2px; }
+
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group input[type="date"],
+  .form-group select,
+  .form-group textarea {
+    width: 100%; padding: 12px 14px;
+    border: 2px solid var(--border-grey); border-radius: 8px;
+    font-family: 'Open Sans', sans-serif; font-size: 14px; color: var(--navy);
+    background: var(--light-grey); transition: border-color 0.2s, background 0.2s;
+    outline: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--cyan); background: white;
+  }
+  .form-group textarea { min-height: 100px; resize: vertical; }
+  .form-group select { cursor: pointer; }
+  .form-group .hint {
+    font-size: 12px; color: var(--slate-light); margin-top: 4px; line-height: 1.5;
+  }
+
+  /* Change type checkboxes */
+  .type-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .type-option {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border: 2px solid var(--border-grey); border-radius: 8px;
+    background: var(--light-grey); cursor: pointer; transition: all 0.2s;
+    font-size: 13px; color: var(--navy);
+  }
+  .type-option:hover { border-color: var(--cyan); background: var(--cyan-pale); }
+  .type-option input[type="checkbox"] { display: none; }
+  .type-option .check-box {
+    width: 18px; height: 18px; border: 2px solid var(--border-grey); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .type-option .check-box svg { opacity: 0; transition: opacity 0.2s; }
+  .type-option.selected { border-color: var(--cyan); background: var(--cyan-pale); }
+  .type-option.selected .check-box { background: var(--cyan); border-color: var(--cyan); }
+  .type-option.selected .check-box svg { opacity: 1; }
+
+  /* Submit button */
+  .submit-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 16px; border: none; border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: white; font-family: 'Montserrat', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,60,114,0.3); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn svg { width: 18px; height: 18px; }
+
+  /* Info box */
+  .info-box {
+    background: var(--cyan-pale); border: 1px solid rgba(0,163,217,0.2);
+    border-radius: 8px; padding: 16px 18px; margin-bottom: 24px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .info-box svg { flex-shrink: 0; margin-top: 2px; }
+  .info-box p { font-size: 13px; color: var(--navy); line-height: 1.6; }
+
+  /* Timestamp */
+  .timestamp {
+    text-align: center; font-size: 11px; color: var(--slate-light);
+    margin-top: 16px; font-family: 'Montserrat', sans-serif; letter-spacing: 0.5px;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--navy-deeper); padding: 30px; text-align: center;
+  }
+  .footer-brand {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .footer-brand .yw { color: white; }
+  .footer-brand .os { color: var(--cyan-light); }
+  .footer-ref {
+    font-size: 11px; color: rgba(255,255,255,0.3); font-family: 'Montserrat', sans-serif;
+  }
+
+  /* Validation */
+  .form-group.error input,
+  .form-group.error select,
+  .form-group.error textarea {
+    border-color: var(--red); background: #FFF5F5;
+  }
+  .form-group .error-msg {
+    display: none; font-size: 12px; color: var(--red); margin-top: 4px;
+  }
+  .form-group.error .error-msg { display: block; }
+
+  /* Success state */
+  .success-card {
+    display: none; background: white; border-radius: 12px; padding: 48px 36px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid var(--green-border);
+    text-align: center;
+  }
+  .success-card.visible { display: block; animation: fadeIn 0.4s ease; }
+  .success-card svg { margin-bottom: 16px; }
+  .success-card h2 {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px;
+    color: var(--green); margin-bottom: 12px;
+  }
+  .success-card p { font-size: 14px; color: var(--slate); line-height: 1.7; max-width: 420px; margin: 0 auto; }
+  .success-card .cr-ref {
+    display: inline-block; margin-top: 16px; padding: 8px 20px;
+    background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 6px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; color: var(--green);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .hero-title { font-size: 26px; }
+    .type-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .form-card { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">
+      <img src="../../assets/SMlogo_landscape_white.png" alt="Seagull Maritime" height="32">
+      <div class="nav-brand-text">YOUR WATCH.<br><span class="nb-highlight">OUR STANDARD.</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Campaign</a></li>
+      <li><a href="risk-screening-tool.html">Risk Screening</a></li>
+      <li><a href="https://report.seagullmaritimeltd.com" target="_blank">Safety App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-breadcrumb">
+      <a href="../index.html">Campaign</a> &nbsp;/&nbsp; Tools &nbsp;/&nbsp; Change Request
+    </div>
+    <h1 class="hero-title">Change Request</h1>
+    <div class="hero-ref">SM/INT/PRO/013 &mdash; Management of Change</div>
+    <p class="hero-desc">
+      Use this form to request a change to any part of the management system &mdash; procedures, policies, SOPs, operations, or working practices. All requests are logged and reviewed by the compliance team.
+    </p>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="info-box">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#00A3D9" stroke-width="2"/><path d="M10 9v5M10 6.5v.01" stroke="#00A3D9" stroke-width="2" stroke-linecap="round"/></svg>
+    <p>This form generates a pre-formatted email to the compliance team. Your email client will open with the details filled in &mdash; just review and send. The Compliance Administrator will assign a CR number and confirm receipt.</p>
+  </div>
+
+  <!-- FORM -->
+  <form id="crForm" onsubmit="return false;">
+
+    <div class="form-card">
+      <h2>Your Details</h2>
+      <p class="card-desc">Tell us who you are so we can follow up.</p>
+
+      <div class="form-group">
+        <label>Full Name <span class="required">*</span></label>
+        <input type="text" id="crName" placeholder="e.g. John Smith" required>
+        <div class="error-msg">Please enter your name</div>
+      </div>
+
+      <div class="form-group">
+        <label>Role / Department <span class="required">*</span></label>
+        <input type="text" id="crRole" placeholder="e.g. Operations Manager / IOR Operations" required>
+        <div class="error-msg">Please enter your role or department</div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address <span class="required">*</span></label>
+        <input type="email" id="crEmail" placeholder="e.g. john@seagullsecurity.com" required>
+        <div class="error-msg">Please enter a valid email address</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h2>Change Details</h2>
+      <p class="card-desc">Describe what you want to change and why.</p>
+
+      <div class="form-group">
+        <label>Type of Change <span class="required">*</span></label>
+        <div class="type-grid" id="typeGrid">
+          <div class="type-option" onclick="toggleType(this)">
+            <input type="checkbox" value="Process / System">
+            <span class="check-box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Process / System
+          </div>
+          <div class="type-option" onclick="toggleType(this)">
+            <input type="checkbox" value="Operational">
+            <span class="check-box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Operational
+          </div>
+          <div class="type-option" onclick="toggleType(this)">
+            <input type="checkbox" value="Organisational">
+            <span class="check-box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Organisational
+          </div>
+          <div class="type-option" onclick="toggleType(this)">
+            <input type="checkbox" value="Regulatory / Standards">
+            <span class="check-box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Regulatory / Standards
+          </div>
+          <div class="type-option" onclick="toggleType(this)">
+            <input type="checkbox" value="Commercial / Contract">
+            <span class="check-box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Commercial / Contract
+          </div>
+          <div class="type-option" onclick="toggleType(this)">
+            <input type="checkbox" value="Environment / Workplace">
+            <span class="check-box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Environment / Workplace
+          </div>
+        </div>
+        <div class="error-msg" id="typeError">Please select at least one change type</div>
+      </div>
+
+      <div class="form-group">
+        <label>What do you want to change? <span class="required">*</span></label>
+        <textarea id="crDescription" placeholder="Describe the change you are proposing. Be as specific as possible — which document, process, or practice needs changing?" required></textarea>
+        <div class="error-msg">Please describe the proposed change</div>
+      </div>
+
+      <div class="form-group">
+        <label>Why is this change needed? <span class="required">*</span></label>
+        <textarea id="crJustification" placeholder="Explain why this change is needed. What problem does it solve, or what improvement does it bring?" required></textarea>
+        <div class="error-msg">Please explain why this change is needed</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h2>Impact (Optional)</h2>
+      <p class="card-desc">Any additional context helps us assess the change faster.</p>
+
+      <div class="form-group">
+        <label>Who or what is affected?</label>
+        <textarea id="crAffected" placeholder="e.g. All PCASP on IOR deployments, SM/OPS/SOP/001 Annex A, training materials..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Any risks or concerns?</label>
+        <textarea id="crRisks" placeholder="Are there any risks if this change is made — or if it isn't?"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Suggested approach (if you have one)</label>
+        <textarea id="crApproach" placeholder="How would you suggest implementing this change?"></textarea>
+      </div>
+    </div>
+
+    <button type="button" class="submit-btn" onclick="submitForm()">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M3 10h14M11 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Submit Change Request
+    </button>
+
+    <p class="timestamp" id="timestamp"></p>
+  </form>
+
+  <!-- SUCCESS -->
+  <div class="success-card" id="successCard">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="26" stroke="#2E7D4F" stroke-width="3"/><path d="M18 28l7 7 13-13" stroke="#2E7D4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <h2>Change Request Submitted</h2>
+    <p>Your email client should have opened with a pre-formatted change request. Review the details and hit send. The Compliance Administrator will log it, assign a CR number, and confirm receipt within 2 working days.</p>
+    <div class="cr-ref">Per SM/INT/PRO/013</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand"><span class="yw">YOUR WATCH.</span> <span class="os">OUR STANDARD.</span></div>
+  <div class="footer-ref">SM/INT/FORM/003 &mdash; Change Request Form (Online)</div>
+</footer>
+
+<script>
+function toggleType(el) {
+  el.classList.toggle('selected');
+  const cb = el.querySelector('input[type="checkbox"]');
+  cb.checked = !cb.checked;
+}
+
+function getSelectedTypes() {
+  const checks = document.querySelectorAll('#typeGrid input[type="checkbox"]:checked');
+  return Array.from(checks).map(c => c.value);
+}
+
+function validate() {
+  let valid = true;
+
+  // Clear previous errors
+  document.querySelectorAll('.form-group').forEach(g => g.classList.remove('error'));
+  document.getElementById('typeError').style.display = 'none';
+
+  // Required text fields
+  ['crName', 'crRole', 'crEmail', 'crDescription', 'crJustification'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.closest('.form-group').classList.add('error');
+      valid = false;
+    }
+  });
+
+  // Email validation
+  const email = document.getElementById('crEmail');
+  if (email.value.trim() && !email.value.includes('@')) {
+    email.closest('.form-group').classList.add('error');
+    valid = false;
+  }
+
+  // At least one change type
+  if (getSelectedTypes().length === 0) {
+    document.getElementById('typeError').style.display = 'block';
+    valid = false;
+  }
+
+  return valid;
+}
+
+function submitForm() {
+  if (!validate()) {
+    // Scroll to first error
+    const firstError = document.querySelector('.form-group.error');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const name = document.getElementById('crName').value.trim();
+  const role = document.getElementById('crRole').value.trim();
+  const email = document.getElementById('crEmail').value.trim();
+  const types = getSelectedTypes().join(', ');
+  const description = document.getElementById('crDescription').value.trim();
+  const justification = document.getElementById('crJustification').value.trim();
+  const affected = document.getElementById('crAffected').value.trim();
+  const risks = document.getElementById('crRisks').value.trim();
+  const approach = document.getElementById('crApproach').value.trim();
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+  const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+  const subject = `Change Request — ${types} — ${name}`;
+
+  let body = `CHANGE REQUEST\n`;
+  body += `Submitted via Campaign Portal\n`;
+  body += `Date: ${dateStr} at ${timeStr}\n`;
+  body += `Ref: SM/INT/PRO/013 — Management of Change\n\n`;
+  body += `═══════════════════════════════════════\n`;
+  body += `ORIGINATOR\n`;
+  body += `═══════════════════════════════════════\n`;
+  body += `Name: ${name}\n`;
+  body += `Role / Department: ${role}\n`;
+  body += `Email: ${email}\n\n`;
+  body += `═══════════════════════════════════════\n`;
+  body += `CHANGE DETAILS\n`;
+  body += `═══════════════════════════════════════\n`;
+  body += `Type of Change: ${types}\n\n`;
+  body += `Description:\n${description}\n\n`;
+  body += `Justification:\n${justification}\n\n`;
+
+  if (affected) {
+    body += `═══════════════════════════════════════\n`;
+    body += `IMPACT\n`;
+    body += `═══════════════════════════════════════\n`;
+    if (affected) body += `Who/What Affected:\n${affected}\n\n`;
+    if (risks) body += `Risks / Concerns:\n${risks}\n\n`;
+    if (approach) body += `Suggested Approach:\n${approach}\n\n`;
+  }
+
+  body += `═══════════════════════════════════════\n`;
+  body += `NEXT STEPS\n`;
+  body += `═══════════════════════════════════════\n`;
+  body += `The Compliance Administrator will log this request in\n`;
+  body += `SM/INT/REG/009, assign a CR number, and route to the\n`;
+  body += `GCD for impact assessment within 2 working days.\n`;
+
+  const mailtoUrl = `mailto:compliance@seagullsecurity.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  window.location.href = mailtoUrl;
+
+  // Show success state
+  setTimeout(() => {
+    document.getElementById('crForm').style.display = 'none';
+    document.getElementById('successCard').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 500);
+}
+
+// Set timestamp on load
+document.getElementById('timestamp').textContent =
+  'Form generated ' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) +
+  ' at ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+</script>
+
+</body>
+</html>
