@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seagull Maritime — ISO 45001 Stage 1 Evidence Matrix</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #003C72;
+    --navy-dark: #001F3F;
+    --cyan: #00A3D9;
+    --cyan-light: #4DC4E8;
+    --tint: #E6EDF5;
+    --bg: #F5F7FA;
+    --white: #FFFFFF;
+    --text: #2A2A2A;
+    --muted: #6B7280;
+    --green: #059669;
+    --amber: #D97706;
+    --red: #DC2626;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+
+  .doc-link {
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--cyan);
+    transition: all 0.15s;
+  }
+  .doc-link:hover {
+    color: var(--cyan);
+    border-bottom-color: var(--navy);
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+    padding: 2rem 2rem 1.5rem;
+    color: white;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+  }
+  .header .subtitle {
+    font-size: 0.95rem;
+    color: var(--cyan-light);
+    font-weight: 400;
+  }
+  .header .meta {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 0.8rem;
+  }
+  .tagline {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .tagline .watch { color: white; }
+  .tagline .standard { color: var(--cyan-light); }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: white;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 1rem 2rem;
+  }
+  .stats-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ISO BADGES */
+  .iso-legend {
+    max-width: 1200px;
+    margin: 1rem auto 0;
+    padding: 0 2rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .iso-legend-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 0.3rem;
+  }
+  .iso-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .iso-badge:hover { transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+  .iso-badge.active { border-color: var(--navy-dark); }
+  .badge-45001 { background: #DCFCE7; color: #166534; }
+  .badge-18788 { background: #DBEAFE; color: #1E40AF; }
+  .badge-28007 { background: #E0E7FF; color: #3730A3; }
+  .badge-28000 { background: #FEF3C7; color: #92400E; }
+  .badge-9001  { background: #FCE7F3; color: #9D174D; }
+
+  /* FILTER */
+  .filter-bar {
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 0 2rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    background: white;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: var(--cyan); color: var(--navy); }
+  .filter-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+  /* MAIN */
+  .main {
+    max-width: 1200px;
+    margin: 1.5rem auto;
+    padding: 0 2rem 3rem;
+  }
+
+  /* CLAUSE GROUP */
+  .clause-group {
+    margin-bottom: 1.5rem;
+  }
+  .clause-group-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1rem;
+    background: var(--navy);
+    color: white;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  .clause-group-header:hover { background: var(--navy-dark); }
+  .clause-group-header h2 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    flex: 1;
+  }
+  .clause-group-count {
+    font-size: 0.75rem;
+    background: rgba(255,255,255,0.2);
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+  }
+  .clause-group-chevron {
+    transition: transform 0.3s;
+    font-size: 0.8rem;
+  }
+  .clause-group.collapsed .clause-group-chevron { transform: rotate(-90deg); }
+  .clause-group.collapsed .clause-body { display: none; }
+
+  .clause-body {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+  }
+
+  /* CLAUSE ROW */
+  .clause-row {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid #F3F4F6;
+  }
+  .clause-row:last-child { border-bottom: none; }
+  .clause-row:hover { background: #FAFBFC; }
+
+  .clause-id {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 0.2rem;
+  }
+  .clause-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+  }
+
+  .doc-list { display: flex; flex-direction: column; gap: 0.3rem; }
+
+  .doc-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    background: var(--tint);
+    border-radius: 5px;
+    border-left: 3px solid var(--cyan);
+    font-size: 0.8rem;
+    transition: all 0.15s;
+  }
+  .doc-entry:hover { background: #D9E6F2; border-left-color: var(--navy); }
+
+  .doc-ref {
+    font-weight: 600;
+    color: var(--navy);
+    white-space: nowrap;
+    min-width: 140px;
+  }
+  .doc-title {
+    flex: 1;
+    color: var(--text);
+  }
+  .doc-badges {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+  .doc-badge {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  /* STATUS INDICATOR */
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 0.35rem;
+  }
+  .status-green { background: var(--green); }
+  .status-amber { background: var(--amber); }
+
+  /* PLATFORM NOTE */
+  .platform-note {
+    margin-top: 0.4rem;
+    padding: 0.5rem 0.7rem;
+    background: #FEF9C3;
+    border-radius: 5px;
+    border-left: 3px solid #EAB308;
+    font-size: 0.78rem;
+    color: #713F12;
+  }
+  .platform-note strong { color: #854D0E; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--navy-dark);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 1.5rem 2rem;
+    font-size: 0.75rem;
+  }
+  .footer strong { color: white; }
+  .footer .tagline-footer { margin-top: 0.5rem; font-size: 0.85rem; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; }
+    .header { background: var(--navy) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .filter-bar, .iso-legend { display: none; }
+    .clause-group.collapsed .clause-body { display: block !important; }
+    .clause-group-chevron { display: none; }
+    .doc-entry { background: var(--tint) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .clause-group-header { background: var(--navy) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .stats-bar { border-bottom: 2px solid var(--navy); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1>ISO 45001:2018 — Stage 1 Evidence Matrix</h1>
+    <div class="subtitle">Seagull Maritime Group — Integrated Management System</div>
+    <div class="meta">Prepared for Libero Assurance | April 2026 | Group Compliance Director: Darren Watts</div>
+    <div class="tagline">
+      <span class="watch">YOUR WATCH.</span> <span class="standard">OUR STANDARD.</span>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><span class="stat-num">135+</span><span class="stat-label">Documents</span></div>
+    <div class="stat"><span class="stat-num">25</span><span class="stat-label">Clauses Addressed</span></div>
+    <div class="stat"><span class="stat-num">144</span><span class="stat-label">Hazards Identified</span></div>
+    <div class="stat"><span class="stat-num">21</span><span class="stat-label">Training Courses</span></div>
+    <div class="stat"><span class="stat-num">5</span><span class="stat-label">ISO Standards Integrated</span></div>
+  </div>
+</div>
+
+<!-- ISO LEGEND -->
+<div class="iso-legend">
+  <span class="iso-legend-label">Cross-references:</span>
+  <span class="iso-badge badge-45001" onclick="toggleFilter('45001')">ISO 45001</span>
+  <span class="iso-badge badge-18788" onclick="toggleFilter('18788')">ISO 18788</span>
+  <span class="iso-badge badge-28007" onclick="toggleFilter('28007')">ISO 28007</span>
+  <span class="iso-badge badge-28000" onclick="toggleFilter('28000')">ISO 28000</span>
+  <span class="iso-badge badge-9001" onclick="toggleFilter('9001')">ISO 9001</span>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="matrix">
+
+<!-- 4. CONTEXT -->
+<div class="clause-group" data-section="context">
+  <div class="clause-group-header" onclick="toggleGroup(this)">
+    <span class="clause-group-chevron">&#9660;</span>
+    <h2>4. Context of the Organisation</h2>
+    <span class="clause-group-count">4 documents</span>
+  </div>
+  <div class="clause-body">
+    <div class="clause-row">
+      <div class="clause-id">Clause 4.1 — Understanding the organisation and its context</div>
+      <div class="clause-title">External and internal issues relevant to the OH&S management system</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/DOC/002</span><span class="doc-title"><a class="doc-link" href="docs/4.%20Context%20of%20the%20Organisation/SM-INT-DOC-002%20-%20Context%20of%20the%20Organisation%20v2.0.pdf" target="_blank" rel="noopener">Context of the Organisation v2.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-28000">28000</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 4.2 — Needs and expectations of workers and other interested parties</div>
+      <div class="clause-title">Interested parties, their needs, and which become compliance obligations</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/REG/001</span><span class="doc-title"><a class="doc-link" href="docs/4.%20Context%20of%20the%20Organisation/SM-HSE-REG-001%20-%20Interested%20Parties%20Register%20v1.0.xlsx" target="_blank" rel="noopener">Interested Parties Register v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-28000">28000</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 4.3 — Determining the scope of the OH&S management system</div>
+      <div class="clause-title">Boundaries and applicability of the OH&S management system</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/DOC/001</span><span class="doc-title"><a class="doc-link" href="docs/4.%20Context%20of%20the%20Organisation/SM-HSE-DOC-001%20-%20OH%26S%20Management%20System%20Scope%20Statement%20v1.0.pdf" target="_blank" rel="noopener">OH&S Management System Scope Statement v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 4.4 — OH&S management system</div>
+      <div class="clause-title">Processes, interactions, and documented information</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,18788,28007"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/DOC/001</span><span class="doc-title"><a class="doc-link" href="docs/4.%20Context%20of%20the%20Organisation/SM-INT-DOC-001%20-%20Document%20Referencing%20and%20Folder%20Structure%20Guide%20v1.0.pdf" target="_blank" rel="noopener">Document Referencing and Folder Structure Guide v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. LEADERSHIP -->
+<div class="clause-group" data-section="leadership">
+  <div class="clause-group-header" onclick="toggleGroup(this)">
+    <span class="clause-group-chevron">&#9660;</span>
+    <h2>5. Leadership and Worker Participation</h2>
+    <span class="clause-group-count">22 documents</span>
+  </div>
+  <div class="clause-body">
+    <div class="clause-row">
+      <div class="clause-id">Clause 5.1 — Leadership and commitment</div>
+      <div class="clause-title">Top management commitment to the OH&S management system</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="18788,28007"><span class="status-dot status-green"></span><span class="doc-ref">CEO Endorsement</span><span class="doc-title">Pavel Shparber — full endorsement of management system and compliance programme (April 2026)</span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso=""><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/MRM/001</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/SM-INT-MRM-001%20-%20Management%20Review%20Minutes%20v1.1.pdf" target="_blank" rel="noopener">Management Review Minutes v1.1 — CEO-chaired</a></span><div class="doc-badges"></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 5.2 — OH&S policy</div>
+      <div class="clause-title">17 policies across HSE, Security, Quality, and Integrated management</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso=""><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/POL/001</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/SM-HSE-POL-001%20-%20OH%20%26%20S%20Policy%20v1.0.pdf" target="_blank" rel="noopener">Occupational Health & Safety Policy v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-45001">45001</span></div></div>
+        <div class="doc-entry" data-iso=""><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/POL/002</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/SM-HSE-POL-002%20-%20Environmental%20Policy%20v1.0.pdf" target="_blank" rel="noopener">Environmental Policy v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-45001">45001</span></div></div>
+        <div class="doc-entry" data-iso="18788,28007,28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/SEC/POL/001–004</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/" target="_blank" rel="noopener">Security policies (Operations, Human Rights, Conformance, Statement) — enhanced for 45001 alignment</a></span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-28000">28000</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/QMS/POL/001–002</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/" target="_blank" rel="noopener">Quality Policy and Quality Policy Statement</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="18788,9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/POL/001–009</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/" target="_blank" rel="noopener">9 integrated policies (Anti-Bribery, Code of Conduct, Equal Opp, Grievance, Data Protection, Recruitment, Risk Mgmt, Social Media, Training)</a></span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-9001">9001</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 5.3 — Organisational roles, responsibilities and authorities</div>
+      <div class="clause-title">Assignment and communication of relevant roles within the OH&S system</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/DOC/005</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/SM-INT-DOC-005%20-%20Roles%20Responsibilities%20and%20Authorities%20Matrix%20v1.0.xlsx" target="_blank" rel="noopener">Roles, Responsibilities and Authorities Matrix (RACI) v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso=""><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/JD/002–004</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/" target="_blank" rel="noopener">Job Descriptions (Compliance Admin, QHSE Manager, Group Compliance Director)</a></span><div class="doc-badges"><span class="doc-badge badge-45001">45001</span><span class="doc-badge badge-9001">9001</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 5.4 — Consultation and participation of workers</div>
+      <div class="clause-title">Mechanisms for worker participation in OH&S decision-making</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso=""><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/014</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/SM-INT-PRO-014%20-%20Worker%20Consultation%20and%20Participation%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Worker Consultation and Participation Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-45001">45001</span></div></div>
+        <div class="doc-entry" data-iso=""><span class="status-dot status-green"></span><span class="doc-ref">HSE App</span><span class="doc-title">Seagull Safety Reporting App — worker-initiated reporting channel</span><div class="doc-badges"><span class="doc-badge badge-45001">45001</span></div></div>
+        <div class="platform-note"><strong>Digital Platform:</strong> The Safety Reporting App enables direct worker participation in hazard identification and incident reporting. Live demonstration available during audit — access credentials provided on the day.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. PLANNING -->
+<div class="clause-group" data-section="planning">
+  <div class="clause-group-header" onclick="toggleGroup(this)">
+    <span class="clause-group-chevron">&#9660;</span>
+    <h2>6. Planning</h2>
+    <span class="clause-group-count">23 documents</span>
+  </div>
+  <div class="clause-body">
+    <div class="clause-row">
+      <div class="clause-id">Clause 6.1.1 — Actions to address risks and opportunities</div>
+      <div class="clause-title">Systematic approach to risk identification and treatment</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/PRO/001</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-HSE-PRO-001%20-%20Hazard%20Identification%20and%20Risk%20Assessment%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Hazard Identification and Risk Assessment Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-28000">28000</span></div></div>
+        <div class="doc-entry" data-iso="18788,28007,28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/SEC/PRO/001</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-SEC-PRO-001%20-%20Security%20and%20Business%20Risk%20Assessment%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Security and Business Risk Assessment Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-28000">28000</span></div></div>
+        <div class="doc-entry" data-iso="28000,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/DOC/003</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-INT-DOC-003%20-%20Risk%20Screening%20Tool%20v1.0.pdf" target="_blank" rel="noopener">Risk Screening Tool v1.0 — pre-engagement risk gateway</a></span><div class="doc-badges"><span class="doc-badge badge-28000">28000</span><span class="doc-badge badge-18788">18788</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 6.1.2 — Hazard identification and assessment of risks and opportunities</div>
+      <div class="clause-title">9 operational H&S risk assessments — 144 identified hazards across all activities</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso=""><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/RA/002–010</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/" target="_blank" rel="noopener">9× RA-003 Pattern H&S Risk Assessments (Vessel Transfer, Security Duties, Vessel Routine, Weapons, RHIB, Office, Night Ops, Remote Working, Heat Stress)</a></span><div class="doc-badges"><span class="doc-badge badge-45001">45001</span></div></div>
+        <div class="doc-entry" data-iso="18788,28007,28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/SEC/RA/001–002</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/" target="_blank" rel="noopener">2× RA-004 Pattern Security & Business RAs (IOR Piracy, WAF GOG)</a></span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-28000">28000</span></div></div>
+        <div class="doc-entry" data-iso=""><span class="status-dot status-green"></span><span class="doc-ref">SM/CAM/BRAG/001–009</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/" target="_blank" rel="noopener">9× Basic Risk Assessment Guides — plain-language frontline worker summaries</a></span><div class="doc-badges"><span class="doc-badge badge-45001">45001</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 6.1.3 — Determination of legal requirements and other requirements</div>
+      <div class="clause-title">Three-register architecture for external compliance tracking</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/PRO/002</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-HSE-PRO-002%20-%20Legal%20and%20Regulatory%20Compliance%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Legal and Regulatory Compliance Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-28000">28000</span></div></div>
+        <div class="doc-entry" data-iso="28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/REG/002</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-HSE-REG-002%20-%20Legal%20and%20Regulatory%20Requirements%20Register%20v1.0.xlsx" target="_blank" rel="noopener">Legal and Regulatory Requirements Register v1.0 (37 entries, 5 jurisdictions)</a></span><div class="doc-badges"><span class="doc-badge badge-28000">28000</span></div></div>
+        <div class="doc-entry" data-iso="28007,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/SEC/REG/001</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-SEC-REG-001%20-%20Flag%20State%20Requirements%20Register%20v1.0.xlsx" target="_blank" rel="noopener">Flag State Requirements Register v1.0 (37 flags)</a></span><div class="doc-badges"><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788,28007,28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/007</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-REG-007%20-%20External%20Standards%20and%20References%20Register%20v1.0.xlsx" target="_blank" rel="noopener">External Standards and References Register v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-28000">28000</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 6.2 — OH&S objectives and planning to achieve them</div>
+      <div class="clause-title">SMART objectives and implementation programme</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/006</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-INT-REG-006%20-%20Company%20Objectives%20Register%20v1.0.xlsx" target="_blank" rel="noopener">Company Objectives Register v1.0 (32 SMART objectives across HSE/SEC/QMS/INT)</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/CMP/002</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-INT-CMP-002%20v2.0%20-%20Combined%20Work%20Programme.xlsx" target="_blank" rel="noopener">Combined Work Programme v2.0 (52 tasks, 4 phases)</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. SUPPORT -->
+<div class="clause-group" data-section="support">
+  <div class="clause-group-header" onclick="toggleGroup(this)">
+    <span class="clause-group-chevron">&#9660;</span>
+    <h2>7. Support</h2>
+    <span class="clause-group-count">14 documents</span>
+  </div>
+  <div class="clause-body">
+    <div class="clause-row">
+      <div class="clause-id">Clause 7.2 — Competence</div>
+      <div class="clause-title">Training programmes, competence records, and assessment</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="18788,28007"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/010</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-PRO-010%20-%20Training%20and%20Competence%20Management%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Training and Competence Management (PCASP) v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/012</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-PRO-012%20-%20Staff%20Training%20and%20Competence%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Staff Training and Competence Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="18788,28007,9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/008</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-REG-008%20-%20Training%20and%20Competence%20Matrix%20v1.0.xlsx" target="_blank" rel="noopener">Training and Competence Matrix v1.0 (21 courses × 3 roles × 41 personnel)</a></span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="18788,28007,9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/TRG/DOC/001–012</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/" target="_blank" rel="noopener">11 training course slide decks — 21 courses live on LMS</a></span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="platform-note"><strong>Digital Platform:</strong> Emergent LMS — 21 courses, AI-generated quizzes, automatic certificates, completion tracking. Live demonstration available during audit — access credentials provided on the day.</div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 7.4 — Communication</div>
+      <div class="clause-title">Internal and external communication processes</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/016</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-PRO-016%20-%20Internal%20and%20External%20Communications%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Internal and External Communications Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 7.5 — Documented information</div>
+      <div class="clause-title">Document and record control processes</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,18788,28007"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/002</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-PRO-002%20-%20Control%20of%20Documents%20v1.0.pdf" target="_blank" rel="noopener">Control of Documents v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/005</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-PRO-005%20-%20Control%20of%20Records%20v1.0.pdf" target="_blank" rel="noopener">Control of Records v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/001</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-REG-001%20-%20Document%20Register%20v2.0.xlsx" target="_blank" rel="noopener">Document Register v2.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 8. OPERATION -->
+<div class="clause-group" data-section="operation">
+  <div class="clause-group-header" onclick="toggleGroup(this)">
+    <span class="clause-group-chevron">&#9660;</span>
+    <h2>8. Operation</h2>
+    <span class="clause-group-count">16 documents</span>
+  </div>
+  <div class="clause-body">
+    <div class="clause-row">
+      <div class="clause-id">Clause 8.1.1 — Operational planning and control</div>
+      <div class="clause-title">SOPs governing all operational activities</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="28007,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/OPS/SOP/001 + A–H</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/" target="_blank" rel="noopener">IOR Standard Operating Procedures (main + 8 annexes)</a></span><div class="doc-badges"><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="28007,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/OPS/SOP/002 + A</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/SM-OPS-SOP-002%20-%20West%20Africa%20SEV%20Operations%20v1.0.pdf" target="_blank" rel="noopener">WAF SEV Operations + MSLO Annex</a></span><div class="doc-badges"><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="18788,28007"><span class="status-dot status-green"></span><span class="doc-ref">SM/OPS/PRO/001</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/SM-OPS-PRO-001%20-%20Rules%20on%20the%20Use%20of%20Force%20v1.0.pdf" target="_blank" rel="noopener">Rules on the Use of Force v1.0 + 5 form annexes</a></span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 8.1.3 — Management of change</div>
+      <div class="clause-title">Formal change management process</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/013</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/SM-INT-PRO-013%20-%20Management%20of%20Change%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Management of Change Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-28000">28000</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/FORM/003</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/SM-INT-FORM-003%20-%20Change%20Request%20Form%20v1.0.docx" target="_blank" rel="noopener">Change Request Form v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/009</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/SM-INT-REG-009%20-%20Change%20Request%20Register%20v1.0.xlsx" target="_blank" rel="noopener">Change Request Register v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 8.1.4 — Procurement</div>
+      <div class="clause-title">Supplier and contractor H&S management</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/017</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/SM-INT-PRO-017%20-%20Supplier%20Contractor%20and%20Procurement%20Management%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Supplier, Contractor and Procurement Management v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/010</span><span class="doc-title">Supplier and Subcontractor Register v1.0</span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="28007,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/SEC/PRO/004–005</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/" target="_blank" rel="noopener">SEV Approval + Supplier Approval Procedures v1.1</a></span><div class="doc-badges"><span class="doc-badge badge-28007">28007</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/FORM/004–006</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/" target="_blank" rel="noopener">Supplier Forms (Approval, SCAR, Checklist)</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 8.2 — Emergency preparedness and response</div>
+      <div class="clause-title">Emergency response planning and testing</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="28000"><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/PRO/003</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/SM-HSE-PRO-003%20-%20Emergency%20Preparedness%20and%20Response%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Emergency Preparedness and Response Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-28000">28000</span></div></div>
+        <div class="doc-entry" data-iso="18788,28007"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/006</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/SM-INT-PRO-006%20-%20Incident%20and%20Crisis%20Management%20v1.0.pdf" target="_blank" rel="noopener">Incident and Crisis Management v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span></div></div>
+        <div class="doc-entry" data-iso=""><span class="status-dot status-amber"></span><span class="doc-ref">IRT Exercise</span><span class="doc-title"><a class="doc-link" href="docs/8.%20Operation/SM-HSE-RPT-001%20-%20IRT%20Exercise%20Report%20-%20Office%20Fire%20v1.0.pdf" target="_blank" rel="noopener">Incident Response Test — paper-based tabletop (target: 18 April 2026)</a></span><div class="doc-badges"><span class="doc-badge badge-45001">45001</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 9. EVALUATION -->
+<div class="clause-group" data-section="evaluation">
+  <div class="clause-group-header" onclick="toggleGroup(this)">
+    <span class="clause-group-chevron">&#9660;</span>
+    <h2>9. Performance Evaluation</h2>
+    <span class="clause-group-count">8 documents</span>
+  </div>
+  <div class="clause-body">
+    <div class="clause-row">
+      <div class="clause-id">Clause 9.1 — Monitoring, measurement, analysis and evaluation</div>
+      <div class="clause-title">Performance monitoring framework and tools</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/004</span><span class="doc-title"><a class="doc-link" href="docs/10.%20Improvement/SM-INT-REG-004%20-%20NCR%20OFI%20and%20CAPA%20Register%20v1.0.xlsx" target="_blank" rel="noopener">NCR/OFI/CAPA Register v1.0 — live dashboard, trend analysis</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/006</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-INT-REG-006%20-%20Company%20Objectives%20Register%20v1.0.xlsx" target="_blank" rel="noopener">Company Objectives Register v1.0 — KPIs, RAG status, review history (Cl. 9.1 evidence)</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/008</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-REG-008%20-%20Training%20and%20Competence%20Matrix%20v1.0.xlsx" target="_blank" rel="noopener">Training and Competence Matrix v1.0 — competence monitoring</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/HSE/REG/002</span><span class="doc-title"><a class="doc-link" href="docs/6.%20Planning/SM-HSE-REG-002%20-%20Legal%20and%20Regulatory%20Requirements%20Register%20v1.0.xlsx" target="_blank" rel="noopener">Legal and Regulatory Requirements Register v1.0 — compliance evaluation (Cl. 9.1.2)</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/003</span><span class="doc-title"><a class="doc-link" href="docs/9.%20Performance%20Evaluation/SM-INT-REG-003%20-%20Internal%20Audit%20Schedule%202026.xlsx" target="_blank" rel="noopener">Internal Audit Schedule 2026 — performance monitoring</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/MRM/001</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/SM-INT-MRM-001%20-%20Management%20Review%20Minutes%20v1.1.pdf" target="_blank" rel="noopener">Management Review Minutes v1.1 — performance evaluation record</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso=""><span class="status-dot status-green"></span><span class="doc-ref">HSE App</span><span class="doc-title">Seagull Safety Reporting App — real-time incident/near-miss data</span><div class="doc-badges"><span class="doc-badge badge-45001">45001</span><span class="doc-badge badge-28000">28000</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 9.2 — Internal audit</div>
+      <div class="clause-title">Internal audit programme and results</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,18788,28007"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/003</span><span class="doc-title"><a class="doc-link" href="docs/9.%20Performance%20Evaluation/SM-INT-PRO-003%20-%20Internal%20Audit%20v1.0.pdf" target="_blank" rel="noopener">Internal Audit Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/003</span><span class="doc-title"><a class="doc-link" href="docs/9.%20Performance%20Evaluation/SM-INT-REG-003%20-%20Internal%20Audit%20Schedule%202026.xlsx" target="_blank" rel="noopener">Internal Audit Schedule 2026</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/IA/26-001 & 002</span><span class="doc-title"><a class="doc-link" href="docs//" target="_blank" rel="noopener">Internal Audit Reports — Document Control + Risk Management</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 9.3 — Management review</div>
+      <div class="clause-title">Management review process and outputs</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/019</span><span class="doc-title"><a class="doc-link" href="docs/7.%20Support/SM-INT-PRO-019%20-%20Management%20Review%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Management Review Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/MRM/001</span><span class="doc-title"><a class="doc-link" href="docs/5.%20Leadership%20and%20Worker%20Participation/SM-INT-MRM-001%20-%20Management%20Review%20Minutes%20v1.1.pdf" target="_blank" rel="noopener">Management Review Minutes v1.1 (data maturity note included)</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 10. IMPROVEMENT -->
+<div class="clause-group" data-section="improvement">
+  <div class="clause-group-header" onclick="toggleGroup(this)">
+    <span class="clause-group-chevron">&#9660;</span>
+    <h2>10. Improvement</h2>
+    <span class="clause-group-count">6 documents</span>
+  </div>
+  <div class="clause-body">
+    <div class="clause-row">
+      <div class="clause-id">Clause 10.1 — Incident, nonconformity and corrective action</div>
+      <div class="clause-title">NCR/OFI/CAPA lifecycle management</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001,18788,28007"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/001</span><span class="doc-title"><a class="doc-link" href="docs/10.%20Improvement/SM-INT-PRO-001%20-%20Non-Conformance%20OFI%20and%20Corrective%20Action%20Management%20v1.0.pdf" target="_blank" rel="noopener">NCR, OFI and Corrective Action Management v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/004</span><span class="doc-title"><a class="doc-link" href="docs/10.%20Improvement/SM-INT-REG-004%20-%20NCR%20OFI%20and%20CAPA%20Register%20v1.0.xlsx" target="_blank" rel="noopener">NCR/OFI/CAPA Register v1.0 (live dashboard, conditional formatting)</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/FORM/001</span><span class="doc-title"><a class="doc-link" href="docs/10.%20Improvement/SM-INT-FORM-001%20-%20Non-Conformance%20Report%20Form%20v1.0.docx" target="_blank" rel="noopener">Non-Conformance Report Form v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="28000,18788,28007"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/006</span><span class="doc-title"><a class="doc-link" href="docs/10.%20Improvement/SM-INT-PRO-006%20-%20Incident%20and%20Crisis%20Management%20v1.0.pdf" target="_blank" rel="noopener">Incident and Crisis Management v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-28000">28000</span><span class="doc-badge badge-18788">18788</span><span class="doc-badge badge-28007">28007</span></div></div>
+      </div>
+    </div>
+    <div class="clause-row">
+      <div class="clause-id">Clause 10.3 — Continual improvement</div>
+      <div class="clause-title">Systematic continual improvement of the OH&S management system</div>
+      <div class="doc-list">
+        <div class="doc-entry" data-iso="9001"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/PRO/015</span><span class="doc-title"><a class="doc-link" href="docs/10.%20Improvement/SM-INT-PRO-015%20-%20Continual%20Improvement%20Procedure%20v1.0.pdf" target="_blank" rel="noopener">Continual Improvement Procedure v1.0</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span></div></div>
+        <div class="doc-entry" data-iso="9001,18788"><span class="status-dot status-green"></span><span class="doc-ref">SM/INT/REG/005</span><span class="doc-title"><a class="doc-link" href="docs/10.%20Improvement/SM-INT-REG-005%20-%20Reconciliation%20Matrix%20v1.0.xlsx" target="_blank" rel="noopener">Reconciliation Matrix v1.0 — cross-reference tracking</a></span><div class="doc-badges"><span class="doc-badge badge-9001">9001</span><span class="doc-badge badge-18788">18788</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>CONFIDENTIAL — Prepared for <strong>Libero Assurance</strong> | April 2026</div>
+  <div class="tagline-footer">
+    <span class="watch" style="color:white"><strong>YOUR WATCH.</strong></span>
+    <span class="standard" style="color:#4DC4E8"><strong>OUR STANDARD.</strong></span>
+  </div>
+</div>
+
+<script>
+function toggleGroup(header) {
+  header.parentElement.classList.toggle('collapsed');
+}
+
+function toggleFilter(iso) {
+  const badges = document.querySelectorAll('.iso-badge');
+  const entries = document.querySelectorAll('.doc-entry');
+  const clickedBadge = document.querySelector('.badge-' + iso);
+
+  // Toggle active state
+  const wasActive = clickedBadge.classList.contains('active');
+
+  // Clear all active
+  badges.forEach(b => b.classList.remove('active'));
+
+  if (wasActive) {
+    // Show all
+    entries.forEach(e => { e.style.display = ''; });
+  } else {
+    clickedBadge.classList.add('active');
+    entries.forEach(e => {
+      const docIso = e.getAttribute('data-iso') || '';
+      if (docIso.includes(iso) || iso === '45001') {
+        e.style.display = '';
+      } else {
+        e.style.display = 'none';
+      }
+    });
+  }
+}
+
+// Start all sections expanded
+document.addEventListener('DOMContentLoaded', () => {
+  // All expanded by default
+});
+</script>
+
+</body>
+</html>
