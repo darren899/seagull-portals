@@ -134,7 +134,7 @@ body{font-family:'Open Sans',-apple-system,sans-serif;background:var(--bg);color
   <h1>Sanctions Screener</h1>
   <p class="hero-sub">Screen individuals, companies, and vessels against OFAC, UK FCDO, and EU consolidated sanctions lists. Updated weekly.</p>
   <span class="hero-badge">OFAC SDN &bull; UK SANCTIONS &bull; EU FSF</span>
-  <p class="hero-db-status" id="subT">Loading database...</p>
+  <p class="hero-db-status" id="subT"><span id="dbStatus" style="color:#ea580c;font-weight:600;animation:pulse 1.5s infinite">&#9679; LOADING DATABASE — please wait...</span></p>
 </div>
 
 <!-- MAIN -->
@@ -144,7 +144,7 @@ body{font-family:'Open Sans',-apple-system,sans-serif;background:var(--bg);color
   <div class="sp">
     <div class="sb">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input id="q" type="text" placeholder="Search name, company, vessel, IMO, MMSI..." oninput="doSearch()" autofocus>
+      <input id="q" type="text" placeholder="Database loading — please wait..." oninput="doSearch()" disabled id="searchInput">
       <button class="cbtn" onclick="clr()" title="Clear"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="fl" id="flArea"></div>
@@ -256,11 +256,13 @@ renderAll();
       dbName = 'OFAC/UK/EU (' + db.length.toLocaleString() + ' entries)';
       idx = []; buildIdx();
       renderAll();
-      document.getElementById('subT').textContent = db.length.toLocaleString() + ' sanctions entries loaded | Last refreshed: ' + refreshed;
+      document.getElementById('subT').innerHTML = '<span style="color:#16a34a;font-weight:600">&#9679; LIVE</span> &mdash; ' + db.length.toLocaleString() + ' sanctions entries loaded | Last refreshed: ' + refreshed;
+      var si2 = document.getElementById('searchInput'); if(si2){si2.disabled=false; si2.placeholder='Search name, company, vessel, IMO, MMSI...'; si2.focus();}
     }
   } catch(e) {
     console.warn('Could not load hosted DB, using sample:', e);
-    document.getElementById('subT').textContent = 'Using sample database (200 entries) — hosted DB unavailable';
+    document.getElementById('subT').innerHTML = '<span style="color:#dc2626;font-weight:600">&#9679; FALLBACK</span> &mdash; Using sample database (200 entries) — hosted DB unavailable';
+    var si3 = document.getElementById('searchInput'); if(si3){si3.disabled=false; si3.placeholder='Search name, company, vessel, IMO, MMSI... (sample data only)';}
   }
 })();
 
