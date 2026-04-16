@@ -500,19 +500,27 @@
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="downloadPNG()">Download as PNG</button>
-    <button class="btn btn-secondary" onclick="downloadPNG2x()">Download as PNG (2x)</button>
+    <button class="btn btn-primary" onclick="copyHTML()" id="btn-copy">Copy for Gmail</button>
+    <button class="btn btn-secondary" onclick="downloadPNG2x()">Download PNG for Outlook</button>
+    <button class="btn btn-outline" onclick="downloadPNG()">Download PNG (1x)</button>
   </div>
   <div class="status-msg" id="status-msg"></div>
 
   <div class="instructions">
     <h3>How to use this signature</h3>
     <p>
+      <strong>Gmail:</strong><br>
       <strong>1.</strong> Fill in your details above &mdash; the preview updates live.<br>
-      <strong>2.</strong> Click <strong>Download as PNG (2x)</strong> for a high-resolution image.<br>
-      <strong>3.</strong> In <strong>Gmail</strong>: Settings &rarr; General &rarr; Signature &rarr; click the image icon &rarr; Upload &rarr; select your PNG.<br>
-      <strong>4.</strong> In <strong>Outlook</strong>: File &rarr; Options &rarr; Mail &rarr; Signatures &rarr; Insert Picture &rarr; select your PNG.<br>
-      <strong>5.</strong> Resize the image in your email client to roughly 600px wide if needed.
+      <strong>2.</strong> Click <strong>Copy for Gmail</strong>.<br>
+      <strong>3.</strong> Go to Gmail &rarr; Settings &rarr; General &rarr; Signature.<br>
+      <strong>4.</strong> Click inside the signature editor and press <strong>Ctrl+V</strong> (or Cmd+V on Mac).<br>
+      <strong>5.</strong> Done &mdash; the formatted signature pastes directly with all styling.
+    </p>
+    <p style="margin-top: 12px;">
+      <strong>Outlook:</strong><br>
+      <strong>1.</strong> Click <strong>Download PNG for Outlook</strong> for a high-resolution image.<br>
+      <strong>2.</strong> File &rarr; Options &rarr; Mail &rarr; Signatures &rarr; Insert Picture &rarr; select your PNG.<br>
+      <strong>3.</strong> Resize to roughly 600px wide if needed.
     </p>
   </div>
 </div>
@@ -546,6 +554,80 @@ function updatePreview() {
     if (i < locs.length - 1) html += '<span class="loc-dot"></span>';
   });
   document.getElementById('out-locations').innerHTML = html;
+}
+
+function copyHTML() {
+  var name = document.getElementById('sig-name').value || 'Your Name';
+  var title = (document.getElementById('sig-jobtitle').value || 'Job Title').toUpperCase();
+  var email = document.getElementById('sig-email').value || 'email@seagullsecurity.com';
+  var phone = document.getElementById('sig-phone').value || '+971 XX XXX XXXX';
+  var web = document.getElementById('sig-web').value || 'seagullmaritimeltd.com';
+  var locations = document.getElementById('sig-locations').value || 'UK, Malta, Greece, Dubai, Nigeria';
+  var locs = locations.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+  var locHTML = locs.join(' <span style="color:#00A3D9;margin:0 4px;">&bull;</span> ');
+
+  var html = '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;max-width:600px;">'
+    + '<tr>'
+    + '<td style="padding:0 16px 10px 0;vertical-align:middle;">'
+    +   '<div style="font-weight:800;font-size:17px;color:#003C72;line-height:1.2;">' + name + '</div>'
+    +   '<div style="font-weight:600;font-size:10px;color:#00A3D9;text-transform:uppercase;letter-spacing:1.5px;margin-top:2px;">' + title + '</div>'
+    +   '<div style="margin-top:10px;font-size:11px;color:#42515A;line-height:1.6;">'
+    +     '<span style="font-weight:700;color:#003C72;display:inline-block;width:18px;">E</span> <a href="mailto:' + email + '" style="color:#42515A;text-decoration:none;">' + email + '</a><br>'
+    +     '<span style="font-weight:700;color:#003C72;display:inline-block;width:18px;">T</span> ' + phone + '<br>'
+    +     '<span style="font-weight:700;color:#003C72;display:inline-block;width:18px;">W</span> <a href="https://' + web + '" style="color:#42515A;text-decoration:none;">' + web + '</a>'
+    +   '</div>'
+    + '</td>'
+    + '<td style="width:160px;vertical-align:middle;text-align:center;padding:10px 0 10px 16px;border-left:1px solid #E8EDF2;">'
+    +   '<div style="font-weight:800;font-size:15px;color:#003C72;letter-spacing:0.3px;">SEAGULL</div>'
+    +   '<div style="font-weight:400;font-size:9px;color:#003C72;letter-spacing:3px;">MARITIME</div>'
+    +   '<div style="margin-top:6px;font-weight:800;font-size:11px;color:#003C72;">YOUR WATCH.</div>'
+    +   '<div style="font-weight:600;font-size:7px;color:#00A3D9;letter-spacing:2px;">OUR STANDARD.</div>'
+    + '</td>'
+    + '</tr>'
+    + '<tr><td colspan="2" style="padding:0;">'
+    +   '<table cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#003C72;border-radius:4px;">'
+    +   '<tr><td style="padding:7px 16px;">'
+    +     '<span style="font-size:7.5px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,0.85);background:rgba(255,255,255,0.12);padding:3px 10px;border-radius:10px;margin-right:8px;">ASSESS</span>'
+    +     '<span style="font-size:7.5px;font-weight:700;letter-spacing:1.5px;color:#4DC4E8;background:rgba(0,163,217,0.25);padding:3px 10px;border-radius:10px;margin-right:8px;">REPORT</span>'
+    +     '<span style="font-size:7.5px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.08);padding:3px 10px;border-radius:10px;">DELIVER</span>'
+    +   '</td>'
+    +   '<td style="padding:7px 16px;text-align:right;font-size:7px;font-weight:600;color:rgba(255,255,255,0.45);letter-spacing:0.5px;line-height:1.5;">'
+    +     'ISO 9001 &middot; ISO 18788<br>ISO 28000 &middot; ISO 28007'
+    +   '</td></tr></table>'
+    + '</td></tr>'
+    + '<tr><td colspan="2" style="padding-top:6px;text-align:center;font-size:8px;font-weight:500;color:#6B7C88;letter-spacing:0.5px;">'
+    +   locHTML
+    + '</td></tr>'
+    + '</table>';
+
+  // Copy as rich HTML to clipboard
+  var blob = new Blob([html], { type: 'text/html' });
+  var clipItem = new ClipboardItem({ 'text/html': blob });
+  navigator.clipboard.write([clipItem]).then(function() {
+    var msg = document.getElementById('status-msg');
+    msg.textContent = 'Copied! Paste directly into Gmail signature editor (Ctrl+V).';
+    msg.style.color = '#27AE60';
+    setTimeout(function() { msg.textContent = ''; msg.style.color = ''; }, 5000);
+  }).catch(function(err) {
+    // Fallback: select and copy from a hidden div
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    tmp.style.position = 'fixed';
+    tmp.style.left = '-9999px';
+    document.body.appendChild(tmp);
+    var range = document.createRange();
+    range.selectNodeContents(tmp);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+    document.body.removeChild(tmp);
+    var msg = document.getElementById('status-msg');
+    msg.textContent = 'Copied! Paste directly into Gmail signature editor (Ctrl+V).';
+    msg.style.color = '#27AE60';
+    setTimeout(function() { msg.textContent = ''; msg.style.color = ''; }, 5000);
+  });
 }
 
 function doCapture(scale) {
