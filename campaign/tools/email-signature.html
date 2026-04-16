@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Signature Generator | Seagull Maritime</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --navy: #003C72;
+    --navy-dark: #002A52;
+    --navy-deeper: #001D3A;
+    --cyan: #00A3D9;
+    --cyan-light: #4DC4E8;
+    --cyan-pale: #E6F6FC;
+    --slate: #42515A;
+    --slate-light: #6B7C88;
+    --off-white: #F8FAFB;
+    --light-grey: #F4F7FA;
+    --mid-grey: #E8EDF2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--slate);
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: var(--navy);
+    padding: 24px 30px;
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .header-left img { height: 28px; }
+  .header-left .divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,0.15);
+  }
+  .header-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+  }
+  .header-brand .yw { color: white; }
+  .header-brand .os { color: var(--cyan-light); }
+  .back-link {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--cyan-light); }
+
+  /* ===== PAGE ===== */
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+  }
+
+  .page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .page-subtitle {
+    font-size: 14px;
+    color: var(--slate-light);
+    margin-bottom: 36px;
+  }
+
+  /* ===== FORM ===== */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  .form-group label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .form-group input, .form-group select {
+    padding: 10px 14px;
+    border: 1px solid var(--mid-grey);
+    border-radius: 6px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: var(--slate);
+    background: white;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(0,163,217,0.1);
+  }
+
+  .hint {
+    font-size: 11px;
+    color: var(--slate-light);
+    margin-top: 2px;
+  }
+
+  /* ===== PREVIEW ===== */
+  .preview-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .preview-wrapper {
+    background: white;
+    border: 1px solid var(--mid-grey);
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ===== THE SIGNATURE ===== */
+  .sig {
+    width: 600px;
+    font-family: 'Open Sans', Arial, sans-serif;
+    background: white;
+  }
+
+  .sig-main {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 3px solid var(--cyan);
+  }
+
+  .sig-left {
+    flex: 1;
+    padding: 0 16px 12px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .sig-name {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    color: var(--navy);
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+  }
+
+  .sig-title {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 10px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 2px;
+  }
+
+  .sig-details {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sig-detail {
+    font-size: 11px;
+    color: var(--slate);
+    line-height: 1.4;
+  }
+
+  .sig-detail .sig-label {
+    font-weight: 700;
+    color: var(--navy);
+    display: inline-block;
+    width: 18px;
+  }
+
+  .sig-detail a {
+    color: var(--slate);
+    text-decoration: none;
+  }
+
+  .sig-right {
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0 10px 16px;
+    border-left: 1px solid var(--mid-grey);
+  }
+
+  .sig-logo {
+    width: 120px;
+    margin-bottom: 6px;
+  }
+
+  .sig-campaign {
+    font-family: 'Montserrat', Arial, sans-serif;
+    text-align: center;
+    line-height: 1.15;
+  }
+
+  .sig-campaign .sc-top {
+    font-weight: 800;
+    font-size: 11px;
+    color: var(--navy);
+    letter-spacing: 0.3px;
+  }
+
+  .sig-campaign .sc-bottom {
+    font-weight: 600;
+    font-size: 7px;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Banner strip */
+  .sig-banner {
+    background: var(--navy);
+    padding: 7px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .sig-pillars {
+    display: flex;
+    gap: 12px;
+  }
+
+  .sig-pill {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 7.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 10px;
+  }
+
+  .sig-pill.assess {
+    background: rgba(255,255,255,0.12);
+    color: white;
+  }
+  .sig-pill.report {
+    background: rgba(0,163,217,0.25);
+    color: var(--cyan-light);
+  }
+  .sig-pill.deliver {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
+  }
+
+  .sig-isos {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 7px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.5px;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  /* Locations line */
+  .sig-locations {
+    padding-top: 6px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 500;
+    color: var(--slate-light);
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  .sig-locations .loc-dot {
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--cyan);
+    margin: 0 6px;
+    vertical-align: middle;
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-primary {
+    background: var(--cyan);
+    color: white;
+  }
+  .btn-primary:hover { background: #0090c0; }
+
+  .btn-secondary {
+    background: var(--navy);
+    color: white;
+  }
+  .btn-secondary:hover { background: var(--navy-dark); }
+
+  .btn-outline {
+    background: white;
+    color: var(--navy);
+    border: 2px solid var(--mid-grey);
+  }
+  .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .status-msg {
+    font-size: 13px;
+    color: var(--cyan);
+    font-weight: 600;
+    margin-top: 8px;
+    min-height: 20px;
+  }
+
+  /* ===== INSTRUCTIONS ===== */
+  .instructions {
+    background: var(--cyan-pale);
+    border-left: 3px solid var(--cyan);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 24px;
+  }
+
+  .instructions h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .instructions p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--slate);
+  }
+
+  .instructions strong { color: var(--navy); }
+
+  .footer {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 30px 40px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--slate-light);
+  }
+
+  @media (max-width: 700px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .preview-wrapper { padding: 16px; overflow-x: auto; }
+    .sig { transform-origin: top left; transform: scale(0.8); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <img src="../../assets/SMlogo_landscape_white.png" alt="Seagull Maritime">
+      <div class="divider"></div>
+      <div class="header-brand"><span class="yw">YOUR WATCH.</span> <span class="os">OUR STANDARD.</span></div>
+    </div>
+    <a href="../index.html" class="back-link">&larr; Campaign Portal</a>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="page-title">Email Signature Generator</h1>
+  <p class="page-subtitle">Enter your details below. Download as PNG and paste into your email client.</p>
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="sig-name" value="Darren Watts" oninput="updatePreview()">
+    </div>
+    <div class="form-group">
+      <label>Job Title</label>
+      <input type="text" id="sig-jobtitle" value="Group Compliance Director" oninput="updatePreview()">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="sig-email" value="darren@seagullsecurity.com" oninput="updatePreview()">
+    </div>
+    <div class="form-group">
+      <label>Phone</label>
+      <input type="tel" id="sig-phone" value="+971 50 950 0175" oninput="updatePreview()">
+    </div>
+    <div class="form-group">
+      <label>Website</label>
+      <input type="text" id="sig-web" value="seagullmaritimeltd.com" oninput="updatePreview()">
+    </div>
+    <div class="form-group">
+      <label>Locations</label>
+      <input type="text" id="sig-locations" value="UK, Malta, Greece, Dubai, Nigeria" oninput="updatePreview()">
+      <span class="hint">Comma-separated</span>
+    </div>
+  </div>
+
+  <div class="preview-label">Live Preview</div>
+
+  <div class="preview-wrapper">
+    <div class="sig" id="sig-capture">
+
+      <div class="sig-main">
+        <div class="sig-left">
+          <div class="sig-name" id="out-name">Darren Watts</div>
+          <div class="sig-title" id="out-title">GROUP COMPLIANCE DIRECTOR</div>
+          <div class="sig-details">
+            <div class="sig-detail"><span class="sig-label">E</span> <a id="out-email-link" href="mailto:darren@seagullsecurity.com"><span id="out-email">darren@seagullsecurity.com</span></a></div>
+            <div class="sig-detail"><span class="sig-label">T</span> <span id="out-phone">+971 50 950 0175</span></div>
+            <div class="sig-detail"><span class="sig-label">W</span> <a id="out-web-link" href="https://seagullmaritimeltd.com"><span id="out-web">seagullmaritimeltd.com</span></a></div>
+          </div>
+        </div>
+        <div class="sig-right">
+          <img src="../../assets/SMlogo_portrait.png" alt="Seagull Maritime" class="sig-logo">
+          <div class="sig-campaign">
+            <div class="sc-top">YOUR WATCH.</div>
+            <div class="sc-bottom">OUR STANDARD.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sig-banner">
+        <div class="sig-pillars">
+          <span class="sig-pill assess">ASSESS</span>
+          <span class="sig-pill report">REPORT</span>
+          <span class="sig-pill deliver">DELIVER</span>
+        </div>
+        <div class="sig-isos">ISO 9001 &middot; ISO 18788<br>ISO 28000 &middot; ISO 28007</div>
+      </div>
+
+      <div class="sig-locations" id="out-locations">
+        <span>UK</span><span class="loc-dot"></span><span>Malta</span><span class="loc-dot"></span><span>Greece</span><span class="loc-dot"></span><span>Dubai</span><span class="loc-dot"></span><span>Nigeria</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="downloadPNG()">Download as PNG</button>
+    <button class="btn btn-secondary" onclick="downloadPNG2x()">Download as PNG (2x)</button>
+  </div>
+  <div class="status-msg" id="status-msg"></div>
+
+  <div class="instructions">
+    <h3>How to use this signature</h3>
+    <p>
+      <strong>1.</strong> Fill in your details above &mdash; the preview updates live.<br>
+      <strong>2.</strong> Click <strong>Download as PNG (2x)</strong> for a high-resolution image.<br>
+      <strong>3.</strong> In <strong>Gmail</strong>: Settings &rarr; General &rarr; Signature &rarr; click the image icon &rarr; Upload &rarr; select your PNG.<br>
+      <strong>4.</strong> In <strong>Outlook</strong>: File &rarr; Options &rarr; Mail &rarr; Signatures &rarr; Insert Picture &rarr; select your PNG.<br>
+      <strong>5.</strong> Resize the image in your email client to roughly 600px wide if needed.
+    </p>
+  </div>
+</div>
+
+<div class="footer">
+  Seagull Maritime Ltd &nbsp;|&nbsp; Your Watch. Our Standard. &nbsp;|&nbsp; 2026
+</div>
+
+<script>
+function updatePreview() {
+  var name = document.getElementById('sig-name').value || 'Your Name';
+  var title = document.getElementById('sig-jobtitle').value || 'Job Title';
+  var email = document.getElementById('sig-email').value || 'email@seagullsecurity.com';
+  var phone = document.getElementById('sig-phone').value || '+971 XX XXX XXXX';
+  var web = document.getElementById('sig-web').value || 'seagullmaritimeltd.com';
+  var locations = document.getElementById('sig-locations').value || 'UK, Malta, Greece, Dubai, Nigeria';
+
+  document.getElementById('out-name').textContent = name;
+  document.getElementById('out-title').textContent = title.toUpperCase();
+  document.getElementById('out-email').textContent = email;
+  document.getElementById('out-email-link').href = 'mailto:' + email;
+  document.getElementById('out-phone').textContent = phone;
+  document.getElementById('out-web').textContent = web;
+  document.getElementById('out-web-link').href = 'https://' + web;
+
+  // Rebuild locations with dots
+  var locs = locations.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+  var html = '';
+  locs.forEach(function(loc, i) {
+    html += '<span>' + loc + '</span>';
+    if (i < locs.length - 1) html += '<span class="loc-dot"></span>';
+  });
+  document.getElementById('out-locations').innerHTML = html;
+}
+
+function doCapture(scale) {
+  var el = document.getElementById('sig-capture');
+  var msg = document.getElementById('status-msg');
+  msg.textContent = 'Rendering...';
+
+  html2canvas(el, {
+    scale: scale,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    logging: false,
+    allowTaint: true
+  }).then(function(canvas) {
+    var link = document.createElement('a');
+    var name = document.getElementById('sig-name').value.replace(/\s+/g, '-').toLowerCase() || 'signature';
+    link.download = 'seagull-signature-' + name + (scale > 1 ? '-2x' : '') + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    msg.textContent = 'Downloaded! Paste into your email client settings.';
+    setTimeout(function() { msg.textContent = ''; }, 4000);
+  }).catch(function(err) {
+    msg.textContent = 'Error: ' + err.message + '. Try right-clicking the preview and saving as image.';
+  });
+}
+
+function downloadPNG() { doCapture(1); }
+function downloadPNG2x() { doCapture(2); }
+</script>
+
+</body>
+</html>
