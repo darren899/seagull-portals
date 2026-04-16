@@ -548,13 +548,20 @@ function doCapture(scale) {
   var msg = document.getElementById('status-msg');
   msg.textContent = 'Rendering...';
 
+  // Timeout fallback in case html2canvas hangs
+  var timeout = setTimeout(function() {
+    msg.textContent = 'Rendering timed out. If viewing locally, try from the live portal instead (GitHub Pages).';
+  }, 8000);
+
   html2canvas(el, {
     scale: scale,
     backgroundColor: '#ffffff',
     useCORS: true,
     logging: false,
-    allowTaint: true
+    allowTaint: true,
+    imageTimeout: 5000
   }).then(function(canvas) {
+    clearTimeout(timeout);
     var link = document.createElement('a');
     var name = document.getElementById('sig-name').value.replace(/\s+/g, '-').toLowerCase() || 'signature';
     link.download = 'seagull-signature-' + name + (scale > 1 ? '-2x' : '') + '.png';
@@ -563,7 +570,8 @@ function doCapture(scale) {
     msg.textContent = 'Downloaded! Paste into your email client settings.';
     setTimeout(function() { msg.textContent = ''; }, 4000);
   }).catch(function(err) {
-    msg.textContent = 'Error: ' + err.message + '. Try right-clicking the preview and saving as image.';
+    clearTimeout(timeout);
+    msg.textContent = 'Error: ' + err.message + '. Try from the live portal or right-click the preview to save.';
   });
 }
 

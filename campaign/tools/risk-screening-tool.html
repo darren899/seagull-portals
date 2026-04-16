@@ -422,7 +422,7 @@
       <button class="btn btn-back" id="btn-back" onclick="goBack()">Back</button>
       <div>
         <button class="btn btn-next" id="btn-next" onclick="goNext()">Next</button>
-        <button class="btn btn-submit hidden" id="btn-submit" onclick="submitScreening()">Submit Screening</button>
+        <button class="btn btn-submit hidden" id="btn-submit" onclick="doSubmit()">Submit Screening</button>
       </div>
     </div>
   </div>
@@ -707,7 +707,7 @@ function renderQuestion() {
     html += `<button class="option-btn dontknow ${isDK ? 'selected' : ''}" onclick="toggleTextDK('${q.id}')" style="margin-top:4px;"><span class="option-radio"></span><span>Don\u2019t Know / Unsure</span></button>`;
     html += `</div>`;
     if (q.sanctions) {
-      html += `<div class="info-box"><span class="info-icon">\u2139\uFE0F</span><span>This entry will be automatically checked against OFAC, UK, and EU sanctions databases when you submit the screening.</span></div>`;
+      html += `<div class="info-box"><span class="info-icon">\u2139\uFE0F</span><span>This name will be screened live against OFAC SDN, UK FCDO, and EU FSF sanctions lists when you submit. Vessel name and IMO from the next question are also screened.</span></div>`;
     }
   }
   else if (q.type === "dual-text") {
@@ -817,14 +817,79 @@ function goNext() {
   }
 }
 
+// ===== SUBMIT WRAPPER (loading state for async sanctions check) =====
+function doSubmit() {
+  const btn = document.getElementById("btn-submit");
+  btn.disabled = true;
+  btn.textContent = "Screening sanctions databases...";
+  btn.style.opacity = "0.7";
+  submitScreening().finally(function() {
+    btn.disabled = false;
+    btn.textContent = "Submit Screening";
+    btn.style.opacity = "1";
+  });
+}
+
+// ===== SANCTIONS SEARCH HELPERS =====
+function sanctionsScore(query, text) {
+  if (!query || !text) return 0;
+  var ql = query.toLowerCase().trim(), tl = text.toLowerCase();
+  if (tl === ql) return 100;
+  if (tl.startsWith(ql + ",") || tl.startsWith(ql + " ")) return 95;
+  if (tl.includes(ql)) return 85;
+  var qt = ql.split(/\s+/), hits = 0;
+  for (var i = 0; i < qt.length; i++) { if (tl.includes(qt[i])) hits++; }
+  if (hits === qt.length) return 80;
+  if (hits > 0) return 50 + (hits / qt.length) * 30;
+  return 0;
+}
+
+function searchSanctionsDB(entries, searchTerms) {
+  // searchTerms = [{label, value}] — client name, vessel name, IMO
+  var matches = [];
+  var threshold = 70;
+  entries.forEach(function(entry) {
+    searchTerms.forEach(function(term) {
+      if (!term.value || term.value.length < 2) return;
+      var best = sanctionsScore(term.value, entry.name || "");
+      if (entry.aliases) {
+        entry.aliases.forEach(function(a) {
+          best = Math.max(best, sanctionsScore(term.value, a) * 0.95);
+        });
+      }
+      if (entry.vessel_info) {
+        var vi = entry.vessel_info;
+        if (vi.imo) best = Math.max(best, sanctionsScore(term.value, vi.imo) * 0.95);
+        if (vi.call_sign) best = Math.max(best, sanctionsScore(term.value, vi.call_sign) * 0.9);
+      }
+      best = Math.round(best);
+      if (best >= threshold) {
+        matches.push({ entry: entry, score: best, searchedFor: term.label + ": " + term.value });
+      }
+    });
+  });
+  // Deduplicate by entry name+source, keep highest score
+  var seen = {};
+  var unique = [];
+  matches.forEach(function(m) {
+    var key = m.entry.name + "|" + m.entry.source;
+    if (!seen[key] || seen[key].score < m.score) { seen[key] = m; }
+  });
+  Object.keys(seen).forEach(function(k) { unique.push(seen[k]); });
+  unique.sort(function(a, b) { return b.score - a.score; });
+  return unique.slice(0, 20);
+}
+
 // ===== RESULTS ENGINE =====
-function submitScreening() {
+async function submitScreening() {
   // Calculate ratings per dimension
   const dimRatings = { security: "green", safety: "green", sanctions: "green" };
   const unknowns = [];
   const gaps = [];
   const coveredRAs = new Set();
   const flaggedItems = [];
+  let sanctionsMatches = [];
+  let sanctionsMeta = null;
 
   // Always include baseline RAs for vessel operations
   coveredRAs.add("SM/HSE/RA/003"); // Security duties
@@ -889,12 +954,54 @@ function submitScreening() {
     coveredRAs.add("SM/HSE/RA/002");
   }
 
-  // Sanctions check (simulated — flags if client name entered)
+  // ===== LIVE SANCTIONS CHECK =====
+  // Build search terms from answers
+  const searchTerms = [];
   const clientAnswer = answers["1.4"];
-  if (clientAnswer && clientAnswer.value && clientAnswer.value.length > 0) {
-    // In production, this would hit the sanctions DB
-    // For now, simulate clean result
-    dimRatings.sanctions = "green";
+  if (clientAnswer && clientAnswer.value && clientAnswer.value.length >= 2) {
+    searchTerms.push({ label: "Client", value: clientAnswer.value });
+  }
+  const vesselAnswer = answers["1.5"];
+  if (vesselAnswer) {
+    if (vesselAnswer["vessel-name"] && vesselAnswer["vessel-name"].length >= 2) {
+      searchTerms.push({ label: "Vessel", value: vesselAnswer["vessel-name"] });
+    }
+    if (vesselAnswer["vessel-imo"] && vesselAnswer["vessel-imo"].length >= 2) {
+      searchTerms.push({ label: "IMO", value: vesselAnswer["vessel-imo"] });
+    }
+  }
+
+  if (searchTerms.length > 0) {
+    try {
+      const resp = await fetch('../data/sanctions_db.json');
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const data = await resp.json();
+      sanctionsMeta = data.metadata || {};
+      const entries = data.entries || [];
+
+      if (entries.length > 0) {
+        sanctionsMatches = searchSanctionsDB(entries, searchTerms);
+        if (sanctionsMatches.length > 0) {
+          dimRatings.sanctions = "red";
+          sanctionsMatches.forEach(function(m) {
+            flaggedItems.push({
+              qId: "SANCTIONS",
+              question: "Sanctions screening",
+              answer: m.entry.name + " (" + m.entry.source + ") — match score " + m.score + "% — searched: " + m.searchedFor,
+              dimension: "sanctions"
+            });
+          });
+        }
+      } else {
+        // Empty database — flag as amber (can't confirm clean)
+        dimRatings.sanctions = escalate(dimRatings.sanctions, "amber");
+        unknowns.push({ qId: "SANCTIONS", question: "Sanctions database was empty — could not verify" });
+      }
+    } catch (err) {
+      // Database fetch failed — flag as amber (can't confirm clean)
+      dimRatings.sanctions = escalate(dimRatings.sanctions, "amber");
+      unknowns.push({ qId: "SANCTIONS", question: "Sanctions database could not be loaded (" + err.message + ") — manual check required" });
+    }
   }
 
   // Check flag state for sanctions dimension
@@ -912,7 +1019,7 @@ function submitScreening() {
   const overall = Object.values(dimRatings).reduce((worst, r) => riskOrder[r] > riskOrder[worst] ? r : worst, "green");
 
   // Render results
-  renderResults(overall, dimRatings, coveredRAs, gaps, unknowns, flaggedItems);
+  renderResults(overall, dimRatings, coveredRAs, gaps, unknowns, flaggedItems, sanctionsMatches, sanctionsMeta);
 }
 
 function escalate(current, to) {
@@ -920,10 +1027,13 @@ function escalate(current, to) {
   return order[to] > order[current] ? to : current;
 }
 
-function renderResults(overall, dimRatings, coveredRAs, gaps, unknowns, flaggedItems) {
+function renderResults(overall, dimRatings, coveredRAs, gaps, unknowns, flaggedItems, sanctionsMatches, sanctionsMeta) {
   document.getElementById("screening-flow").classList.add("hidden");
   const container = document.getElementById("results-container");
   container.style.display = "block";
+
+  sanctionsMatches = sanctionsMatches || [];
+  sanctionsMeta = sanctionsMeta || {};
 
   const ratingLabels = { green: "GREEN", amber: "AMBER", red: "RED" };
   const ratingIcons = { green: "\u2705", amber: "\u26A0\uFE0F", red: "\uD83D\uDED1" };
@@ -944,6 +1054,47 @@ function renderResults(overall, dimRatings, coveredRAs, gaps, unknowns, flaggedI
   html += `<div class="dim-result-card"><div class="dim-result-label">Safety</div><div class="dim-result-badge ${dimRatings.safety}">${ratingLabels[dimRatings.safety]}</div></div>`;
   html += `<div class="dim-result-card"><div class="dim-result-label">Sanctions</div><div class="dim-result-badge ${dimRatings.sanctions}">${ratingLabels[dimRatings.sanctions]}</div></div>`;
   html += `</div>`;
+
+  // Sanctions screening detail
+  const sanctionsRefreshed = sanctionsMeta.generated_at ? new Date(sanctionsMeta.generated_at).toLocaleDateString('en-GB') : null;
+  const sanctionsCount = sanctionsMeta.total_entries || 0;
+  const ageDays = sanctionsMeta.generated_at ? Math.floor((Date.now() - new Date(sanctionsMeta.generated_at).getTime()) / 86400000) : null;
+
+  if (sanctionsMatches.length > 0) {
+    html += `<div class="result-section" style="border-left:3px solid var(--red); padding-left:14px;">`;
+    html += `<div class="result-section-title" style="color:var(--red);">\uD83D\uDED1 Sanctions Matches Found (${sanctionsMatches.length})</div>`;
+    sanctionsMatches.forEach(m => {
+      const e = m.entry;
+      const srcLabel = e.source.includes('OFAC') ? 'OFAC' : e.source.includes('UK') ? 'UK' : 'EU';
+      html += `<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:10px 14px;margin-bottom:6px;">`;
+      html += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">`;
+      html += `<span style="font-size:8px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.8px;font-family:Montserrat,sans-serif;${srcLabel==='OFAC'?'background:#dbeafe;color:#1e40af':srcLabel==='UK'?'background:#fce7f3;color:#9d174d':'background:#f0fdf4;color:#166534'}">${srcLabel}</span>`;
+      html += `<strong style="color:var(--navy);font-family:Montserrat,sans-serif;font-size:12px;">${m.entry.name}</strong>`;
+      html += `<span style="margin-left:auto;font-size:14px;font-weight:700;font-family:Montserrat,sans-serif;color:var(--red);">${m.score}%</span>`;
+      html += `</div>`;
+      html += `<div style="font-size:10px;color:var(--slate);display:flex;gap:12px;flex-wrap:wrap;">`;
+      if (e.type) html += `<span>Type: ${e.type}</span>`;
+      if (e.nationality) html += `<span>Nationality: ${e.nationality}</span>`;
+      if (e.program) html += `<span>Program: ${e.program}</span>`;
+      html += `</div>`;
+      html += `<div style="font-size:9px;color:var(--slate-light);margin-top:4px;">Searched: ${m.searchedFor}</div>`;
+      html += `</div>`;
+    });
+    html += `</div>`;
+  } else if (sanctionsCount > 0) {
+    html += `<div class="result-section" style="border-left:3px solid var(--green); padding-left:14px;">`;
+    html += `<div class="result-section-title" style="color:var(--green);">\u2705 Sanctions Screening — No Matches</div>`;
+    html += `<p style="font-size:12px;color:var(--slate);line-height:1.6;">Client name, vessel name, and IMO number were screened against ${sanctionsCount.toLocaleString()} entries across OFAC SDN, UK FCDO, and EU FSF consolidated lists. No matches found above the screening threshold.</p>`;
+    html += `</div>`;
+  }
+
+  if (sanctionsRefreshed) {
+    let freshStyle = 'color:var(--slate-light)';
+    let freshWarn = '';
+    if (ageDays > 14) { freshStyle = 'color:var(--red);font-weight:600'; freshWarn = ' \u2014 DATA IS STALE, RUN REFRESH'; }
+    else if (ageDays > 7) { freshStyle = 'color:var(--orange)'; freshWarn = ' \u2014 approaching refresh deadline'; }
+    html += `<p style="font-size:10px;${freshStyle};margin-top:4px;">Sanctions data last refreshed: ${sanctionsRefreshed} (${ageDays} day${ageDays !== 1 ? 's' : ''} ago)${freshWarn}</p>`;
+  }
 
   // Critical flags
   if (flaggedItems.length > 0) {
