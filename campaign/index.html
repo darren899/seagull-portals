@@ -832,18 +832,47 @@
 <body>
 
 <!-- THREAT LEVEL BANNER -->
-<div class="threat-banner">
+<div class="threat-banner" id="threat-banner">
   <div class="threat-banner-inner">
     <div class="threat-left">
       <div class="threat-indicator">
-        <div class="threat-dot"></div>
-        <span class="threat-label">UKMTO: Critical</span>
+        <div class="threat-dot" id="threat-dot"></div>
+        <span class="threat-label" id="threat-label">Loading...</span>
       </div>
-      <span class="threat-text"><strong>Strait of Hormuz</strong> — US naval blockade declared after ceasefire talks failed (12 Apr); 600+ vessels stranded. IRGC tolls up to $2M/tanker. Houthis threatening Bab al-Mandeb. UKMTO JMIC: Critical across PG, Hormuz &amp; Gulf of Oman.</span>
+      <span class="threat-text" id="threat-text">Fetching current threat status...</span>
     </div>
-    <span class="threat-date">Updated: 13 Apr 2026</span>
+    <span class="threat-date" id="threat-date"></span>
   </div>
 </div>
+<script>
+(function() {
+  var THREAT_API = 'data/threat-level.json';
+  var COLORS = { critical: '#C0392B', high: '#D4842A', moderate: '#D4842A', low: '#2E7D4F' };
+
+  fetch(THREAT_API)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var color = COLORS[d.level] || COLORS.moderate;
+      document.getElementById('threat-dot').style.background = color;
+      document.getElementById('threat-label').style.color = color;
+      document.getElementById('threat-label').textContent = d.label || 'UKMTO: Unknown';
+      var desc = d.description || '';
+      var region = d.region || '';
+      document.getElementById('threat-text').innerHTML = (region ? '<strong>' + region + '</strong> — ' : '') + desc;
+      if (d.updated_at) {
+        var dt = new Date(d.updated_at);
+        var day = dt.getDate();
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        document.getElementById('threat-date').textContent = 'Updated: ' + day + ' ' + months[dt.getMonth()] + ' ' + dt.getFullYear();
+      }
+    })
+    .catch(function() {
+      document.getElementById('threat-label').textContent = 'UKMTO: Unavailable';
+      document.getElementById('threat-text').textContent = 'Threat data could not be loaded. Check report.seagullmaritimeltd.com directly.';
+      document.getElementById('threat-dot').style.background = '#888';
+    });
+})();
+</script>
 
 <!-- NAVIGATION -->
 <nav class="nav">
@@ -946,10 +975,18 @@
     </div>
 
     <div class="bulletins-grid">
+      <a class="bulletin-card" href="bulletins/bulletin-003-campaign-launch.html">
+        <div class="bulletin-type-badge badge-change">NEW<br>LAUNCH</div>
+        <div class="bulletin-content">
+          <h4>Your Watch. Our Standard. — Campaign Launch <span class="bulletin-new-tag">NEW</span></h4>
+          <div class="bulletin-meta">SM-CAM-BUL-003 &nbsp;|&nbsp; April 2026</div>
+          <div class="bulletin-summary">Introducing the compliance awareness campaign — what's on the portal, how to use the compliance tools, and what managers need to do by 30 April.</div>
+        </div>
+      </a>
       <a class="bulletin-card" href="bulletins/bulletin-001-vessel-transfers-v2.html">
         <div class="bulletin-type-badge badge-alert">H&amp;S<br>ALERT</div>
         <div class="bulletin-content">
-          <h4>Safe Vessel Transfers — Key Safety Requirements <span class="bulletin-new-tag">NEW</span></h4>
+          <h4>Safe Vessel Transfers — Key Safety Requirements</h4>
           <div class="bulletin-meta">SM-CAM-BUL-001 &nbsp;|&nbsp; April 2026</div>
           <div class="bulletin-summary">PPE requirements, transfer procedures, and critical safety reminders for all personnel involved in vessel-to-vessel transfers. Includes printable flash cards.</div>
         </div>
