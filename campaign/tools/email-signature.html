@@ -411,9 +411,63 @@
     .preview-wrapper { padding: 16px; overflow-x: auto; }
     .sig { transform-origin: top left; transform: scale(0.8); }
   }
-</style>
+/* CANONICAL NAV — shared across compliance tools */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(0, 42, 82, 0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: flex; justify-content: space-between; align-items: center; height: 60px; gap: 20px;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
+  .nav-brand-text {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+    color: white; line-height: 1.1;
+  }
+  .nav-brand-text .nb-highlight { color: #4DC4E8; }
+  .nav-brand-text .nb-tool { font-weight: 500; opacity: 0.7; font-size: 11px; }
+  .nav-links { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; justify-content: flex-end; }
+  .nav-links a {
+    font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 10.5px;
+    letter-spacing: 0.8px; text-transform: uppercase;
+    color: rgba(255,255,255,0.62); text-decoration: none; transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-links a:hover { color: #4DC4E8; }
+  .nav-links a[aria-current="page"] { color: #4DC4E8; border-bottom: 2px solid #4DC4E8; padding-bottom: 2px; }
+  @media (max-width: 900px) {
+    .nav-links { gap: 14px; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.5px; }
+  }
+  @media (max-width: 760px) {
+    .nav-inner { flex-wrap: wrap; height: auto; padding: 12px 20px; gap: 10px; }
+    .nav-links { width: 100%; justify-content: flex-start; }
+  }
+
+  </style>
 </head>
 <body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="https://portals.seagullmaritimeltd.com" class="nav-brand">
+      <div class="nav-brand-text">SEAGULL<span class="nb-highlight">·</span>MARITIME<br/><span class="nb-tool">Email Signature Generator</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="https://portals.seagullmaritimeltd.com">Portals</a></li>
+      <li><a href="../index.html">Campaign</a></li>
+      <li><a href="risk-screening-tool.html">Risk Screening</a></li>
+      <li><a href="sanctions-screener.html">Sanctions</a></li>
+      <li><a href="kyc-framework.html">KYC</a></li>
+      <li><a href="email-signature.html" aria-current="page">Email Sig</a></li>
+      <li><a href="change-request.html">Change Request</a></li>
+    </ul>
+  </div>
+</nav>
+
 
 <div class="header">
   <div class="header-inner">
@@ -720,10 +774,6 @@ function doCapture(scale) {
 function downloadPNG() { doCapture(1); }
 function downloadPNG2x() { doCapture(2); }
 </script>
-
-</body>
-</html>
-pt>
 
 </body>
 </html>
