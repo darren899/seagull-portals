@@ -328,6 +328,7 @@
   /* ===== BUTTONS ===== */
   .btn-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     margin-bottom: 24px;
   }
@@ -500,27 +501,31 @@
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="copyHTML()" id="btn-copy">Copy for Gmail</button>
+    <button class="btn btn-primary" onclick="copyImage()" id="btn-copy-image">Copy for Gmail</button>
     <button class="btn btn-secondary" onclick="downloadPNG2x()">Download PNG for Outlook</button>
     <button class="btn btn-outline" onclick="downloadPNG()">Download PNG (1x)</button>
+    <button class="btn btn-outline" onclick="copyHTML()" id="btn-copy-html">Copy HTML (advanced)</button>
   </div>
   <div class="status-msg" id="status-msg"></div>
 
   <div class="instructions">
     <h3>How to use this signature</h3>
     <p>
-      <strong>Gmail:</strong><br>
+      <strong>Gmail (recommended):</strong><br>
       <strong>1.</strong> Fill in your details above &mdash; the preview updates live.<br>
-      <strong>2.</strong> Click <strong>Copy for Gmail</strong>.<br>
-      <strong>3.</strong> Go to Gmail &rarr; Settings &rarr; General &rarr; Signature.<br>
+      <strong>2.</strong> Click <strong>Copy for Gmail</strong>. The signature image is now on your clipboard.<br>
+      <strong>3.</strong> In Gmail, click the gear &rarr; <em>See all settings</em> &rarr; <em>General</em> &rarr; scroll to <em>Signature</em>.<br>
       <strong>4.</strong> Click inside the signature editor and press <strong>Ctrl+V</strong> (or Cmd+V on Mac).<br>
-      <strong>5.</strong> Done &mdash; the formatted signature pastes directly with all styling.
+      <strong>5.</strong> Scroll to the bottom and click <strong>Save changes</strong>.
     </p>
     <p style="margin-top: 12px;">
       <strong>Outlook:</strong><br>
       <strong>1.</strong> Click <strong>Download PNG for Outlook</strong> for a high-resolution image.<br>
       <strong>2.</strong> File &rarr; Options &rarr; Mail &rarr; Signatures &rarr; Insert Picture &rarr; select your PNG.<br>
       <strong>3.</strong> Resize to roughly 600px wide if needed.
+    </p>
+    <p style="margin-top: 12px;">
+      <strong>Copy HTML (advanced):</strong> Copies an editable text-based signature (no logo graphic, just text and styling). Use only if you specifically need an HTML signature &mdash; the Copy for Gmail button gives a better result for most people.
     </p>
   </div>
 </div>
@@ -630,6 +635,56 @@ function copyHTML() {
   });
 }
 
+function copyImage() {
+  var el = document.getElementById('sig-capture');
+  var msg = document.getElementById('status-msg');
+  msg.textContent = 'Rendering signature...';
+  msg.style.color = '';
+
+  // Feature check before rendering (saves time if browser doesn't support clipboard write)
+  if (typeof ClipboardItem === 'undefined' || !navigator.clipboard || !navigator.clipboard.write) {
+    msg.innerHTML = 'Your browser does not support image copy. Use <strong>Download PNG for Outlook</strong> and paste the file into Gmail instead.';
+    msg.style.color = '#C0392B';
+    return;
+  }
+
+  var timeout = setTimeout(function() {
+    msg.textContent = 'Rendering timed out. Try the live portal (GitHub Pages) rather than a local file.';
+    msg.style.color = '#C0392B';
+  }, 8000);
+
+  html2canvas(el, {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    logging: false,
+    allowTaint: true,
+    imageTimeout: 5000
+  }).then(function(canvas) {
+    clearTimeout(timeout);
+    canvas.toBlob(function(blob) {
+      if (!blob) {
+        msg.textContent = 'Could not produce image blob. Please try again.';
+        msg.style.color = '#C0392B';
+        return;
+      }
+      var clipItem = new ClipboardItem({ 'image/png': blob });
+      navigator.clipboard.write([clipItem]).then(function() {
+        msg.textContent = 'Copied! Go to your Gmail signature settings and press Ctrl+V to paste.';
+        msg.style.color = '#27AE60';
+        setTimeout(function() { msg.textContent = ''; msg.style.color = ''; }, 6000);
+      }).catch(function(err) {
+        msg.innerHTML = 'Clipboard write failed (' + err.message + '). Try <strong>Download PNG for Outlook</strong> and paste the file instead.';
+        msg.style.color = '#C0392B';
+      });
+    }, 'image/png');
+  }).catch(function(err) {
+    clearTimeout(timeout);
+    msg.textContent = 'Render error: ' + err.message + '. Try Download PNG instead.';
+    msg.style.color = '#C0392B';
+  });
+}
+
 function doCapture(scale) {
   var el = document.getElementById('sig-capture');
   var msg = document.getElementById('status-msg');
@@ -665,6 +720,10 @@ function doCapture(scale) {
 function downloadPNG() { doCapture(1); }
 function downloadPNG2x() { doCapture(2); }
 </script>
+
+</body>
+</html>
+pt>
 
 </body>
 </html>
