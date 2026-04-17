@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYC Framework | Seagull Maritime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #003C72;
+    --navy-dark: #002A52;
+    --navy-deeper: #001D3A;
+    --cyan: #00A3D9;
+    --cyan-light: #4DC4E8;
+    --cyan-pale: #E6F6FC;
+    --white: #FFFFFF;
+    --off-white: #F8FAFB;
+    --light-grey: #F4F7FA;
+    --mid-grey: #E8EDF2;
+    --border-grey: #D5DCE3;
+    --slate: #42515A;
+    --slate-light: #6B7C88;
+    --green: #2E7D4F;
+    --green-bg: #E8F5ED;
+    --amber: #D4842A;
+    --amber-bg: #FFF3E0;
+    --red: #C0392B;
+    --red-bg: #FDECEB;
+    --purple: #6B3FA0;
+    --purple-bg: #F0E9F8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--navy);
+    background: var(--off-white);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(0, 42, 82, 0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 30px;
+    display: flex; justify-content: space-between; align-items: center; height: 60px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 12px; text-decoration: none;
+  }
+  .nav-brand-text {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+    color: white; line-height: 1.1;
+  }
+  .nav-brand-text .nb-highlight { color: var(--cyan-light); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: rgba(255,255,255,0.65); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan-light); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--navy-deeper) 0%, var(--navy) 50%, var(--navy-dark) 100%);
+    padding: 100px 30px 60px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -200px; right: -150px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,163,217,0.08) 0%, transparent 70%);
+  }
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto; position: relative; z-index: 2;
+  }
+  .hero-badge {
+    display: inline-block; font-family: 'Montserrat', sans-serif; font-weight: 700;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--cyan-light); background: rgba(0,163,217,0.12);
+    padding: 6px 12px; border: 1px solid rgba(0,163,217,0.28); border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: 42px; color: white; line-height: 1.1; margin-bottom: 12px;
+  }
+  .hero-sub {
+    font-size: 15px; color: rgba(255,255,255,0.78); max-width: 780px; line-height: 1.6;
+  }
+  .hero-draft {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(212,132,42,0.15); border: 1px solid rgba(212,132,42,0.4);
+    padding: 8px 14px; border-radius: 4px; margin-top: 20px;
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; color: #F5C882;
+  }
+  .hero-draft::before { content: '●'; color: #F5C882; }
+
+  /* CONTEXT PANEL */
+  .context {
+    max-width: 1100px; margin: -30px auto 0; padding: 0 30px; position: relative; z-index: 3;
+  }
+  .context-card {
+    background: white; border-radius: 8px; padding: 28px 32px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08); border: 1px solid var(--border-grey);
+  }
+  .context-card h2 {
+    font-family: 'Montserrat', sans-serif; font-size: 18px; color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .context-card p {
+    font-size: 14px; color: var(--slate); line-height: 1.6; margin-bottom: 10px;
+  }
+  .ownership-key {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid var(--mid-grey);
+  }
+  .owner-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 10px;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 5px 11px; border-radius: 4px;
+  }
+  .owner-finance { background: var(--green-bg); color: var(--green); border: 1px solid #A8D5B8; }
+  .owner-compliance { background: var(--cyan-pale); color: var(--navy); border: 1px solid #A8D5E8; }
+  .owner-ops { background: var(--amber-bg); color: var(--amber); border: 1px solid #F5C882; }
+  .owner-commercial { background: var(--purple-bg); color: var(--purple); border: 1px solid #C9A8E0; }
+  .owner-legal { background: var(--red-bg); color: var(--red); border: 1px solid #E8A8A3; }
+
+  /* SECTIONS */
+  .sections {
+    max-width: 1100px; margin: 40px auto 60px; padding: 0 30px;
+    display: grid; gap: 16px;
+  }
+  .section-card {
+    background: white; border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--border-grey); transition: box-shadow 0.2s;
+  }
+  .section-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  .section-head {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 26px; background: var(--navy); color: white;
+  }
+  .section-num {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 28px;
+    color: var(--cyan-light); min-width: 42px;
+  }
+  .section-title-group { flex: 1; }
+  .section-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 17px; color: white;
+  }
+  .section-ocimf {
+    font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px;
+    font-family: 'Montserrat', sans-serif; letter-spacing: 0.5px;
+  }
+  .section-badges { display: flex; gap: 6px; }
+
+  .section-body {
+    padding: 22px 26px; background: var(--off-white);
+  }
+  .section-desc {
+    font-size: 13px; color: var(--slate); line-height: 1.6; margin-bottom: 14px;
+  }
+  .doc-list {
+    display: grid; gap: 8px;
+  }
+  .doc-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; background: white;
+    border: 1px solid var(--mid-grey); border-radius: 4px;
+    font-size: 13px;
+  }
+  .doc-item.live {
+    border-left: 3px solid var(--green); background: white;
+  }
+  .doc-item.placeholder {
+    border-left: 3px solid var(--amber); background: var(--amber-bg);
+  }
+  .doc-item.tool {
+    border-left: 3px solid var(--cyan); background: var(--cyan-pale);
+  }
+  .doc-name { flex: 1; color: var(--navy); font-weight: 600; }
+  .doc-ref {
+    font-size: 10px; color: var(--slate-light);
+    font-family: 'Montserrat', sans-serif; letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .doc-status {
+    font-size: 10px; padding: 4px 9px; border-radius: 3px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .status-live { background: var(--green-bg); color: var(--green); }
+  .status-placeholder { background: var(--amber-bg); color: var(--amber); }
+  .status-tool { background: var(--cyan-pale); color: var(--navy); }
+
+  .doc-item a { color: inherit; text-decoration: none; flex:1; display: flex; align-items: center; gap: 12px; }
+  .doc-item a:hover .doc-name { color: var(--cyan); }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    max-width: 1100px; margin: 0 auto 60px; padding: 28px 32px;
+    background: white; border-radius: 8px; border: 1px solid var(--border-grey);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .footer-note h3 {
+    font-family: 'Montserrat', sans-serif; font-size: 16px; color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .footer-note p { font-size: 14px; color: var(--slate); line-height: 1.6; margin-bottom: 8px; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--navy-deeper); padding: 40px 30px; color: rgba(255,255,255,0.5);
+    text-align: center; font-size: 12px;
+  }
+  .footer strong { color: white; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
+
+  @media (max-width: 700px) {
+    .hero-title { font-size: 30px; }
+    .nav-links { display: none; }
+    .section-head { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">
+      <div class="nav-brand-text">SEAGULL<span class="nb-highlight">·</span>MARITIME<br/><span style="font-weight:500;opacity:0.7;">KYC FRAMEWORK</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="https://portals.seagullmaritimeltd.com">Portals Home</a></li>
+      <li><a href="../index.html">Campaign</a></li>
+      <li><a href="sanctions-screener.html">Sanctions Screener</a></li>
+      <li><a href="risk-screening-tool.html">Risk Screening</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-badge">Internal · Finance + Compliance</span>
+    <h1 class="hero-title">KYC Framework</h1>
+    <p class="hero-sub">
+      Know Your Customer framework for onboarding Seagull Maritime and Vanguard entities
+      into client vendor master data systems. Structured for Finance-led population with
+      Compliance-led policy and sanctions overlay — so each section has a clear owner
+      and no requests fall through the gap.
+    </p>
+    <span class="hero-draft">Draft v0.1 — for discussion</span>
+  </div>
+</section>
+
+<!-- CONTEXT PANEL -->
+<div class="context">
+  <div class="context-card">
+    <h2>Why this framework</h2>
+    <p>
+      KYC requests come in constantly — Nakilat, Boskalis, DNK, EMF, Pacific Basin, Hafnia,
+      Navios, Vitol — and the shape is always similar. Ten common sections, three owning teams,
+      and a mix of finance data (bank, tax, invoicing) and compliance evidence (sanctions,
+      policies, insurance). When the ownership isn't clear, things drop. This framework
+      mirrors the Due Diligence portal you already know, but scoped for KYC and owned
+      primarily by Finance.
+    </p>
+    <p>
+      <strong>Built to evolve.</strong> Each section below is a placeholder today. Finance +
+      Compliance populate it together, the same way Compliance built out the DD portal over
+      the last 12 weeks.
+    </p>
+    <div class="ownership-key">
+      <span class="owner-badge owner-finance">Finance / Accounts</span>
+      <span class="owner-badge owner-compliance">Compliance</span>
+      <span class="owner-badge owner-ops">Operations</span>
+      <span class="owner-badge owner-commercial">Commercial</span>
+      <span class="owner-badge owner-legal">Legal</span>
+    </div>
+  </div>
+</div>
+
+<!-- SECTIONS -->
+<div class="sections">
+
+  <!-- 1. Corporate Identity -->
+  <div class="section-card" id="s1">
+    <div class="section-head">
+      <div class="section-num">01</div>
+      <div class="section-title-group">
+        <div class="section-title">Corporate Identity</div>
+        <div class="section-ocimf">Legal entity, registration, contact data · Matches most client vendor master data schema</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-finance">Finance</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Core corporate identity for each contracting entity. Provided once per entity, refreshed
+        on any incorporation change or rebranding.
+      </p>
+      <div class="doc-list">
+        <div class="doc-item placeholder"><span class="doc-name">Legal Entity Name + Trading Name</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance to populate</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Country + Company Registration Number</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance to populate</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Date of Incorporation</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance to populate</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Tax ID / VAT / TRN Numbers</span><span class="doc-ref">Per jurisdiction</span><span class="doc-status status-placeholder">Finance to populate</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Registered Office + Principal Business Address</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance to populate</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Telephone + Email + Website</span><span class="doc-ref">Central contact</span><span class="doc-status status-placeholder">Finance to populate</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Certificate of Incorporation (scan)</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance to populate</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Group Structure & Beneficial Ownership -->
+  <div class="section-card" id="s2">
+    <div class="section-head">
+      <div class="section-num">02</div>
+      <div class="section-title-group">
+        <div class="section-title">Group Structure & Beneficial Ownership</div>
+        <div class="section-ocimf">Parent, subsidiaries, UBO declaration (&gt;25%)</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-finance">Finance</span><span class="owner-badge owner-compliance">Compliance</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Group structure and ultimate beneficial ownership — one of the highest-friction KYC
+        items. Needs an org chart, a UBO register (anyone with &gt;25% control), and a clear
+        statement of ownership changes in the last 36 months (Boskalis flagged this specifically).
+      </p>
+      <div class="doc-list">
+        <div class="doc-item live"><a href="https://portals.seagullmaritimeltd.com/dd/docs/s1/Corporate-Structure-Organisation-Chart.html"><span class="doc-name">Group Organisation Chart</span><span class="doc-ref">Existing</span><span class="doc-status status-live">Live in DD Portal</span></a></div>
+        <div class="doc-item placeholder"><span class="doc-name">UBO Register (&gt;25% beneficial owners, per entity)</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance + Legal</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Ownership Change Declaration (last 36 months)</span><span class="doc-ref">Group-level</span><span class="doc-status status-placeholder">Finance + Legal</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Parent Company Letter of Confirmation</span><span class="doc-ref">Seagull FZCO</span><span class="doc-status status-placeholder">Finance</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Directors & Officers -->
+  <div class="section-card" id="s3">
+    <div class="section-head">
+      <div class="section-num">03</div>
+      <div class="section-title-group">
+        <div class="section-title">Directors, Officers & Authorised Signatories</div>
+        <div class="section-ocimf">Board, senior officers, authorised payees, PEP declarations</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-finance">Finance</span><span class="owner-badge owner-compliance">Compliance</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Current directors and officers per entity, with copies of passport / ID for KYC verification
+        and PEP (Politically Exposed Person) declarations. Authorised signatories for contracts and
+        banking listed separately.
+      </p>
+      <div class="doc-list">
+        <div class="doc-item placeholder"><span class="doc-name">Board of Directors — per entity</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Senior Officers / Key Management</span><span class="doc-ref">Group-level</span><span class="doc-status status-placeholder">Finance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Authorised Signatories List</span><span class="doc-ref">Per entity + activity</span><span class="doc-status status-placeholder">Finance + Legal</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">PEP Declaration</span><span class="doc-ref">Per officer / director</span><span class="doc-status status-placeholder">Compliance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Director IDs / Passports (for verification)</span><span class="doc-ref">Restricted</span><span class="doc-status status-placeholder">Finance (restricted)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Banking & Financial -->
+  <div class="section-card" id="s4">
+    <div class="section-head">
+      <div class="section-num">04</div>
+      <div class="section-title-group">
+        <div class="section-title">Banking & Financial</div>
+        <div class="section-ocimf">Bank details, invoicing format, authorised payee — critical for getting paid</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-finance">Finance</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Entirely Finance-owned. Errors here mean we don't get paid — this is why KYC needs
+        Finance in the lead, not Compliance. Must be kept current and validated against
+        contract bank details (Nakilat caught a mismatch in Nov 2025).
+      </p>
+      <div class="doc-list">
+        <div class="doc-item placeholder"><span class="doc-name">Bank Name + Branch (per entity)</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Account Number + IBAN</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">SWIFT / BIC Code</span><span class="doc-ref">Per account</span><span class="doc-status status-placeholder">Finance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Bank Reference Letter / Confirmation of Account</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Authorised Payee Declaration</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Sample Invoice Template</span><span class="doc-ref">Group-level</span><span class="doc-status status-placeholder">Finance</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Tax Residency & FATCA/CRS -->
+  <div class="section-card" id="s5">
+    <div class="section-head">
+      <div class="section-num">05</div>
+      <div class="section-title-group">
+        <div class="section-title">Tax Residency & Reporting</div>
+        <div class="section-ocimf">Tax residence, FATCA (US-facing), CRS (most jurisdictions)</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-finance">Finance</span><span class="owner-badge owner-legal">Legal</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Standard tax-transparency regime documents. FATCA for any US-connected counterparty,
+        CRS for almost everyone else. Tax residency certificates must be in-date; they expire
+        annually in most jurisdictions.
+      </p>
+      <div class="doc-list">
+        <div class="doc-item placeholder"><span class="doc-name">Tax Residence Certificate (per entity)</span><span class="doc-ref">Per entity / per year</span><span class="doc-status status-placeholder">Finance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">FATCA W-8BEN-E (US-facing)</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance + Legal</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">CRS Self-Certification</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance + Legal</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Sanctions & PEP Screening -->
+  <div class="section-card" id="s6">
+    <div class="section-head">
+      <div class="section-num">06</div>
+      <div class="section-title-group">
+        <div class="section-title">Sanctions, PEP & Adverse Media</div>
+        <div class="section-ocimf">OFAC / UK OFSI / EU FSF / UN — screening evidence</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-compliance">Compliance</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Compliance-led. Clients want a clear statement of our sanctions screening process and
+        evidence we ourselves are not sanctioned. This is where the live Sanctions Screener
+        tool slots in — it produces dated screening reports per counterparty we can hand back.
+      </p>
+      <div class="doc-list">
+        <div class="doc-item tool"><a href="sanctions-screener.html"><span class="doc-name">Sanctions Screener Tool</span><span class="doc-ref">Live · 35,000+ entries</span><span class="doc-status status-tool">Live Tool</span></a></div>
+        <div class="doc-item live"><a href="../../docs/SM-INT-POL-012%20-%20Sanctions%20Policy%20v1.0.pdf"><span class="doc-name">Sanctions Policy</span><span class="doc-ref">SM/INT/POL/012</span><span class="doc-status status-live">Live Policy</span></a></div>
+        <div class="doc-item placeholder"><span class="doc-name">Screening Declaration (Seagull entities not sanctioned)</span><span class="doc-ref">Per entity, annual</span><span class="doc-status status-placeholder">Compliance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">PEP Declaration — Directors & Officers</span><span class="doc-ref">Per officer</span><span class="doc-status status-placeholder">Compliance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Adverse Media Review Statement</span><span class="doc-ref">Annual</span><span class="doc-status status-placeholder">Compliance</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Compliance Policies -->
+  <div class="section-card" id="s7">
+    <div class="section-head">
+      <div class="section-num">07</div>
+      <div class="section-title-group">
+        <div class="section-title">Compliance Policies</div>
+        <div class="section-ocimf">Anti-bribery, AML, Code of Conduct, Conflict of Interest, ESG</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-compliance">Compliance</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Already built out and in the DD portal. Linked here directly so Finance doesn't have to
+        go hunting when a client asks. All current versions.
+      </p>
+      <div class="doc-list">
+        <div class="doc-item live"><a href="../../docs/SM-INT-POL-001%20-%20Anti-Bribery%20Corruption%20and%20Business%20Ethics%20v1.0.pdf"><span class="doc-name">Anti-Bribery, Corruption & Business Ethics Policy</span><span class="doc-ref">SM/INT/POL/001</span><span class="doc-status status-live">Live Policy</span></a></div>
+        <div class="doc-item live"><a href="../../docs/SM-INT-POL-002%20-%20Code%20of%20Conduct%20v1.0.pdf"><span class="doc-name">Code of Conduct</span><span class="doc-ref">SM/INT/POL/002</span><span class="doc-status status-live">Live Policy</span></a></div>
+        <div class="doc-item live"><a href="../../docs/SM-INT-POL-004%20-%20Grievance%20and%20Whistleblowing%20Policy%20v1.0.pdf"><span class="doc-name">Grievance & Whistleblowing Policy</span><span class="doc-ref">SM/INT/POL/004</span><span class="doc-status status-live">Live Policy</span></a></div>
+        <div class="doc-item live"><a href="../../docs/SM-INT-POL-011%20-%20ESG%20Policy%20v1.0.pdf"><span class="doc-name">ESG Policy</span><span class="doc-ref">SM/INT/POL/011</span><span class="doc-status status-live">Live Policy</span></a></div>
+        <div class="doc-item live"><a href="../../docs/SM-INT-POL-013%20-%20Conflict%20of%20Interest%20Policy%20v1.0.pdf"><span class="doc-name">Conflict of Interest Policy</span><span class="doc-ref">SM/INT/POL/013</span><span class="doc-status status-live">Live Policy</span></a></div>
+        <div class="doc-item placeholder"><span class="doc-name">AML Procedure Statement</span><span class="doc-ref">To build</span><span class="doc-status status-placeholder">Compliance</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Insurance -->
+  <div class="section-card" id="s8">
+    <div class="section-head">
+      <div class="section-num">08</div>
+      <div class="section-title-group">
+        <div class="section-title">Insurance</div>
+        <div class="section-ocimf">Liability, professional indemnity, personal accident, K&amp;R</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-ops">Operations</span><span class="owner-badge owner-legal">Legal</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Operations holds the policies, Legal confirms the scope. Client KYC typically asks for
+        certificates plus a statement of cover limits. Insurance certificates are renewed annually
+        — expired certificates get flagged fast in vendor systems.
+      </p>
+      <div class="doc-list">
+        <div class="doc-item placeholder"><span class="doc-name">Public &amp; Employer's Liability Certificate</span><span class="doc-ref">Per entity, annual</span><span class="doc-status status-placeholder">Ops</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Professional Indemnity Certificate</span><span class="doc-ref">Group-level</span><span class="doc-status status-placeholder">Ops</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Personal Accident / K&amp;R Cover</span><span class="doc-ref">PCASP pool</span><span class="doc-status status-placeholder">Ops</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Firearms Use Insurance</span><span class="doc-ref">HRA operations</span><span class="doc-status status-placeholder">Ops</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Insurance Scope Summary (client-friendly)</span><span class="doc-ref">Group</span><span class="doc-status status-placeholder">Ops + Legal</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. Licences & Memberships -->
+  <div class="section-card" id="s9">
+    <div class="section-head">
+      <div class="section-num">09</div>
+      <div class="section-title-group">
+        <div class="section-title">Operating Licences & Memberships</div>
+        <div class="section-ocimf">ICoCA, ISO certifications, flag state approvals, regional licences</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-compliance">Compliance</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Industry memberships and operating credentials. Covered comprehensively in the DD portal
+        already — KYC typically wants certificates and a summary statement.
+      </p>
+      <div class="doc-list">
+        <div class="doc-item live"><a href="https://portals.seagullmaritimeltd.com/dd/#s6"><span class="doc-name">ISO 28007, 18788, 28000 Certificates</span><span class="doc-ref">DD Portal Section 6</span><span class="doc-status status-live">Live</span></a></div>
+        <div class="doc-item live"><a href="https://portals.seagullmaritimeltd.com/dd/#s6"><span class="doc-name">ICoCA Certified Member Certificate</span><span class="doc-ref">DD Portal Section 6</span><span class="doc-status status-live">Live</span></a></div>
+        <div class="doc-item live"><a href="https://portals.seagullmaritimeltd.com/dd/#s7"><span class="doc-name">Flag State Requirements Register</span><span class="doc-ref">SM/SEC/REG/001</span><span class="doc-status status-live">Live</span></a></div>
+        <div class="doc-item placeholder"><span class="doc-name">Malta Operating Regime Statement</span><span class="doc-ref">S.L. 480.05 context</span><span class="doc-status status-placeholder">Compliance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">UK OGTCL Position Statement</span><span class="doc-ref">Group</span><span class="doc-status status-placeholder">Compliance</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. References -->
+  <div class="section-card" id="s10">
+    <div class="section-head">
+      <div class="section-num">10</div>
+      <div class="section-title-group">
+        <div class="section-title">Trade & Bank References</div>
+        <div class="section-ocimf">Client testimonials, bank references, sample client list</div>
+      </div>
+      <div class="section-badges"><span class="owner-badge owner-commercial">Commercial</span><span class="owner-badge owner-finance">Finance</span></div>
+    </div>
+    <div class="section-body">
+      <p class="section-desc">
+        Final layer — references from existing clients and banking partners. Commercial owns the
+        client relationships; Finance owns the bank side. Always needs NDA-permission before
+        naming specific clients.
+      </p>
+      <div class="doc-list">
+        <div class="doc-item placeholder"><span class="doc-name">Trade References (3-5, with NDA permission)</span><span class="doc-ref">Rotating</span><span class="doc-status status-placeholder">Commercial</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Bank Reference Letter</span><span class="doc-ref">Per entity</span><span class="doc-status status-placeholder">Finance</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Major Clients List (NDA-permitted only)</span><span class="doc-ref">Group</span><span class="doc-status status-placeholder">Commercial</span></div>
+        <div class="doc-item placeholder"><span class="doc-name">Testimonials Pack</span><span class="doc-ref">Group</span><span class="doc-status status-placeholder">Commercial</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER NOTE -->
+<div class="footer-note">
+  <h3>How we build this out</h3>
+  <p>
+    Each section starts as a placeholder. Finance owns the bulk — Corporate Identity, Banking,
+    Tax — and Compliance layers in the policy and sanctions evidence. The aim is that when a
+    client sends a KYC form, the right team knows exactly which section they own and can pull
+    the documents in ten minutes, not three days.
+  </p>
+  <p>
+    The DD portal took 12 weeks of Compliance work to get right. The KYC framework could move
+    faster — most of the finance items already exist somewhere, they just aren't centralised.
+    Framework-first, then populate, then wire to external KYC questionnaires (Nakilat, Boskalis,
+    DNK, EMF, Hafnia, Pacific Basin, Navios already in the last six months of inbox).
+  </p>
+  <p style="margin-top: 14px;">
+    <strong style="color: var(--navy);">Next step:</strong> Finance team walk-through,
+    agreement on who owns which row, and a two-week sprint to populate the placeholders with
+    real documents.
+  </p>
+</div>
+
+<footer class="footer">
+  <strong>SEAGULL MARITIME</strong> · KYC FRAMEWORK · DRAFT v0.1 · INTERNAL USE ONLY
+</footer>
+
+</body>
+</html>
