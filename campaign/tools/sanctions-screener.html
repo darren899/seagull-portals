@@ -29,7 +29,7 @@ body{font-family:'Open Sans',-apple-system,sans-serif;background:var(--bg);color
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 
 /* ===== HERO ===== */
-.hero{background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 100%);padding:32px 24px 28px;text-align:center}
+.hero{background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 100%);padding:92px 24px 28px;text-align:center}
 .hero-crumb{font-family:'Montserrat',sans-serif;font-size:10px;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
 .hero-crumb a{color:var(--cyan-light);text-decoration:none}
 .hero h1{font-family:'Montserrat',sans-serif;font-size:28px;font-weight:800;color:white;letter-spacing:-0.5px;margin-bottom:6px}
@@ -170,6 +170,7 @@ body{font-family:'Open Sans',-apple-system,sans-serif;background:var(--bg);color
       <li><a href="risk-screening-tool.html">Risk Screening</a></li>
       <li><a href="sanctions-screener.html" aria-current="page">Sanctions</a></li>
       <li><a href="kyc-framework.html">KYC</a></li>
+      <li><a href="email-signature.html">Email Sig</a></li>
       <li><a href="change-request.html">Change Request</a></li>
     </ul>
   </div>
@@ -183,21 +184,6 @@ body{font-family:'Open Sans',-apple-system,sans-serif;background:var(--bg);color
   <div class="loading-bar"><div class="loading-fill" id="loadingBar"></div></div>
 </div>
 
-<!-- NAV -->
-<div class="nav">
-  <img src="../../assets/SMlogo_landscape_white.png" class="nav-logo" alt="Seagull Maritime">
-  <span class="nav-sep">|</span>
-  <a href="../index.html" class="nav-link">Campaign</a>
-  <a href="risk-screening-tool.html" class="nav-link">Risk Screening</a>
-  <a href="#" class="nav-link active">Sanctions Screener</a>
-  <div class="nav-right">
-    <button class="hbtn" id="ubtn" onclick="toggleUp()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-      <span id="ubl">LOAD CUSTOM DB</span>
-    </button>
-  </div>
-</div>
-
 <!-- HERO -->
 <div class="hero">
   <div class="hero-crumb"><a href="../../index.html">Portals</a> &rsaquo; <a href="../index.html">Campaign</a> &rsaquo; Tools</div>
@@ -205,6 +191,12 @@ body{font-family:'Open Sans',-apple-system,sans-serif;background:var(--bg);color
   <p class="hero-sub">Screen individuals, companies, and vessels against OFAC, UK FCDO, and EU consolidated sanctions lists. Updated weekly.</p>
   <span class="hero-badge">OFAC SDN &bull; UK SANCTIONS &bull; EU FSF</span>
   <p class="hero-db-status" id="subT"><span id="dbStatus" style="color:#ea580c;font-weight:600;animation:pulse 1.5s infinite">&#9679; LOADING DATABASE — please wait...</span></p>
+  <div style="margin-top:18px">
+    <button class="hbtn" id="ubtn" onclick="toggleUp()" style="background:rgba(0,163,217,.08);border:1px solid rgba(0,163,217,.4);color:var(--cyan);padding:7px 16px;border-radius:6px;font-size:11px;font-family:'Montserrat',sans-serif;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;letter-spacing:0.5px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      <span id="ubl">LOAD CUSTOM DB</span>
+    </button>
+  </div>
 </div>
 
 <!-- MAIN -->
