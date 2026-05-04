@@ -874,15 +874,48 @@ function searchSanctionsDB(entries, searchTerms) {
   entries.forEach(function(entry) {
     searchTerms.forEach(function(term) {
       if (!term.value || term.value.length < 2) return;
+      var rawDigits = String(term.value).replace(/\D/g,'');
+      var isImoLike = (term.label && /imo/i.test(term.label)) || (rawDigits.length >= 4 && rawDigits === String(term.value).trim());
+
+      // ===== IMO-style query: dedicated digit match (catches FORTIS/TEMPEST DREAM cases) =====
+      if (isImoLike && rawDigits) {
+        var idDigits = String(entry.id_number || "").replace(/\D/g,'');
+        if (idDigits === rawDigits) { matches.push({ entry: entry, score: 100, searchedFor: term.label + ": " + term.value }); return; }
+        if (entry.vessel_info && entry.vessel_info.imo) {
+          var viDigits = String(entry.vessel_info.imo).replace(/\D/g,'');
+          if (viDigits === rawDigits) { matches.push({ entry: entry, score: 100, searchedFor: term.label + ": " + term.value }); return; }
+        }
+        // Remarks: find IMO patterns
+        if (entry.remarks) {
+          var r = String(entry.remarks);
+          if (r.indexOf(rawDigits) !== -1) {
+            // Boost only if it follows an IMO-style marker
+            if (/IMO[\s#:)\-]*(?:number)?[\s:)\-]*/i.test(r) && r.match(new RegExp("\\b" + rawDigits + "\\b"))) {
+              matches.push({ entry: entry, score: 95, searchedFor: term.label + ": " + term.value }); return;
+            }
+            // Bare digit-string match in remarks — still flag, lower confidence
+            if (rawDigits.length === 7) {
+              matches.push({ entry: entry, score: 82, searchedFor: term.label + ": " + term.value }); return;
+            }
+          }
+        }
+        // No IMO hit — fall through to text scoring below in case label is misleading
+      }
+
+      // ===== Standard text scoring =====
       var best = sanctionsScore(term.value, entry.name || "");
       if (entry.aliases) {
         entry.aliases.forEach(function(a) {
           best = Math.max(best, sanctionsScore(term.value, a) * 0.95);
         });
       }
+      if (entry.id_number) best = Math.max(best, sanctionsScore(term.value, entry.id_number) * 0.9);
+      // Search remarks too — UK vessel entries put IMO + vessel detail in remarks
+      if (entry.remarks) best = Math.max(best, sanctionsScore(term.value, entry.remarks) * 0.7);
       if (entry.vessel_info) {
         var vi = entry.vessel_info;
         if (vi.imo) best = Math.max(best, sanctionsScore(term.value, vi.imo) * 0.95);
+        if (vi.mmsi) best = Math.max(best, sanctionsScore(term.value, vi.mmsi) * 0.95);
         if (vi.call_sign) best = Math.max(best, sanctionsScore(term.value, vi.call_sign) * 0.9);
       }
       best = Math.round(best);

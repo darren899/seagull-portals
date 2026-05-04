@@ -206,8 +206,13 @@ body{font-family:'Open Sans',-apple-system,sans-serif;background:var(--bg);color
   <div class="sp">
     <div class="sb">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input id="q" type="text" placeholder="Database loading — please wait..." oninput="doSearch()" disabled id="searchInput">
+      <input id="q" type="text" placeholder="Database loading — please wait..." oninput="doSearch()" disabled>
       <button class="cbtn" onclick="clr()" title="Clear"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="sb" style="padding:8px 14px;background:rgba(0,163,217,.04);border-color:rgba(0,163,217,.2)">
+      <span style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;min-width:48px">IMO</span>
+      <input id="imoQ" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="7" placeholder="Vessel IMO — 7 digits (e.g. 9395379)" oninput="doSearch()" disabled>
+      <button class="cbtn" onclick="clrImo()" title="Clear IMO"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="fl" id="flArea"></div>
   </div>
@@ -237,7 +242,13 @@ var SANCTIONS_META = {};
 // ============================================================
 // APPLICATION STATE
 // ============================================================
-var db=[], dbName='', idx=[], q='', sf='all', th=70, showUp=false, expanded={};
+var db=[], dbName='', idx=[], q='', imoQ='', sf='all', th=70, showUp=false, expanded={};
+
+// ============================================================
+// CLEAR BUTTONS
+// ============================================================
+function clr(){ var el=document.getElementById('q'); if(el){ el.value=''; q=''; doSearch(); el.focus(); } }
+function clrImo(){ var el=document.getElementById('imoQ'); if(el){ el.value=''; imoQ=''; doSearch(); el.focus(); } }
 
 // ============================================================
 // FETCH + INDEX — loads sanctions_db.json, builds search index
@@ -339,7 +350,9 @@ function initDB() {
           document.getElementById('subT').innerHTML = '<span style="color:#16a34a;font-weight:600">&#9679; LIVE</span> &mdash; ' + db.length.toLocaleString() + ' sanctions entries | Refreshed: ' + refreshed + ageWarn + srcInfo;
           
           var si = document.getElementById('q');
-          if (si) { si.disabled = false; si.placeholder = 'Search name, company, vessel, IMO, MMSI...'; si.focus(); }
+          if (si) { si.disabled = false; si.placeholder = 'Search name, company, alias, programme, country...'; si.focus(); }
+          var iqEl = document.getElementById('imoQ');
+          if (iqEl) { iqEl.disabled = false; iqEl.placeholder = 'Vessel IMO — 7 digits (e.g. 9395379)'; }
           
           renderAll();
           
@@ -404,6 +417,8 @@ function scoreEntry(entry, idxStr, query) {
   if (entry.aliases) for (var i=0;i<entry.aliases.length;i++) best=Math.max(best, score(query,entry.aliases[i])*.95);
   best = Math.max(best, score(query, entry.nationality)*.6);
   best = Math.max(best, score(query, entry.id_number)*.9);
+  // Search remarks too — many UK vessel entries have IMO + vessel detail buried in remarks
+  if (entry.remarks) best = Math.max(best, score(query, entry.remarks)*.7);
   if (entry.vessel_info) {
     var vi=entry.vessel_info;
     if(vi.imo) best=Math.max(best, score(query,vi.imo)*.95);
@@ -413,14 +428,71 @@ function scoreEntry(entry, idxStr, query) {
   return Math.round(best);
 }
 
+// IMO-specific scoring — exact / substring digit match against id_number,
+// vessel_info.imo, and any IMO number embedded in remarks. No fuzzy match,
+// no name-token noise. Threshold doesn't apply to IMO matches >=80.
+function scoreImo(entry, imoQuery) {
+  if (!imoQuery) return 0;
+  var qd = String(imoQuery).replace(/\D/g,'');
+  if (!qd) return 0;
+  var best = 0;
+  if (entry.id_number) {
+    var idd = String(entry.id_number).replace(/\D/g,'');
+    if (idd === qd) best = 100;
+    else if (idd && idd.indexOf(qd) !== -1) best = Math.max(best, 90);
+  }
+  if (entry.vessel_info && entry.vessel_info.imo) {
+    var vid = String(entry.vessel_info.imo).replace(/\D/g,'');
+    if (vid === qd) best = Math.max(best, 100);
+    else if (vid && vid.indexOf(qd) !== -1) best = Math.max(best, 90);
+  }
+  if (entry.remarks) {
+    var r = String(entry.remarks);
+    var matches = r.match(/IMO[\s#:)\-]*(?:number)?[\s:)\-]*(\d{7,})/gi) || [];
+    for (var i=0;i<matches.length;i++) {
+      var dm = matches[i].match(/(\d{7,})/);
+      if (dm) {
+        if (dm[1] === qd) { best = Math.max(best, 100); break; }
+        if (qd.length>=4 && dm[1].indexOf(qd) !== -1) best = Math.max(best, 88);
+      }
+    }
+    // Last-resort: any 7-digit run in remarks (catches awkwardly formatted IMO mentions)
+    if (best < 100 && qd.length === 7 && r.indexOf(qd) !== -1) best = Math.max(best, 82);
+  }
+  return best;
+}
+
 function doSearch() {
-  q = document.getElementById('q').value;
-  if (!q || q.length < 2) { renderR(); return; }
+  var qEl = document.getElementById('q'); q = qEl ? qEl.value : '';
+  var imoEl = document.getElementById('imoQ');
+  imoQ = imoEl ? (imoEl.value || '').replace(/\D/g, '') : '';
+
+  var hasText = q && q.length >= 2;
+  var hasImo  = imoQ && imoQ.length >= 4;
+
+  if (!hasText && !hasImo) { renderR(); return; }
+
   var results = [];
   for (var i=0;i<db.length;i++) {
     if (sf!=='all' && db[i].type!==sf) continue;
-    var s = scoreEntry(db[i], idx[i], q);
-    if (s >= th) results.push({entry:db[i], score:s, idx:i});
+
+    var imoScore  = hasImo  ? scoreImo(db[i], imoQ)         : null;
+    var textScore = hasText ? scoreEntry(db[i], idx[i], q)  : null;
+
+    if (hasText && hasImo) {
+      // Both must satisfy — IMO loose-match (>=60) + text >= threshold
+      if (imoScore < 60) continue;
+      if (textScore < th) continue;
+      results.push({entry:db[i], score:Math.max(imoScore,textScore), idx:i});
+    } else if (hasImo) {
+      // IMO-only — anything with a meaningful IMO hit shows
+      if (imoScore < 60) continue;
+      results.push({entry:db[i], score:imoScore, idx:i});
+    } else {
+      // Text-only — threshold gate
+      if (textScore < th) continue;
+      results.push({entry:db[i], score:textScore, idx:i});
+    }
   }
   results.sort(function(a,b){ return b.score-a.score; });
   renderR(results.slice(0,50));
@@ -461,15 +533,20 @@ function renderFl(){
   var types=['all','individual','company','vessel'];
   var h='<div class="fl"><span class="fl-l">Filter</span>';
   for(var i=0;i<types.length;i++) h+='<button class="fb'+(sf===types[i]?' a':'')+'" onclick="sf=\''+types[i]+'\';renderFl();doSearch()">'+types[i].charAt(0).toUpperCase()+types[i].slice(1)+'</button>';
-  h+='<div class="th"><span>Threshold</span><input type="range" min="40" max="95" value="'+th+'" oninput="th=+this.value;doSearch()"><span>'+th+'%</span></div></div>';
+  h+='<div class="th"><span>Threshold</span><input type="range" min="40" max="95" value="'+th+'" oninput="th=+this.value;var l=document.getElementById(\'thLbl\');if(l)l.textContent=th+\'%\';doSearch()"><span id="thLbl">'+th+'%</span></div></div>';
   a.innerHTML=h;
 }
 
 function renderR(results){
   var a=document.getElementById('resArea'); if(!a)return;
   if(!results||results.length===0){
-    if(q&&q.length>=2) a.innerHTML='<div style="text-align:center;padding:40px;color:var(--textM)"><p style="font-size:32px;margin-bottom:8px">&#9989;</p><p style="font-family:Montserrat,sans-serif;font-weight:600;color:var(--green)">No matches found</p><p style="font-size:11px;margin-top:4px">No sanctions entries matched above the '+th+'% threshold.</p></div>';
-    else a.innerHTML='<div style="text-align:center;padding:40px;color:var(--textM);font-size:12px">Type at least 2 characters to search '+db.length.toLocaleString()+' sanctions entries.</div>';
+    var hasText=q&&q.length>=2, hasImo=imoQ&&imoQ.length>=4;
+    if(hasText||hasImo){
+      var noteText = hasImo ? 'No sanctions entries matched IMO '+esc(imoQ)+(hasText?' AND text "'+esc(q)+'"':'')+'.' : 'No sanctions entries matched above the '+th+'% threshold.';
+      a.innerHTML='<div style="text-align:center;padding:40px;color:var(--textM)"><p style="font-size:32px;margin-bottom:8px">&#9989;</p><p style="font-family:Montserrat,sans-serif;font-weight:600;color:var(--green)">No matches found</p><p style="font-size:11px;margin-top:4px">'+noteText+'</p><p style="font-size:10px;margin-top:8px;color:var(--textM)">For shadow-fleet vessels, also cross-check OpenSanctions and the GUR shadow-fleet tracker before quoting.</p></div>';
+    } else {
+      a.innerHTML='<div style="text-align:center;padding:40px;color:var(--textM);font-size:12px">Type at least 2 characters in the name search, or 4+ digits in the IMO field, to search '+db.length.toLocaleString()+' sanctions entries.</div>';
+    }
     return;
   }
   var h='<div style="font-size:10px;color:var(--textM);margin-bottom:8px;font-family:Montserrat,sans-serif">'+results.length+' match'+(results.length>1?'es':'')+' found</div>';
@@ -562,6 +639,13 @@ document.addEventListener('DOMContentLoaded', function(){
     si.placeholder='Loading database...';
     var debounce;
     si.addEventListener('input',function(){ clearTimeout(debounce); debounce=setTimeout(doSearch,200); });
+  }
+  var iq=document.getElementById('imoQ');
+  if(iq){
+    iq.disabled=true;
+    iq.placeholder='Loading database...';
+    var debImo;
+    iq.addEventListener('input',function(){ clearTimeout(debImo); debImo=setTimeout(doSearch,200); });
   }
   initDB();
 });
