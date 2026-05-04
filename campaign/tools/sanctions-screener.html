@@ -254,12 +254,16 @@ function clrImo(){ var el=document.getElementById('imoQ'); if(el){ el.value=''; 
 // FETCH + INDEX — loads sanctions_db.json, builds search index
 // ============================================================
 function initDB() {
-  var JSON_URL = '../data/sanctions_db.json';
-  
+  // Cache-bust the JSON fetch — both browsers and GitHub Pages' Fastly CDN
+  // can serve stale copies for minutes after a refresh push. Sanctions data
+  // staleness is the catastrophic failure mode for this tool, so force fresh
+  // every time.
+  var JSON_URL = '../data/sanctions_db.json?v=' + Date.now();
+
   document.getElementById('loadingStatus').textContent = 'Fetching sanctions database...';
   document.getElementById('loadingBar').style.width = '10%';
-  
-  fetch(JSON_URL)
+
+  fetch(JSON_URL, { cache: 'no-cache' })
     .then(function(resp) {
       if (!resp.ok) throw new Error('HTTP ' + resp.status + ' — database file not found');
       document.getElementById('loadingStatus').textContent = 'Downloading (' + (resp.headers.get('content-length') ? (parseInt(resp.headers.get('content-length'))/1024/1024).toFixed(1) + ' MB' : 'please wait') + ')...';

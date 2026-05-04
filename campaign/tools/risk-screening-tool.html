@@ -1029,7 +1029,9 @@ async function submitScreening() {
 
   if (searchTerms.length > 0) {
     try {
-      const resp = await fetch('../data/sanctions_db.json');
+      // Cache-bust the JSON fetch — browsers and GitHub Pages' Fastly CDN
+      // can serve stale sanctions data for minutes after a push.
+      const resp = await fetch('../data/sanctions_db.json?v=' + Date.now(), { cache: 'no-cache' });
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const data = await resp.json();
       sanctionsMeta = data.metadata || {};
