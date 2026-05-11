@@ -97,6 +97,21 @@
   .info-box svg { flex-shrink: 0; margin-top: 2px; }
   .info-box p { font-size: 13px; color: var(--navy); line-height: 1.6; }
 
+  .trial-banner {
+    background: #C04A1B; color: white;
+    border-radius: 8px; padding: 14px 20px; margin-bottom: 18px;
+    display: flex; gap: 14px; align-items: flex-start;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .trial-banner svg { flex-shrink: 0; margin-top: 2px; }
+  .trial-banner .trial-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.4px;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .trial-banner .trial-body {
+    font-size: 13px; line-height: 1.55; font-weight: 500;
+  }
+
   /* ===== FORM CARD ===== */
   .form-card {
     background: white; border-radius: 12px; padding: 28px 30px;
@@ -362,6 +377,16 @@
 <!-- MAIN -->
 <div class="main">
 
+  <div class="trial-banner">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+    <div>
+      <div class="trial-title">Trial &middot; Compliance Use Only</div>
+      <div class="trial-body">This tool is in trial. Use only when directed by Compliance. Outputs are advisory and do not replace formal vessel risk assessment processes. Port dropdowns currently show placeholder values (Point A&ndash;D) pending the Operational Ports and Threat Register going live.</div>
+    </div>
+  </div>
+
   <div class="info-box">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#00A3D9" stroke-width="2"/><path d="M10 9v5M10 6.5v.01" stroke="#00A3D9" stroke-width="2" stroke-linecap="round"/></svg>
     <p>Fill in what you know &mdash; the score updates live on the right. When complete, generate a PDF and upload it to the relevant 1Clearview task as a checklist completion item. The PDF is the audit trail.</p>
@@ -425,17 +450,43 @@
       <!-- CARD 2: VOYAGE DETAILS -->
       <div class="form-card">
         <h2>2. Voyage Details</h2>
-        <p class="card-desc">Route, speed, freeboard.</p>
+        <p class="card-desc">Route from embark point through any stopover to disembark point. Speed and freeboard of the protected vessel.</p>
 
         <div class="row">
           <div class="form-group">
-            <label>Embark Port <span class="required">*</span></label>
-            <input type="text" id="vEmbark" placeholder="e.g. Galle, Sri Lanka">
+            <label>Embark Point <span class="required">*</span></label>
+            <select id="vEmbark" onchange="recalc()">
+              <option value="">Select embark point...</option>
+              <option value="A" data-base="2">Point A</option>
+              <option value="B" data-base="4">Point B</option>
+              <option value="C" data-base="6">Point C</option>
+              <option value="D" data-base="8">Point D</option>
+            </select>
+            <div class="hint">Where the team boards the vessel</div>
           </div>
           <div class="form-group">
-            <label>Disembark Port <span class="required">*</span></label>
-            <input type="text" id="vDisembark" placeholder="e.g. Salalah, Oman">
+            <label>Disembark Point <span class="required">*</span></label>
+            <select id="vDisembark" onchange="recalc()">
+              <option value="">Select disembark point...</option>
+              <option value="A" data-base="2">Point A</option>
+              <option value="B" data-base="4">Point B</option>
+              <option value="C" data-base="6">Point C</option>
+              <option value="D" data-base="8">Point D</option>
+            </select>
+            <div class="hint">Where the team leaves the vessel</div>
           </div>
+        </div>
+
+        <div class="form-group">
+          <label>Stopover (if any)</label>
+          <select id="vStopover" onchange="recalc()">
+            <option value="">No stopover</option>
+            <option value="A" data-base="2">Point A</option>
+            <option value="B" data-base="4">Point B</option>
+            <option value="C" data-base="6">Point C</option>
+            <option value="D" data-base="8">Point D</option>
+          </select>
+          <div class="hint">Intermediate port call during transit. Leave blank if vessel transits direct.</div>
         </div>
 
         <div class="row">
@@ -447,20 +498,6 @@
             <label>ETA <span class="required">*</span></label>
             <input type="date" id="vETA">
           </div>
-        </div>
-
-        <div class="form-group">
-          <label>Route Corridor <span class="required">*</span></label>
-          <select id="vRoute" onchange="recalc()">
-            <option value="">Select primary route corridor...</option>
-            <option value="outside" data-base="1">Outside HRA (transit south of HRA boundary)</option>
-            <option value="irtc" data-base="4">IRTC &mdash; Internationally Recommended Transit Corridor</option>
-            <option value="bam" data-base="5">BAM Mainstem (Bay of Bengal &harr; Arabian Sea)</option>
-            <option value="yemen" data-base="7">Yemen TSS / approaches</option>
-            <option value="bab" data-base="6">Bab-el-Mandeb / southern Red Sea</option>
-            <option value="bosaso" data-base="8">Bosaso &mdash; Mogadishu coast (Somali EEZ active)</option>
-            <option value="hormuz" data-base="9">Strait of Hormuz / Persian Gulf</option>
-          </select>
         </div>
 
         <div class="row">
@@ -496,19 +533,6 @@
             <label>Team Leader (Name / ID)</label>
             <input type="text" id="vTL" placeholder="e.g. PCASP-042 / J. Singh">
           </div>
-        </div>
-
-        <div class="form-group">
-          <label>Test Fire Scheduled?</label>
-          <div class="yn">
-            <input type="radio" name="vTestFire" id="tfYes" value="yes" onchange="recalc()">
-            <label for="tfYes">Yes</label>
-            <input type="radio" name="vTestFire" id="tfNo" value="no" onchange="recalc()">
-            <label for="tfNo">No</label>
-            <input type="radio" name="vTestFire" id="tfNA" value="na" onchange="recalc()">
-            <label for="tfNA">N/A</label>
-          </div>
-          <div class="hint">VBA-only or in international waters per BMP-MS</div>
         </div>
 
         <div class="form-group">
@@ -783,13 +807,28 @@ function recalc() {
     return;
   }
 
-  // Route corridor base
-  const route = document.getElementById('vRoute');
-  if (route && route.value) {
-    const opt = route.options[route.selectedIndex];
-    const base = parseInt(opt.dataset.base || 0, 10);
-    score += base;
-    factors.push({ label: 'Route: ' + opt.text.split(' &mdash;')[0].split(' (')[0], pts: '+' + base, cls: 'add' });
+  // Route — derive worst-leg base from embark/stopover/disembark dropdowns.
+  // Worst-leg model: the highest-band leg of the voyage drives the route score.
+  // (Sum would over-count; max captures the riskiest exposure the voyage touches.)
+  function getLegBase(id) {
+    const sel = document.getElementById(id);
+    if (sel && sel.value) {
+      const opt = sel.options[sel.selectedIndex];
+      return parseInt(opt.dataset.base || 0, 10);
+    }
+    return 0;
+  }
+  const embarkBase = getLegBase('vEmbark');
+  const stopBase   = getLegBase('vStopover');
+  const disBase    = getLegBase('vDisembark');
+  const worstBase  = Math.max(embarkBase, stopBase, disBase);
+  if (worstBase > 0) {
+    score += worstBase;
+    const legs = [];
+    if (embarkBase) legs.push('Embark Point ' + document.getElementById('vEmbark').value);
+    if (stopBase)   legs.push('Stopover Point ' + document.getElementById('vStopover').value);
+    if (disBase)    legs.push('Disembark Point ' + document.getElementById('vDisembark').value);
+    factors.push({ label: 'Route worst-leg (' + legs.join(' → ') + ')', pts: '+' + worstBase, cls: 'add' });
   }
 
   // Freeboard
@@ -814,11 +853,6 @@ function recalc() {
     else if (ts <= 6) { factors.push({ label: 'Team size: ' + ts, pts: '0', cls: 'neutral' }); }
     else { score -= 1; factors.push({ label: 'Team size: ' + ts + ' (enhanced)', pts: '-1', cls: 'sub' }); }
   }
-
-  // Test fire
-  const tf = radio('vTestFire');
-  if (tf === 'no') { score += 1; factors.push({ label: 'Test fire NOT scheduled', pts: '+1', cls: 'add' }); }
-  else if (tf === 'yes') { factors.push({ label: 'Test fire scheduled', pts: '0', cls: 'neutral' }); }
 
   // Intel briefing
   const intel = radio('vIntel');
@@ -988,13 +1022,19 @@ function generatePDF() {
   ]);
 
   // ===== VOYAGE =====
-  const routeText = val('vRoute') ? document.getElementById('vRoute').options[document.getElementById('vRoute').selectedIndex].text : '';
+  function legLabel(id) {
+    const sel = document.getElementById(id);
+    if (sel && sel.value) {
+      return sel.options[sel.selectedIndex].text;
+    }
+    return '';
+  }
   section('Voyage', [
-    ['Embark Port', val('vEmbark')],
-    ['Disembark Port', val('vDisembark')],
+    ['Embark Point', legLabel('vEmbark')],
+    ['Stopover', legLabel('vStopover') || '—'],
+    ['Disembark Point', legLabel('vDisembark')],
     ['ETD', val('vETD')],
     ['ETA', val('vETA')],
-    ['Route Corridor', routeText.replace(/&mdash;/g,'—').replace(/&harr;/g,'↔')],
     ['Speed (knots)', val('vSpeed')],
     ['Freeboard', val('vFreeboard')]
   ]);
@@ -1003,7 +1043,6 @@ function generatePDF() {
   section('PCASP Team', [
     ['Team Size', val('vTeamSize')],
     ['Team Leader', val('vTL')],
-    ['Test Fire Scheduled', radio('vTestFire')],
     ['Voyage Intel Briefing', radio('vIntel')],
     ['Kit Last Serviced', val('vKit')]
   ]);
