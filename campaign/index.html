@@ -1308,7 +1308,7 @@
         <div class="doc-category">Procedure</div>
         <div class="doc-version">v1.0</div>
         <div class="doc-date">Apr 2026</div>
-        <div class="doc-download"><a href="../dd/docs/s5/SM-INT-PRO-001 - Non-Conformance OFI and Corrective Action Management v1.0.pdf" target="_blank" title="Download">↓</a></div>
+        <div class="doc-download"><a href="../dd/docs/s5/SM-INT-PRO-001 - Non-Conformance OFI and Corrective Action Management Procedure v1.0.pdf" target="_blank" title="Download">↓</a></div>
       </div>
 
       <div class="docs-table-row" data-cat="procedure">
@@ -1319,7 +1319,7 @@
         <div class="doc-category">Procedure</div>
         <div class="doc-version">v1.0</div>
         <div class="doc-date">Apr 2026</div>
-        <div class="doc-download"><a href="../dd/docs/s5/SM-INT-PRO-002 - Control of Documents v1.0.pdf" target="_blank" title="Download">↓</a></div>
+        <div class="doc-download"><a href="../dd/docs/s5/SM-INT-PRO-002 - Control of Documents Procedure v1.0.pdf" target="_blank" title="Download">↓</a></div>
       </div>
 
       <div class="docs-table-row" data-cat="procedure">
@@ -1674,6 +1674,17 @@
         <div class="doc-download"><a href="docs/SM-CAM-BRAG-009 - Night Operations v1.0.pdf" target="_blank" title="Download">↓</a></div>
       </div>
 
+      <div class="docs-table-row" data-cat="brag">
+        <div>
+          <div class="doc-name">Test Fire at Sea — Basic Risk Assessment Guide</div>
+          <div class="doc-ref">SM/CAM/BRAG/010</div>
+        </div>
+        <div class="doc-category">BRAG</div>
+        <div class="doc-version">v1.0</div>
+        <div class="doc-date">May 2026</div>
+        <div class="doc-download"><a href="#" target="_blank" title="Download">↓</a></div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1731,17 +1742,4 @@
   });
 
   // Category filter buttons
-  document.querySelectorAll('.doc-cat-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.doc-cat-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const cat = btn.dataset.cat;
-      document.querySelectorAll('.docs-table-row').forEach(row => {
-        row.style.display = (cat === 'all' || row.dataset.cat === cat) ? '' : 'none';
-      });
-    });
-  });
-</script>
-
-</body>
-</html>
+  documen
