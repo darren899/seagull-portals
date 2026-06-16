@@ -2,7 +2,7 @@
   "level": "critical",
   "label": "UKMTO: Critical",
   "region": "Strait of Hormuz",
-  "description": "Strait of Hormuz remains effectively closed to commercial shipping following the Feb 2026 US-Israel-Iran war; IRGC mining, boardings and attacks ongoing, with April 2026 traffic down to 191 vessels (vs ~3,000/month pre-crisis). US blockade of Iranian ports continues and Iran's 'Persian Gulf Strait Authority' still demands prior coordination for transits. Red Sea / Gulf of Aden re-escalated: Houthi ASBM strikes on cargo ship Norderney and container ship MSC Tavvishi reported 8 Jun 2026 in the Gulf of Aden — first confirmed incidents since the September 2025 pause. Most carriers retain Cape of Good Hope routing; IMO monitoring c.20,000 seafarers in-region.",
-  "updated_at": "2026-06-08T12:00:00+04:00",
+  "description": "Strait of Hormuz remains effectively closed to commercial shipping (day 100+ of the crisis that began 28 Feb 2026): only ~2 transits recorded on 7 Jun 2026 against a pre-crisis baseline of ~94/day (c.2% of normal volume). IRGC mining, boardings, USV/UAV and missile attacks and vessel seizures continue; war-risk premiums now ~8x pre-crisis with 6 P&I clubs withdrawing cover. Red Sea / Gulf of Aden re-escalated: Houthis declared a total ban on Israel-linked navigation and struck two commercial vessels (targeted on operator port-call history, not flag) on 8-9 Jun 2026 — first kinetic enforcement since the Oct 2025 pause. Most carriers retain Cape of Good Hope routing. Persistent GNSS jamming/spoofing across the Gulf and Gulf of Oman.",
+  "updated_at": "2026-06-15T08:07:43+04:00",
   "updated_by": "Scheduled Task"
 }
